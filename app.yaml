@@ -1,0 +1,53 @@
+runtime: python27
+threadsafe: false
+
+handlers:
+- url: /(.*\.css)
+  mime_type: text/css
+  static_files: dist/\1
+  upload: dist/(.*\.css)
+
+- url: /(.*\.html)
+  mime_type: text/html
+  static_files: dist/\1
+  upload: dist/(.*\.html)
+
+- url: /(.*\.js)
+  mime_type: text/javascript
+  static_files: dist/\1
+  upload: dist/(.*\.js)
+
+- url: /(.*\.js\.map)
+  mime_type: application/json
+  static_files: dist/\1
+  upload: dist/(.*\.js\.map)
+
+# image files
+- url: /(.*\.(bmp|gif|ico|jpeg|jpg|png|webp))
+  static_files: dist/\1
+  upload: dist/(.*\.(bmp|gif|ico|jpeg|jpg|png|webp))
+
+# font files
+- url: /(.*\.ttf)
+  mime_type: application/x-font-ttf
+  static_files: dist/\1
+  upload: dist/(.*\.ttf)
+
+# audio files
+- url: /(.*\.(mid|midi|mp3|wav))
+  static_files: dist/\1
+  upload: dist/(.*\.(mid|midi|mp3|wav))  
+
+# index files
+- url: /(.+)/
+  static_files: dist/\1/index.html
+  upload: dist/(.+)/index.html
+
+- url: /(.+)
+  static_files: dist/\1/index.html
+  upload: dist/(.+)/index.html
+
+# site root
+- url: /
+  static_files: dist/index.html
+  upload: dist/index.html

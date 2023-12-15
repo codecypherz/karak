@@ -1,0 +1,83 @@
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header_height);
+  overflow: hidden;
+  border-bottom: 1px solid var(--foreground_color);
+}
+
+.header>img {
+  margin-top: -180px;
+  margin-left: 0px;
+  zoom: 1.1;
+}
+
+.title {
+  font-family: Horizon;
+  font-size: 80px;
+  position: absolute;
+  top: 0;
+  left: 20px;
+  height: var(--header_height);
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.navigation-title {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 30px;
+  background: rgba(0, 0, 0, 70%);
+  border-radius: 30px;
+  padding: 10px 30px;
+}
+
+.audio-controls {
+  position: absolute;
+  right: 22px;
+  top: 22px;
+}
+
+.app-background {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 101px;
+  bottom: 0;
+  overflow: hidden;
+  z-index: var(--z_app_background);
+}
+
+.app-background>img {
+  width: 143%;
+  margin-left: -265px;
+  opacity: 30%;
+}
+
+.router-outlet {
+  display: inline-block;
+  vertical-align: top;
+  margin-bottom: 40px;
+}
+
+.footer {
+  position: absolute;
+  bottom: -51px;
+  height: 50px;
+  left: 0;
+  right: 0;
+  border-top: 1px solid black;
+}
+
+.horizon-attribution {
+  width: 500px;
+  margin: auto;
+  font-weight: 100;
+  font-size: 12px;
+  margin-top: 9px;
+  color: #aaa;
+}
