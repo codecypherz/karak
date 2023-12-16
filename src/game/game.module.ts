@@ -6,6 +6,8 @@ import { GameRoutingModule } from './game-routing.module';
 import { GameComponent } from './game/game.component';
 import { GameOverComponent } from './game-over/game-over.component';
 import { PlayerSheetsComponent } from './player-sheets/player-sheets.component';
+import { DungeonComponent } from './dungeon/dungeon.component';
+import { ActivePlayerComponent } from './active-player/active-player.component';
 
 @NgModule({
   imports: [
@@ -14,6 +16,8 @@ import { PlayerSheetsComponent } from './player-sheets/player-sheets.component';
     GameRoutingModule,
   ],
   declarations: [
+    ActivePlayerComponent,
+    DungeonComponent,
     GameComponent,
     GameOverComponent,
     PlayerSheetsComponent,
