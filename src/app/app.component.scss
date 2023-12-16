@@ -54,9 +54,9 @@
 }
 
 .app-background>img {
-  width: 143%;
-  margin-left: -265px;
-  opacity: 30%;
+  width: 115%;
+  margin-left: -100px;
+  filter: brightness(15%);
 }
 
 .router-outlet {

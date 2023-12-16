@@ -1,13 +1,13 @@
 import { Injectable, NgModule } from "@angular/core";
 import { Title } from "@angular/platform-browser";
 import { PreloadAllModules, RouterModule, RouterStateSnapshot, Routes, TitleStrategy } from "@angular/router";
-import { PlayerSelectionComponent } from "./ui/player-selection/player-selection.component";
+import { NewGameSetupComponent } from "./ui/new-game-setup/new-game-setup.component";
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: PlayerSelectionComponent,
+    component: NewGameSetupComponent,
   },
   {
     path: 'game',

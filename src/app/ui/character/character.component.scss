@@ -1,0 +1,28 @@
+.character {
+  display: inline-block;
+  width: 300px;
+  margin-top: 30px;
+}
+
+.character-name {
+  font-size: 18px;
+}
+
+.character-image {
+  width: 250px;
+  margin: 12px 2px;
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  filter: brightness(50%); 
+}
+
+.character-image:hover {
+  filter: inherit;
+}
+
+.character.selected .character-image {
+  margin: 10px 0;
+  border: 4px solid white;
+  filter: inherit;
+}
