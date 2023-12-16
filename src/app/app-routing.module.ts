@@ -10,6 +10,10 @@ const routes: Routes = [
     component: PlayerSelectionComponent,
   },
   {
+    path: 'game',
+    loadChildren: () => import('../game/game.module').then(m => m.GameModule),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

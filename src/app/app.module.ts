@@ -4,6 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { GameCollection } from './collection/game-collection';
+import { GameService } from './service/game.service';
+import { GameModule } from 'src/game/game.module';
 
 @NgModule({
   imports: [
@@ -12,9 +15,17 @@ import { AppComponent } from './app.component';
     LoggerModule.forRoot({
       level: NgxLoggerLevel.INFO,
     }),
+    GameModule,
   ],
   declarations: [
     AppComponent,
+  ],
+  providers: [
+    // Services
+    GameService,
+
+    // Collections
+    GameCollection,
   ],
   bootstrap: [AppComponent],
 })
