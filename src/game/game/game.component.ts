@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CanComponentDeactivate } from 'src/app/guard/can-deactivate.guard';
 import { Game } from 'src/app/model/game';
+import { DialogService } from 'src/app/service/dialog.service';
 import { GameService } from 'src/app/service/game.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class GameComponent implements CanComponentDeactivate, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private dialogService: DialogService,
     private gameService: GameService) {
   }
 
@@ -27,11 +29,10 @@ export class GameComponent implements CanComponentDeactivate, OnDestroy {
   }
 
   canDeactivate(): Observable<boolean> | boolean {
-    return true;
-    // if (this.game.isGameOver()) {
-    //   return true;
-    // }
-    // return this.dialogService.confirm('Quit game?');
+    if (this.game.isGameOver()) {
+      return true;
+    }
+    return this.dialogService.confirm('Quit game?');
   }
 
   ngOnDestroy(): void {

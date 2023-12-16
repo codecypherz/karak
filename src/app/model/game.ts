@@ -11,4 +11,9 @@ export class Game extends EventTarget {
   start(): void {
     // TODO
   }
+
+  isGameOver(): boolean {
+    // TODO
+    return false;
+  }
 }
