@@ -5,6 +5,7 @@ import { LoggerModule } from 'ngx-logger';
 import { GameRoutingModule } from './game-routing.module';
 import { GameComponent } from './game/game.component';
 import { GameOverComponent } from './game-over/game-over.component';
+import { PlayerSheetsComponent } from './player-sheets/player-sheets.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { GameOverComponent } from './game-over/game-over.component';
   declarations: [
     GameComponent,
     GameOverComponent,
+    PlayerSheetsComponent,
   ],
 })
 export class GameModule { }
