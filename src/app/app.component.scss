@@ -6,23 +6,24 @@
   height: var(--header_height);
   overflow: hidden;
   border-bottom: 1px solid var(--foreground_color);
+  background-color: #38214B;
 }
 
-.header>img {
-  margin-top: -180px;
+.banner {
+  margin-top: -188px;
   margin-left: 0px;
-  zoom: 1.1;
+  zoom: 68%;
 }
 
-.title {
-  font-family: Horizon;
-  font-size: 80px;
+.logo {
   position: absolute;
-  top: 0;
+  top: -17px;
   left: 20px;
   height: var(--header_height);
   vertical-align: middle;
   cursor: pointer;
+  zoom: 190%;
+  border: 1px solid var(--foreground_color);
 }
 
 .navigation-title {
@@ -74,7 +75,7 @@
 }
 
 .horizon-attribution {
-  width: 500px;
+  width: 800px;
   margin: auto;
   font-weight: 100;
   font-size: 12px;

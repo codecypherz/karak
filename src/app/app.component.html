@@ -1,16 +1,15 @@
 <div class="header">
-  <img src="/images/banner.png">
-  <div class="title" (click)="navigateHome()">Karak</div>
+  <img src="/images/banner.jpg" class="banner">
+  <img src="/images/logo.jpg" class="logo" (click)="navigateHome()">
   <div *ngIf=getNavigationTitle() class="navigation-title">{{getNavigationTitle()}}</div>
   <audio class="audio-controls" controls loop>
-    <!--<source src="/audio/rusted_sands.mp3" type="audio/mpeg">-->
-    <!--<source src="/audio/awash.mp3" type="audio/mpeg">-->
-    <source src="/audio/the_sanctuary_of_zi'tah.mp3" type="audio/mpeg">
+    <source src="/audio/honor.mp3" type="audio/mpeg">
+    <!-- <source src="/audio/mists.mp3" type="audio/mpeg"> -->
   </audio>
 </div>
 
 <div class="app-background">
-  <img src="/images/body_background.webp">
+  <img src="/images/body_background.jpg">
 </div>
 
 <div class="router-outlet">
@@ -20,7 +19,7 @@
 <div class="footer">
   <div class="horizon-attribution">
     Trademarks are the property of their respective owners.
-    Game content and materials (c) Guerrilla Games and Sony Interactive Entertainment.
+    Game content and materials (c) Outset Media Corp.
     All rights reserved.
   </div>
 </div>
