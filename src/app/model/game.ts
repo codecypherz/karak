@@ -23,15 +23,25 @@ export class Game extends EventTarget {
     return this.players;
   }
 
-  getActivePlayer(): Player {
-    if (!this.started) {
-      throw new Error("No active player until started.");
+  getPlayersInOrder(): Array<Player> {
+    let inOrderPlayers = new Array<Player>();
+    let index = this.activePlayerIndex;
+    for (let i = 0; i < this.players.length; i++) {
+      inOrderPlayers.push(this.players[index]);
+      index = (index + 1) % this.players.length;
     }
-    return this.players[this.activePlayerIndex];
+    return inOrderPlayers;
+  }
+
+  getActivePlayer(): Player {
+    let player = this.players[this.activePlayerIndex];
+    return player;
   }
 
   startNextTurn(): void {
+    this.getActivePlayer().setActive(false);
     this.activePlayerIndex = (this.activePlayerIndex + 1) % this.players.length;
+    this.getActivePlayer().setActive(true);
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
   }
 
@@ -42,9 +52,13 @@ export class Game extends EventTarget {
   start(): void {
     if (this.players.length < 2) {
       throw new Error("Not enough players to start the game.");
+    } else if (this.players.length > 5) {
+      throw new Error("Too many players.");
     }
     // Shuffle the player order randomly.
     shuffle(this.players);
+    this.activePlayerIndex = 0;
+    this.getActivePlayer().setActive(true);
     this.started = true;
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
   }

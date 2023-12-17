@@ -1,3 +1,6 @@
-<div class="player-sheet">
+<div [ngClass]="{
+      'player-sheet': true,
+      'active': player.isActive()
+    }">
   <img class="character-image" src="{{player.character.imageUrl}}">
 </div>
