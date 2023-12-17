@@ -1,4 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Game } from 'src/app/model/game';
+import { Player } from 'src/app/model/player';
 
 @Component({
   selector: 'app-active-player',
@@ -7,4 +9,13 @@ import { Component, OnDestroy } from '@angular/core';
 })
 export class ActivePlayerComponent {
 
+  @Input() game!: Game;
+
+  getActivePlayer(): Player {
+    return this.game.getActivePlayer();
+  }
+
+  endTurn(): void {
+    this.game.startNextTurn();
+  }
 }
