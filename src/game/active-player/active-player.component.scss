@@ -1,0 +1,41 @@
+.active-player {
+  border: 1px solid gold;
+  border-radius: 10px;
+  padding: 10px;
+  background: #222;
+  position: relative;
+}
+
+.left-content {
+  width: 600px;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.right-content {
+  vertical-align: top;
+  display: inline-block;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.ability-1 {
+  margin-bottom: 5px;
+}
+
+.ability-1, .ability-2 {
+  text-align: left;
+}
+
+.ability-1>button, .ability-2>button {
+  width: 150px;
+}
+
+.actions {
+  position: absolute;
+  bottom: 10px;
+  right: 17px;
+}

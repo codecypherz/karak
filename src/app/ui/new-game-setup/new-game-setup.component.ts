@@ -26,6 +26,7 @@ export class NewGameSetupComponent {
   }
 
   startGame(): void {
+    // TODO: Validate the game before creating it.
     for (let character of this.characterCollection.getCharacters()) {
       if (character.isSelected()) {
         this.game.addPlayer(new Player(character));
