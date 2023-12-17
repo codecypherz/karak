@@ -21,6 +21,10 @@ export class Character {
   isSelected(): boolean {
     return this.selected;
   }
+
+  setSelected(selected: boolean): void {
+    this.selected = selected;
+  }
   
   toggleSelect(): void {
     this.selected = !this.selected;

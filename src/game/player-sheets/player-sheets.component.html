@@ -1,3 +1,4 @@
 <div>
-  Player Sheets
+  <app-player-sheet *ngFor="let player of game.getPlayers()" [player]="player">
+  </app-player-sheet>
 </div>

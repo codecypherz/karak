@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Character } from 'src/app/model/character';
 
 @Component({
@@ -6,14 +6,19 @@ import { Character } from 'src/app/model/character';
   templateUrl: './character.component.html',
   styleUrls: ['./character.component.scss']
 })
-export class CharacterComponent {
+export class CharacterComponent implements OnInit {
 
   @Input() character!: Character;
+
+  ngOnInit(): void {
+    // Reset the Character when initialized.
+    this.character.setSelected(false);
+  }
 
   isSelected(): boolean {
     return this.character.isSelected();
   }
-  
+
   toggleSelect(): void {
     this.character.toggleSelect();
   }
