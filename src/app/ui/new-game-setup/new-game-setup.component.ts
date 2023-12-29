@@ -13,8 +13,6 @@ import { GameService } from 'src/app/service/game.service';
 })
 export class NewGameSetupComponent {
 
-  private game = new Game();
-
   constructor(
     private characterCollection: CharacterCollection,
     private gameService: GameService,
@@ -26,13 +24,19 @@ export class NewGameSetupComponent {
   }
 
   startGame(): void {
-    // TODO: Validate the game before creating it.
+    const game = new Game();
     for (let character of this.characterCollection.getCharacters()) {
       if (character.isSelected()) {
-        this.game.addPlayer(new Player(character));
+        game.addPlayer(new Player(character));
       }
     }
-    this.gameService.startGame(this.game);
-    this.router.navigate(['game', this.game.getId()]);
+
+    if (!game.isValidToStart()) {
+      // TODO: Render something to tell the user.
+      return;
+    }
+
+    this.gameService.startGame(game);
+    this.router.navigate(['game', game.getId()]);
   }
 }

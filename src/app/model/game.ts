@@ -57,11 +57,16 @@ export class Game extends EventTarget {
     return this.dungeon;
   }
 
+  isValidToStart(): boolean {
+    if (this.players.length < 2 || this.players.length > 5) {
+      return false;
+    }
+    return true;
+  }
+
   start(): void {
-    if (this.players.length < 2) {
-      throw new Error("Not enough players to start the game.");
-    } else if (this.players.length > 5) {
-      throw new Error("Too many players.");
+    if (!this.isValidToStart()) {
+      throw new Error('The game is not in a valid starting state.');
     }
 
     // Shuffle the player order randomly.
