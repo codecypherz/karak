@@ -1,7 +1,9 @@
-.dungeon {
+.dungeon-container {
+  width: 840px;
   height: 676px;
   border: 2px solid white;
   border-radius: 10px;
   margin-top: 40px;
   background: #222;
+  overflow: hidden;
 }

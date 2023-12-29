@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Player } from './player';
 import { shuffle } from '../util/arrays';
+import { Dungeon } from './dungeon';
 
 export class Game extends EventTarget {
 
@@ -8,6 +9,7 @@ export class Game extends EventTarget {
 
   private id = uuidv4();
   private players = new Array<Player>();
+  private dungeon = new Dungeon();
   private started = false;
   private activePlayerIndex = 0;
 
@@ -47,6 +49,10 @@ export class Game extends EventTarget {
 
   isStarted(): boolean {
     return this.started;
+  }
+
+  getDungeon(): Dungeon {
+    return this.dungeon;
   }
 
   start(): void {
