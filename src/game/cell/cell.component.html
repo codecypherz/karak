@@ -1,3 +1,7 @@
-<div class="cell">
-  Cell
+<div [ngClass]="{
+      'cell': true,
+      'empty': cell.isEmpty()
+    }"
+    (click)="onClick()">
+  {{cell.getPosition().toString()}}
 </div>

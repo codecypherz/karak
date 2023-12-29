@@ -9,4 +9,8 @@ import { Cell } from 'src/app/model/cell';
 export class CellComponent {
 
   @Input() cell!: Cell;
+
+  onClick(): void {
+    console.log('clicked cell at ' + this.cell.getPosition().toString());
+  }
 }

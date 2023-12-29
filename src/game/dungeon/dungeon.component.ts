@@ -17,7 +17,6 @@ export class DungeonComponent {
   scrollTop = 0;
 
   startDragging(e: MouseEvent, flag: boolean, container: HTMLElement): void {
-    console.log(e);
     this.mouseDown = true;
     this.startX = e.pageX - container.offsetLeft;
     this.startY = e.pageY - container.offsetTop;
