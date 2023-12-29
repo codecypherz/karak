@@ -3,8 +3,9 @@ import { Character } from './character';
 
 export class Player {
 
-  private active = false;
   private id = uuidv4();
+  private active = false;
+  private actionsRemaining = 0;
 
   constructor(
     readonly character: Character) {
@@ -14,11 +15,21 @@ export class Player {
     return this.id;
   }
 
-  setActive(active: boolean): void {
-    this.active = active;
+  startTurn(): void {
+    this.active = true;
+    this.actionsRemaining = 4;
+  }
+
+  endTurn(): void {
+    this.active = false;
+    this.actionsRemaining = 0;
   }
 
   isActive(): boolean {
     return this.active;
+  }
+
+  getActionsRemaining(): number {
+    return this.actionsRemaining;
   }
 }

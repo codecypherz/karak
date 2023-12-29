@@ -43,9 +43,9 @@ export class Game extends EventTarget {
   }
 
   startNextTurn(): void {
-    this.getActivePlayer().setActive(false);
+    this.getActivePlayer().endTurn();
     this.activePlayerIndex = (this.activePlayerIndex + 1) % this.players.length;
-    this.getActivePlayer().setActive(true);
+    this.getActivePlayer().startTurn();
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
   }
 
@@ -69,11 +69,6 @@ export class Game extends EventTarget {
       throw new Error('The game is not in a valid starting state.');
     }
 
-    // Shuffle the player order randomly.
-    shuffle(this.players);
-    this.activePlayerIndex = 0;
-    this.getActivePlayer().setActive(true);
-
     // Set the starting tile.
     const starterCell = this.dungeon.getCenterCell();
     this.dungeon.setTile(starterCell, new Tile(TileType.STARTER));
@@ -81,8 +76,15 @@ export class Game extends EventTarget {
     // Put the players on the starting tile.
     this.players.forEach(starterCell.addPlayer, starterCell);
 
-    // Start the first player's turn.
+    // Shuffle the player order randomly.
+    shuffle(this.players);
+    this.activePlayerIndex = 0;
+
+    // Mark the game as started prior to dispatching events.
     this.started = true;
+
+    // Start the first player's turn.
+    this.getActivePlayer().startTurn();
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
   }
 
