@@ -12,4 +12,8 @@
     <br>
     {{player.character.shortName}}
   </span>
+  <span *ngIf="cell.isExplorable()">
+    <br>
+    <button (click)="explore()">Explore</button>
+  </span>
 </div>

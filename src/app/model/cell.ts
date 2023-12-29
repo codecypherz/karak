@@ -6,6 +6,7 @@ export class Cell {
  
   private tile: Tile | null = null;
   private players = new Set<Player>();
+  private explorable = false;
 
   constructor(private pos: Position) {
   }
@@ -46,5 +47,13 @@ export class Cell {
 
   getPlayers(): Set<Player> {
     return this.players;
+  }
+
+  setExplorable(explorable: boolean): void {
+    this.explorable = explorable;
+  }
+
+  isExplorable(): boolean {
+    return this.explorable;
   }
 }

@@ -71,7 +71,7 @@ export class Game extends EventTarget {
 
     // Set the starting tile.
     const starterCell = this.dungeon.getCenterCell();
-    starterCell.setTile(new Tile(TileType.STARTER));
+    this.dungeon.setTile(starterCell, new Tile(TileType.STARTER));
 
     // Put the players on the starting tile.
     this.players.forEach(starterCell.addPlayer, starterCell);

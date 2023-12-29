@@ -13,4 +13,8 @@ export class CellComponent {
   onClick(): void {
     //console.log('clicked cell at ' + this.cell.getPosition().toString());
   }
+
+  explore(): void {
+    
+  }
 }

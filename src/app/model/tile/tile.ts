@@ -1,11 +1,19 @@
+import { Direction } from "../direction";
 import { TileType } from "./tiletype";
 
 export class Tile {
  
   private type: TileType;
+  private pathDirections = new Set<Direction>();
 
   constructor(type: TileType) {
     this.type = type;
+
+    // TODO: This is temporary.
+    this.pathDirections.add(Direction.UP);
+    this.pathDirections.add(Direction.DOWN);
+    this.pathDirections.add(Direction.LEFT);
+    this.pathDirections.add(Direction.RIGHT);
   }
 
   getType(): TileType {
@@ -25,5 +33,9 @@ export class Tile {
       case TileType.HEALING:
         return 'Healing';
     }
+  }
+
+  getPathDirections(): Set<Direction> {
+    return this.pathDirections;
   }
 }
