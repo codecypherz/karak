@@ -4,6 +4,8 @@ import { shuffle } from '../util/arrays';
 import { Dungeon } from './dungeon';
 import { Tile } from './tile/tile';
 import { TileType } from './tile/tiletype';
+import { Cell } from './cell';
+import { TileBag } from './tile/tilebag';
 
 export class Game extends EventTarget {
 
@@ -12,6 +14,7 @@ export class Game extends EventTarget {
   private id = uuidv4();
   private players = new Array<Player>();
   private dungeon = new Dungeon();
+  private tileBag = new TileBag();
   private started = false;
   private activePlayerIndex = 0;
 
@@ -74,7 +77,9 @@ export class Game extends EventTarget {
     this.dungeon.setTile(starterCell, new Tile(TileType.STARTER));
 
     // Put the players on the starting tile.
-    this.players.forEach(starterCell.addPlayer, starterCell);
+    this.players.forEach(player => {
+      player.setPosition(starterCell.getPosition());
+    })
 
     // Shuffle the player order randomly.
     shuffle(this.players);
@@ -86,6 +91,26 @@ export class Game extends EventTarget {
     // Start the first player's turn.
     this.getActivePlayer().startTurn();
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
+  }
+
+  explore(cell: Cell): void {
+    const activePlayer = this.getActivePlayer();
+    if (!activePlayer.hasActionsRemaining()) {
+      throw new Error('Player cannot explore without remaining actions.');
+    }
+    if (cell.hasTile()) {
+      throw new Error('Cell has already been explored.');
+    }
+
+    // Pick a tile from the bag.
+    const tile = this.tileBag.drawTile();
+    this.dungeon.setTile(cell, tile);
+
+    // Move the player to the cell.
+    activePlayer.setPosition(cell.getPosition());
+
+    // Reduce remaining actions.
+    activePlayer.consumeAction();
   }
 
   isGameOver(): boolean {

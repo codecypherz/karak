@@ -8,7 +8,7 @@
     <br>
     &lt;{{cell.getTile()!.getTypeText()}}&gt;
   </span>
-  <span *ngFor="let player of cell.getPlayers()">
+  <span *ngFor="let player of getPlayers()">
     <br>
     {{player.character.shortName}}
   </span>

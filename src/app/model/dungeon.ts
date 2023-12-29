@@ -29,7 +29,11 @@ export class Dungeon {
   }
 
   setTile(cell: Cell, tile: Tile): void {
+    if (cell.hasTile()) {
+      throw new Error('Cell already had a tile');
+    }
     cell.setTile(tile);
+    cell.setExplorable(false);
 
     this.getConnectedCells(cell).forEach(connectedCell => {
       if (connectedCell.isEmpty()) {

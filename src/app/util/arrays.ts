@@ -15,3 +15,19 @@ export function shuffle<T>(array: T[]): T[] {
 
   return array;
 };
+
+export function getRandom<T>(array: T[]): T {
+  if (array.length == 0) {
+    throw new Error('Cannot access an empty array.');
+  }
+  const index = Math.floor(Math.random() * array.length);
+  return array[index];
+}
+
+export function removeRandom<T>(array: T[]): T {
+  if (array.length == 0) {
+    throw new Error('Cannot remove from an empty array.');
+  }
+  const index = Math.floor(Math.random() * array.length);
+  return array.splice(index, 1)[0];
+}
