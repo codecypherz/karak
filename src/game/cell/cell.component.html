@@ -4,4 +4,8 @@
     }"
     (click)="onClick()">
   {{cell.getPosition().toString()}}
+  <br>
+  <span *ngIf="cell.hasTile()">
+    {{cell.getTile()!.getTypeText()}}
+  </span>
 </div>

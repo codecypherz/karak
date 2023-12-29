@@ -1,6 +1,7 @@
 import { Cell } from "./cell";
 import { Position } from "./position";
-import { Tile, TileType } from "./tile/tile";
+import { Tile } from "./tile/tile";
+import { TileType } from "./tile/tiletype";
 
 export class Dungeon {
 
