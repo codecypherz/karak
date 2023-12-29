@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Player } from './player';
 import { shuffle } from '../util/arrays';
 import { Dungeon } from './dungeon';
+import { Tile } from './tile/tile';
+import { TileType } from './tile/tiletype';
 
 export class Game extends EventTarget {
 
@@ -61,10 +63,20 @@ export class Game extends EventTarget {
     } else if (this.players.length > 5) {
       throw new Error("Too many players.");
     }
+
     // Shuffle the player order randomly.
     shuffle(this.players);
     this.activePlayerIndex = 0;
     this.getActivePlayer().setActive(true);
+
+    // Set the starting tile.
+    const starterCell = this.dungeon.getCenterCell();
+    starterCell.setTile(new Tile(TileType.STARTER));
+
+    // Put the players on the starting tile.
+    this.players.forEach(starterCell.addPlayer, starterCell);
+
+    // Start the first player's turn.
     this.started = true;
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
   }

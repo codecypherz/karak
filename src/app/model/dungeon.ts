@@ -1,11 +1,9 @@
 import { Cell } from "./cell";
 import { Position } from "./position";
-import { Tile } from "./tile/tile";
-import { TileType } from "./tile/tiletype";
 
 export class Dungeon {
 
-  static readonly SIZE = 20;
+  static readonly SIZE = 10;
   private cells: Cell[][];
 
   constructor() {
@@ -17,13 +15,14 @@ export class Dungeon {
       }
       this.cells.push(rowArr);
     }
-
-    let center = Dungeon.SIZE / 2;
-    let centerCell = this.cells[center][center]
-    centerCell.setTile(new Tile(TileType.STARTER));
   }
 
   getCells(): Cell[][] {
     return this.cells;
+  }
+
+  getCenterCell(): Cell {
+    let center = Dungeon.SIZE / 2;
+    return this.cells[center][center];
   }
 }

@@ -4,8 +4,12 @@
     }"
     (click)="onClick()">
   {{cell.getPosition().toString()}}
-  <br>
   <span *ngIf="cell.hasTile()">
-    {{cell.getTile()!.getTypeText()}}
+    <br>
+    &lt;{{cell.getTile()!.getTypeText()}}&gt;
+  </span>
+  <span *ngFor="let player of cell.getPlayers()">
+    <br>
+    {{player.character.shortName}}
   </span>
 </div>

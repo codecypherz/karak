@@ -10,6 +10,7 @@ export class Character {
 
   constructor(
     readonly name : string,
+    readonly shortName: string,
     imageFile: string) {
       this.imageUrl = Character.IMAGE_PATH + imageFile;
   }

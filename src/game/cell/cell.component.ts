@@ -11,6 +11,6 @@ export class CellComponent {
   @Input() cell!: Cell;
 
   onClick(): void {
-    console.log('clicked cell at ' + this.cell.getPosition().toString());
+    //console.log('clicked cell at ' + this.cell.getPosition().toString());
   }
 }

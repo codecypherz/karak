@@ -15,13 +15,13 @@ export class CharacterCollection {
       throw new Error('Singleton violation: CharacterCollection');
     }
 
-    this.characters.push(new Character("Horan the Warrior", "horan.jpg"));
-    this.characters.push(new Character("Argentus the Wizard", "argentus.jpg"));
-    this.characters.push(new Character("Lord Xanros the Warlock", "xanros.jpg"));
-    this.characters.push(new Character("Aderyn the Thief", "aderyn.jpg"));
-    this.characters.push(new Character("Victorius the Swordsman", "victorius.jpg"));
-    this.characters.push(new Character("Taia the Oracle", "taia.jpg"));
-    this.characters.push(new Character("Elspeth the Warrior Princess", "elspeth.jpg"));
+    this.characters.push(new Character("Horan the Warrior", "Horan", "horan.jpg"));
+    this.characters.push(new Character("Argentus the Wizard", "Argentus", "argentus.jpg"));
+    this.characters.push(new Character("Lord Xanros the Warlock", "Xanros", "xanros.jpg"));
+    this.characters.push(new Character("Aderyn the Thief", "Aderyn", "aderyn.jpg"));
+    this.characters.push(new Character("Victorius the Swordsman", "Victorius", "victorius.jpg"));
+    this.characters.push(new Character("Taia the Oracle", "Taia", "taia.jpg"));
+    this.characters.push(new Character("Elspeth the Warrior Princess", "Elspeth", "elspeth.jpg"));
   }
 
   getCharacters(): Array<Character> {
