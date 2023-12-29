@@ -4,7 +4,7 @@
     (mouseleave)="stopDragging($event, false)"
     (mousemove)="moveEvent($event, container)">
   <table class="dungeon">
-    <tr class="row" *ngFor="let row of dungeon.getCells()">
+    <tr class="row" *ngFor="let row of dungeon.getRows()">
       <td *ngFor="let cell of row">
         <app-cell [cell]="cell"></app-cell>
       </td>

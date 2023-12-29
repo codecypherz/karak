@@ -19,8 +19,22 @@ export class Dungeon {
     }
   }
 
-  getCells(): Cell[][] {
+  getRows(): Cell[][] {
     return this.cells;
+  }
+
+  forEachCell(fn: (cell: Cell) => void) {
+    this.cells.forEach(row => {
+      row.forEach(fn);
+    });
+  }
+
+  getCell(pos: Position): Cell {
+    if (pos.row < 0 || pos.row > Dungeon.SIZE - 1
+      || pos.col < 0 || pos.col > Dungeon.SIZE - 1) {
+      throw new Error('Position out of bounds: ' + pos.toString());
+    }
+    return this.cells[pos.row][pos.col];
   }
 
   getCenterCell(): Cell {
@@ -28,21 +42,7 @@ export class Dungeon {
     return this.cells[center][center];
   }
 
-  setTile(cell: Cell, tile: Tile): void {
-    if (cell.hasTile()) {
-      throw new Error('Cell already had a tile');
-    }
-    cell.setTile(tile);
-    cell.setExplorable(false);
-
-    this.getConnectedCells(cell).forEach(connectedCell => {
-      if (connectedCell.isEmpty()) {
-        connectedCell.setExplorable(true);
-      }
-    });
-  }
-
-  private getConnectedCells(cell: Cell): Set<Cell> {
+  getConnectedCells(cell: Cell): Set<Cell> {
     const cells = new Set<Cell>();
     if (cell.isEmpty()) {
       return cells;

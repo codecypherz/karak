@@ -14,6 +14,9 @@ export class Cell {
   }
 
   setTile(tile: Tile): void {
+    if (this.tile != null) {
+      throw new Error('Cell already had a tile.');
+    }
     this.tile = tile;
   }
 

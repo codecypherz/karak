@@ -49,6 +49,7 @@ export class Game extends EventTarget {
     this.getActivePlayer().endTurn();
     this.activePlayerIndex = (this.activePlayerIndex + 1) % this.players.length;
     this.getActivePlayer().startTurn();
+    this.updateExplorable();
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
   }
 
@@ -74,7 +75,7 @@ export class Game extends EventTarget {
 
     // Set the starting tile.
     const starterCell = this.dungeon.getCenterCell();
-    this.dungeon.setTile(starterCell, new Tile(TileType.STARTER));
+    starterCell.setTile(new Tile(TileType.STARTER));
 
     // Put the players on the starting tile.
     this.players.forEach(player => {
@@ -90,7 +91,23 @@ export class Game extends EventTarget {
 
     // Start the first player's turn.
     this.getActivePlayer().startTurn();
+    this.updateExplorable();
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
+  }
+
+  private updateExplorable(): void {
+    const activePlayer = this.getActivePlayer();
+    this.dungeon.forEachCell(cell => {
+      cell.setExplorable(false);
+    });
+
+    const playerCell = this.dungeon.getCell(activePlayer.getPosition());
+
+    this.dungeon.getConnectedCells(playerCell).forEach(connectedCell => {
+      if (connectedCell.isEmpty()) {
+        connectedCell.setExplorable(true);
+      }
+    });
   }
 
   explore(cell: Cell): void {
@@ -98,18 +115,16 @@ export class Game extends EventTarget {
     if (!activePlayer.hasActionsRemaining()) {
       throw new Error('Player cannot explore without remaining actions.');
     }
+    if (!cell.isExplorable()) {
+      throw new Error('Cannot explore an unexplorable tile.');
+    }
     if (cell.hasTile()) {
       throw new Error('Cell has already been explored.');
     }
 
-    // Pick a tile from the bag.
-    const tile = this.tileBag.drawTile();
-    this.dungeon.setTile(cell, tile);
-
-    // Move the player to the cell.
+    cell.setTile(this.tileBag.drawTile());
     activePlayer.setPosition(cell.getPosition());
-
-    // Reduce remaining actions.
+    this.updateExplorable();
     activePlayer.consumeAction();
   }
 
