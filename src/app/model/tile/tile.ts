@@ -20,21 +20,6 @@ export class Tile {
     return this.type;
   }
 
-  getTypeText(): string {
-    switch (this.type) {
-      case TileType.STARTER:
-        return 'Starter';
-      case TileType.TUNNEL:
-        return 'Tunnel';
-      case TileType.ROOM:
-        return 'Room';
-      case TileType.TELEPORTATION:
-        return 'Teleportation';
-      case TileType.HEALING:
-        return 'Healing';
-    }
-  }
-
   getRotation(): Direction {
     return this.rotation;
   }
