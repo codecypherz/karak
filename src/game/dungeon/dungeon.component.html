@@ -1,8 +1,10 @@
-<div #container class="dungeon-container"
+<div #container
+    class="dungeon-container"
     (mousedown)="startDragging($event, false, container)"
     (mouseup)="stopDragging($event, false)"
     (mouseleave)="stopDragging($event, false)"
     (mousemove)="moveEvent($event, container)">
+
   <table class="dungeon">
     <tr *ngFor="let row of dungeon.getRows()" class="row">
       <td *ngFor="let cell of row" class="cell">
@@ -10,4 +12,5 @@
       </td>
     </tr>
   </table>
+
 </div>

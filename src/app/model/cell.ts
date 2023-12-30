@@ -34,6 +34,10 @@ export class Cell {
     return this.pos;
   }
 
+  setPosition(row: number, col: number) {
+    this.pos = new Position(row, col);
+  }
+
   setExplorable(explorable: boolean): void {
     this.explorable = explorable;
   }

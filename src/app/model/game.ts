@@ -5,6 +5,8 @@ import { Dungeon } from './dungeon';
 import { Cell } from './cell';
 import { TileBag } from './tile/tilebag';
 import { StarterTile } from './tile/starter_tile';
+import { Direction } from './direction';
+import { Position } from './position';
 
 export class Game extends EventTarget {
 
@@ -187,6 +189,21 @@ export class Game extends EventTarget {
     activePlayer.setPosition(cell.getPosition());
     cell.setConfirmingExplore(false);
     this.cellBeingConfirmed = null;
+  
+    // After successfully placing a tile, we might need to expand the grid.
+    const expandDir = this.dungeon.maybeExpandGrid();
+    if (expandDir == Direction.UP) {
+      this.players.forEach(player => {
+        const pos = player.getPosition();
+        player.setPosition(new Position(pos.row + 1, pos.col));
+      });
+    } else if (expandDir == Direction.LEFT) {
+      this.players.forEach(player => {
+        const pos = player.getPosition();
+        player.setPosition(new Position(pos.row, pos.col + 1));
+      });
+    }
+
     this.updatePlayerActionIndicators();
   }
 
