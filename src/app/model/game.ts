@@ -144,12 +144,33 @@ export class Game extends EventTarget {
     this.updateExplorable();
   }
 
-  confirmExplore(cell: Cell): void {
+  canConfirmExplore(cell: Cell): boolean {
+    const activePlayer = this.getActivePlayer();
     if (this.cellBeingConfirmed == null) {
-      throw new Error('No exploration is happening.');
+      return false;
     }
     if (cell != this.cellBeingConfirmed) {
-      throw new Error('Disagreement about which cell is being explored.');
+      return false;
+    }
+    if (cell.getPosition().equals(activePlayer.getPosition())) {
+      throw new Error('Player and cell positions should be different.');
+    }
+
+    // The current player position needs to be linked to the cell.
+    let connectedCells = this.dungeon.getConnectedCells(cell);
+    for (let connectedCell of connectedCells) {
+      if (connectedCell.getPosition().equals(activePlayer.getPosition())) {
+        return true;
+      }
+    }
+
+    // No link found, so invalid rotation.
+    return false;
+  }
+
+  confirmExplore(cell: Cell): void {
+    if (!this.canConfirmExplore(cell)) {
+      throw new Error('Cannot confirm explore.');
     }
 
     const activePlayer = this.getActivePlayer();

@@ -21,6 +21,7 @@
 
   <button *ngIf="cell.isConfirmingExplore()"
       class="confirm"
+      [disabled]="confirmDisabled()"
       (click)="confirmExplore()">Confirm</button>
   <button *ngIf="cell.isConfirmingExplore()"
       class="clockwise"

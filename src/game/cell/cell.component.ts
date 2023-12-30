@@ -44,6 +44,11 @@ export class CellComponent {
     return 'rotate(' + this.cell.getTile()!.getRotation().degrees + 'deg)';
   }
 
+  confirmDisabled(): boolean {
+    const game = this.gameService.getGame();
+    return !game.canConfirmExplore(this.cell);
+  }
+  
   confirmExplore(): void {
     const game = this.gameService.getGame();
     game.confirmExplore(this.cell);
