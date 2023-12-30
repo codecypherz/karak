@@ -8,6 +8,7 @@ export class Tile {
   private type: TileType;
   private pathDirections: Set<Direction>;
   readonly imageUrl: string;
+  private rotation = Direction.UP;
 
   constructor(type: TileType, imageUrl: string, pathDirections: Set<Direction>) {
     this.type = type;
@@ -32,6 +33,28 @@ export class Tile {
       case TileType.HEALING:
         return 'Healing';
     }
+  }
+
+  getRotation(): Direction {
+    return this.rotation;
+  }
+
+  rotateClockwise(): void {
+    this.rotation = this.rotation.clockwise90();
+    const newDirections = new Set<Direction>();
+    this.pathDirections.forEach(direction => {
+      newDirections.add(direction.clockwise90());
+    });
+    this.pathDirections = newDirections;
+  }
+
+  rotateCounterClockwise(): void {
+    this.rotation = this.rotation.counterClockwise90();
+    const newDirections = new Set<Direction>();
+    this.pathDirections.forEach(direction => {
+      newDirections.add(direction.counterClockwise90());
+    });
+    this.pathDirections = newDirections;
   }
 
   getPathDirections(): Set<Direction> {

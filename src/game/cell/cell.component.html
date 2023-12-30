@@ -4,7 +4,10 @@
     }"
     (click)="onClick()">
 
-  <img *ngIf="cell.hasTile()" class="tile" src="{{cell.getTile()!.imageUrl}}">
+  <img *ngIf="cell.hasTile()"
+      class="tile"
+      src="{{cell.getTile()!.imageUrl}}"
+      [style.transform]="getTileRotationTransform()">
 
   <div *ngIf="hasPlayers()" class="players">
     <div *ngFor="let player of getPlayers()" class="player">
@@ -12,11 +15,17 @@
     </div>
   </div>
 
-  <div *ngIf="cell.isExplorable()" class="explore">
-    <button (click)="explore()">Explore</button>
-  </div>
+  <button *ngIf="cell.isExplorable()"
+      class="explore"
+      (click)="explore()">Explore</button>
 
-  <div *ngIf="cell.isConfirmingExplore()" class="explore">
-    <button (click)="confirmExplore()">Confirm</button>
-  </div>
+  <button *ngIf="cell.isConfirmingExplore()"
+      class="confirm"
+      (click)="confirmExplore()">Confirm</button>
+  <button *ngIf="cell.isConfirmingExplore()"
+      class="clockwise"
+      (click)="rotateClockwise()">CW</button>
+  <button *ngIf="cell.isConfirmingExplore()"
+      class="counter-clockwise"
+      (click)="rotateCounterClockwise()">CCW</button>
 </div>

@@ -7,3 +7,12 @@
   background: #222;
   overflow: hidden;
 }
+
+.dungeon {
+  border-collapse: collapse;
+}
+
+.row, .cell {
+  margin: 0;
+  padding: 0;
+}

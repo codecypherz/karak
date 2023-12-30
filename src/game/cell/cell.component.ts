@@ -23,6 +23,27 @@ export class CellComponent {
     game.explore(this.cell);
   }
 
+  rotateClockwise(): void {
+    if (!this.cell.hasTile() || !this.cell.isConfirmingExplore()) {
+      throw new Error('Cannot rotate unless exploring.');
+    }
+    this.cell.getTile()!.rotateClockwise();
+  }
+
+  rotateCounterClockwise(): void {
+    if (!this.cell.hasTile() || !this.cell.isConfirmingExplore()) {
+      throw new Error('Cannot rotate unless exploring.');
+    }
+    this.cell.getTile()?.rotateCounterClockwise();
+  }
+
+  getTileRotationTransform(): string {
+    if (!this.cell.hasTile()) {
+      return '';
+    }
+    return 'rotate(' + this.cell.getTile()!.getRotation().degrees + 'deg)';
+  }
+
   confirmExplore(): void {
     const game = this.gameService.getGame();
     game.confirmExplore(this.cell);

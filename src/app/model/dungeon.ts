@@ -85,7 +85,8 @@ export class Dungeon {
         break;
     }
 
-    if (row < 0 || row > Dungeon.SIZE - 1
+    if (row == null || col == null
+      || row < 0 || row > Dungeon.SIZE - 1
       || col < 0 || col > Dungeon.SIZE - 1) {
       return null;
     }
