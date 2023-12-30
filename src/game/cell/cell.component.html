@@ -3,17 +3,16 @@
       'empty': cell.isEmpty()
     }"
     (click)="onClick()">
-  {{cell.getPosition().toString()}}
-  <span *ngIf="cell.hasTile()">
-    <br>
-    &lt;{{cell.getTile()!.getTypeText()}}&gt;
-  </span>
-  <span *ngFor="let player of getPlayers()">
-    <br>
-    {{player.character.shortName}}
-  </span>
-  <span *ngIf="cell.isExplorable()">
-    <br>
+
+  <img *ngIf="cell.hasTile()" class="tile" src="{{cell.getTile()!.imageUrl}}">
+
+  <div *ngIf="hasPlayers()" class="players">
+    <div *ngFor="let player of getPlayers()" class="player">
+      {{player.character.shortName}}
+    </div>
+  </div>
+
+  <div *ngIf="cell.isExplorable()" class="explore">
     <button (click)="explore()">Explore</button>
-  </span>
+  </div>
 </div>

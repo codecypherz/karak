@@ -3,11 +3,15 @@ import { TileType } from "./tiletype";
 
 export class Tile {
  
+  static IMAGE_PATH = "/images/tile/";
+
   private type: TileType;
   private pathDirections = new Set<Direction>();
+  readonly imageUrl: string;
 
-  constructor(type: TileType) {
+  constructor(type: TileType, imageUrl: string) {
     this.type = type;
+    this.imageUrl = Tile.IMAGE_PATH + imageUrl;
 
     // TODO: This is temporary.
     this.pathDirections.add(Direction.UP);

@@ -23,6 +23,10 @@ export class CellComponent {
     game.explore(this.cell);
   }
 
+  hasPlayers(): boolean {
+    return this.getPlayers().size > 0;
+  }
+
   getPlayers(): Set<Player> {
     const game = this.gameService.getGame();
     const players = new Set<Player>();

@@ -1,6 +1,6 @@
 import { removeRandom } from "src/app/util/arrays";
 import { Tile } from "./tile";
-import { TileType } from "./tiletype";
+import { RoomTile, RoomType } from "./room_tile";
 
 export class TileBag {
 
@@ -8,7 +8,7 @@ export class TileBag {
 
   constructor() {
     for (let i = 0; i < 20; i++) {
-      this.tiles.push(new Tile(TileType.ROOM));
+      this.tiles.push(new RoomTile(RoomType.FOUR_WAY));
     }
   }
 

@@ -2,10 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { Player } from './player';
 import { shuffle } from '../util/arrays';
 import { Dungeon } from './dungeon';
-import { Tile } from './tile/tile';
-import { TileType } from './tile/tiletype';
 import { Cell } from './cell';
 import { TileBag } from './tile/tilebag';
+import { StarterTile } from './tile/starter_tile';
 
 export class Game extends EventTarget {
 
@@ -75,7 +74,7 @@ export class Game extends EventTarget {
 
     // Set the starting tile.
     const starterCell = this.dungeon.getCenterCell();
-    starterCell.setTile(new Tile(TileType.STARTER));
+    starterCell.setTile(new StarterTile());
 
     // Put the players on the starting tile.
     this.players.forEach(player => {
