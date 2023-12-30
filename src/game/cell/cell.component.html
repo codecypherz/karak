@@ -15,6 +15,10 @@
     </div>
   </div>
 
+  <button *ngIf="cell.isMoveable()"
+      class="move"
+      (click)="move()">Move</button>
+
   <button *ngIf="cell.isExplorable()"
       class="explore"
       (click)="explore()">Explore</button>

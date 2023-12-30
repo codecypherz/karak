@@ -5,6 +5,7 @@ export class Cell {
  
   private tile: Tile | null = null;
   private explorable = false;
+  private moveable = false;
   private confirmingExplore = false;
 
   constructor(private pos: Position) {
@@ -47,5 +48,13 @@ export class Cell {
 
   isConfirmingExplore(): boolean {
     return this.confirmingExplore;
+  }
+
+  isMoveable(): boolean {
+    return this.moveable;
+  }
+
+  setMoveable(moveable: boolean): void {
+    this.moveable = moveable;
   }
 }

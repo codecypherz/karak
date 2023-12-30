@@ -52,7 +52,7 @@ export class Game extends EventTarget {
     this.getActivePlayer().endTurn();
     this.activePlayerIndex = (this.activePlayerIndex + 1) % this.players.length;
     this.getActivePlayer().startTurn();
-    this.updateExplorable();
+    this.updatePlayerActionIndicators();
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
   }
 
@@ -98,14 +98,15 @@ export class Game extends EventTarget {
 
     // Start the first player's turn.
     this.getActivePlayer().startTurn();
-    this.updateExplorable();
+    this.updatePlayerActionIndicators();
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
   }
 
-  private updateExplorable(): void {
+  private updatePlayerActionIndicators(): void {
     const activePlayer = this.getActivePlayer();
     this.dungeon.forEachCell(cell => {
       cell.setExplorable(false);
+      cell.setMoveable(false);
     });
 
     if (activePlayer.getActionsRemaining() == 0
@@ -118,8 +119,17 @@ export class Game extends EventTarget {
     this.dungeon.getConnectedCells(playerCell).forEach(connectedCell => {
       if (connectedCell.isEmpty()) {
         connectedCell.setExplorable(true);
+      } else {
+        connectedCell.setMoveable(true);
       }
     });
+  }
+
+  moveTo(cell: Cell): void {
+    const activePlayer = this.getActivePlayer();
+    activePlayer.setPosition(cell.getPosition());
+    activePlayer.consumeAction();
+    this.updatePlayerActionIndicators();
   }
 
   explore(cell: Cell): void {
@@ -141,7 +151,7 @@ export class Game extends EventTarget {
     cell.setConfirmingExplore(true);
     this.cellBeingConfirmed = cell;
     activePlayer.consumeAction();
-    this.updateExplorable();
+    this.updatePlayerActionIndicators();
   }
 
   canConfirmExplore(cell: Cell): boolean {
@@ -177,7 +187,7 @@ export class Game extends EventTarget {
     activePlayer.setPosition(cell.getPosition());
     cell.setConfirmingExplore(false);
     this.cellBeingConfirmed = null;
-    this.updateExplorable();
+    this.updatePlayerActionIndicators();
   }
 
   isGameOver(): boolean {

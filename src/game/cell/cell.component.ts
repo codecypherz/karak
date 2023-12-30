@@ -18,6 +18,11 @@ export class CellComponent {
     //console.log('clicked cell at ' + this.cell.getPosition().toString());
   }
 
+  move(): void {
+    const game = this.gameService.getGame();
+    game.moveTo(this.cell);
+  }
+
   explore(): void {
     const game = this.gameService.getGame();
     game.explore(this.cell);
