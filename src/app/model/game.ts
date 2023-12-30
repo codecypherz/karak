@@ -122,7 +122,18 @@ export class Game extends EventTarget {
       if (connectedCell.isEmpty()) {
         connectedCell.setExplorable(true);
       } else {
-        connectedCell.setMoveable(true);
+        // The connected cell has a tile, but the target tile must also
+        // contain the player cell in *it's* connected set for it to make
+        // a viable movement path.
+        const targetConnectedCells = this.dungeon.getConnectedCells(connectedCell);
+        let foundPath = false;
+        for (let targetConnectedCell of targetConnectedCells) {
+          if (targetConnectedCell.getPosition().equals(playerCell.getPosition())) {
+            foundPath = true;
+            break;
+          }
+        }
+        connectedCell.setMoveable(foundPath);
       }
     });
   }
