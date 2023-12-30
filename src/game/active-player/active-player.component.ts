@@ -15,6 +15,10 @@ export class ActivePlayerComponent {
     return this.game.getActivePlayer();
   }
 
+  endTurnDisabled(): boolean {
+    return !this.game.canEndTurn();
+  }
+
   endTurn(): void {
     this.game.startNextTurn();
   }

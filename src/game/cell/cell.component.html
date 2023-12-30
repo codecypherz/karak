@@ -15,4 +15,8 @@
   <div *ngIf="cell.isExplorable()" class="explore">
     <button (click)="explore()">Explore</button>
   </div>
+
+  <div *ngIf="cell.isConfirmingExplore()" class="explore">
+    <button (click)="confirmExplore()">Confirm</button>
+  </div>
 </div>

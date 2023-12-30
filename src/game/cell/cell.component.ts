@@ -23,6 +23,11 @@ export class CellComponent {
     game.explore(this.cell);
   }
 
+  confirmExplore(): void {
+    const game = this.gameService.getGame();
+    game.confirmExplore(this.cell);
+  }
+
   hasPlayers(): boolean {
     return this.getPlayers().size > 0;
   }

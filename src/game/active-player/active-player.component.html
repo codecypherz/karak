@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="right-content">
-    <button class="end-turn-button" (click)="endTurn()">
+    <button class="end-turn-button" (click)="endTurn()" [disabled]="endTurnDisabled()">
       End Turn
     </button>
     <div class="actions">

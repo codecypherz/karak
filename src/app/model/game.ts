@@ -16,6 +16,7 @@ export class Game extends EventTarget {
   private tileBag = new TileBag();
   private started = false;
   private activePlayerIndex = 0;
+  private cellBeingConfirmed: Cell | null = null;
 
   getId(): string {
     return this.id;
@@ -45,11 +46,18 @@ export class Game extends EventTarget {
   }
 
   startNextTurn(): void {
+    if (!this.canEndTurn()) {
+      throw new Error('Cannot end turn right now.');
+    }
     this.getActivePlayer().endTurn();
     this.activePlayerIndex = (this.activePlayerIndex + 1) % this.players.length;
     this.getActivePlayer().startTurn();
     this.updateExplorable();
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
+  }
+
+  canEndTurn(): boolean {
+    return this.cellBeingConfirmed == null;
   }
 
   isStarted(): boolean {
@@ -100,8 +108,13 @@ export class Game extends EventTarget {
       cell.setExplorable(false);
     });
 
-    const playerCell = this.dungeon.getCell(activePlayer.getPosition());
+    if (activePlayer.getActionsRemaining() == 0
+      || this.cellBeingConfirmed != null) {
+      return;
+    }
 
+    // Mark immediately adjacent, connected cells as explorable.
+    const playerCell = this.dungeon.getCell(activePlayer.getPosition());
     this.dungeon.getConnectedCells(playerCell).forEach(connectedCell => {
       if (connectedCell.isEmpty()) {
         connectedCell.setExplorable(true);
@@ -111,6 +124,9 @@ export class Game extends EventTarget {
 
   explore(cell: Cell): void {
     const activePlayer = this.getActivePlayer();
+    if (this.cellBeingConfirmed != null) {
+      throw new Error('Another cell is currently being explored.');
+    }
     if (!activePlayer.hasActionsRemaining()) {
       throw new Error('Player cannot explore without remaining actions.');
     }
@@ -122,9 +138,25 @@ export class Game extends EventTarget {
     }
 
     cell.setTile(this.tileBag.drawTile());
-    activePlayer.setPosition(cell.getPosition());
-    this.updateExplorable();
+    cell.setConfirmingExplore(true);
+    this.cellBeingConfirmed = cell;
     activePlayer.consumeAction();
+    this.updateExplorable();
+  }
+
+  confirmExplore(cell: Cell): void {
+    if (this.cellBeingConfirmed == null) {
+      throw new Error('No exploration is happening.');
+    }
+    if (cell != this.cellBeingConfirmed) {
+      throw new Error('Disagreement about which cell is being explored.');
+    }
+
+    const activePlayer = this.getActivePlayer();
+    activePlayer.setPosition(cell.getPosition());
+    cell.setConfirmingExplore(false);
+    this.cellBeingConfirmed = null;
+    this.updateExplorable();
   }
 
   isGameOver(): boolean {

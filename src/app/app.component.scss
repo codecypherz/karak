@@ -51,6 +51,9 @@
   bottom: 0;
   overflow: hidden;
   z-index: var(--z_app_background);
+  background-image: url(/images/body_background.jpg);
+  filter: brightness(15%);
+  background-size: cover;
 }
 
 .app-background>img {
@@ -63,6 +66,7 @@
   display: inline-block;
   vertical-align: top;
   margin-bottom: 40px;
+  min-width: 1300px;
 }
 
 .footer {
