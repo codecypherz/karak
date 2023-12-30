@@ -8,7 +8,10 @@ export class TileBag {
 
   constructor() {
     for (let i = 0; i < 20; i++) {
+      this.tiles.push(new RoomTile(RoomType.FOUR_WAY));
       this.tiles.push(new RoomTile(RoomType.THREE_WAY));
+      this.tiles.push(new RoomTile(RoomType.TWO_WAY));
+      this.tiles.push(new RoomTile(RoomType.CORNER));
     }
   }
 

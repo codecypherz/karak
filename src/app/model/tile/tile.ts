@@ -6,18 +6,13 @@ export class Tile {
   static IMAGE_PATH = "/images/tile/";
 
   private type: TileType;
-  private pathDirections = new Set<Direction>();
+  private pathDirections: Set<Direction>;
   readonly imageUrl: string;
 
-  constructor(type: TileType, imageUrl: string) {
+  constructor(type: TileType, imageUrl: string, pathDirections: Set<Direction>) {
     this.type = type;
     this.imageUrl = Tile.IMAGE_PATH + imageUrl;
-
-    // TODO: This is temporary.
-    this.pathDirections.add(Direction.UP);
-    this.pathDirections.add(Direction.DOWN);
-    this.pathDirections.add(Direction.LEFT);
-    this.pathDirections.add(Direction.RIGHT);
+    this.pathDirections = pathDirections;
   }
 
   getType(): TileType {
