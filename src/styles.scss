@@ -8,8 +8,8 @@ body {
   background-color: var(--background_color);
   color: var(--foreground_color);
   position: absolute;
-  left: 0;
-  right: 0;
+  width: 100%;
+  min-width: fit-content;
 }
 
 button {
