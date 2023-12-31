@@ -1,9 +1,16 @@
 <div #container
     class="dungeon-container"
-    (mousedown)="startDragging($event, false, container)"
-    (mouseup)="stopDragging($event, false)"
-    (mouseleave)="stopDragging($event, false)"
-    (mousemove)="moveEvent($event, container)">
+
+    (mousedown)="startMouseDragging($event, false, container)"
+    (touchstart)="startTouchDragging($event, false, container)"
+
+    (mouseup)="stopMouseDragging($event, false)"
+    (mouseleave)="stopMouseDragging($event, false)"
+    (touchend)="stopTouchDragging($event, false)"
+    (touchcancel)="stopTouchDragging($event, false)"
+
+    (mousemove)="moveMouseEvent($event, container)"
+    (touchmove)="moveTouchEvent($event, container)">
 
   <table class="dungeon">
     <tr *ngFor="let row of dungeon.getRows()" class="row">
