@@ -119,7 +119,7 @@ export class Game extends EventTarget {
     // Mark immediately adjacent, connected cells as explorable.
     const playerCell = this.dungeon.getCell(activePlayer.getPosition());
     this.dungeon.getConnectedCells(playerCell).forEach(connectedCell => {
-      if (connectedCell.isEmpty()) {
+      if (connectedCell.isEmpty() && !this.tileBag.isEmpty()) {
         connectedCell.setExplorable(true);
       } else {
         // The connected cell has a tile, but the target tile must also
