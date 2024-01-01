@@ -27,6 +27,9 @@
 .player {
   border-bottom: 1px solid white;
 }
+.player.active {
+  color: gold;
+}
 
 .player:last-child {
   border-bottom: none;

@@ -10,7 +10,11 @@
       [style.transform]="getTileRotationTransform()">
 
   <div *ngIf="hasPlayers()" class="players">
-    <div *ngFor="let player of getPlayers()" class="player">
+    <div *ngFor="let player of getPlayers()"
+        [ngClass]="{
+          'player': true,
+          'active': player.isActive()
+        }">
       {{player.character.shortName}}
     </div>
   </div>
