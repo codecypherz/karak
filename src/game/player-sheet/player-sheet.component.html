@@ -2,5 +2,14 @@
       'player-sheet': true,
       'active': player.isActive()
     }">
+  <img class="sheet" src="/images/character/character_sheet.jpg">
   <img class="character-image" src="{{player.character.imageUrl}}">
+  <div *ngIf="player.isActive()">
+    <button class="end-turn" (click)="endTurn()" [disabled]="endTurnDisabled()">
+      End Turn
+    </button>
+    <div class="actions-remaining">
+      Actions: {{player.getActionsRemaining()}}
+    </div>
+  </div>
 </div>

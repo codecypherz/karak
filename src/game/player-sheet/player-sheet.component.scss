@@ -1,15 +1,38 @@
 .player-sheet {
-  border: 2px solid black;
+  border: 3px solid transparent;
   border-radius: 10px;
   margin-bottom: 10px;
+  width: 300px;
+  height: 186px;
+  position: relative;
+  background-color: #111;
   overflow: hidden;
-  height: 200px;
 }
 
 .player-sheet.active {
-  border: 2px solid gold;
+  border: 3px solid gold;
+  height: 228px;
+}
+
+.sheet {
+  width: 100%;
 }
 
 .character-image {
-  width: 150px;
+  width: 120px;
+  position: absolute;
+  left: 50px;
+  top: 13px;
+}
+
+.end-turn {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+}
+
+.actions-remaining {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }

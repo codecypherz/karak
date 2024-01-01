@@ -7,7 +7,6 @@ import { GameComponent } from './game/game.component';
 import { GameOverComponent } from './game-over/game-over.component';
 import { PlayerSheetsComponent } from './player-sheets/player-sheets.component';
 import { DungeonComponent } from './dungeon/dungeon.component';
-import { ActivePlayerComponent } from './active-player/active-player.component';
 import { PlayerSheetComponent } from './player-sheet/player-sheet.component';
 import { CellComponent } from './cell/cell.component';
 
@@ -18,7 +17,6 @@ import { CellComponent } from './cell/cell.component';
     GameRoutingModule,
   ],
   declarations: [
-    ActivePlayerComponent,
     CellComponent,
     DungeonComponent,
     GameComponent,
