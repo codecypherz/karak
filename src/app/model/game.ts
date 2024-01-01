@@ -88,8 +88,8 @@ export class Game extends EventTarget {
 
     // Put the players on the starting tile.
     this.players.forEach(player => {
-      player.setPosition(starterCell.getPosition());
-    })
+      player.setPositions(starterCell.getPosition(), starterCell.getPosition());
+    });
 
     // Shuffle the player order randomly.
     shuffle(this.players);
@@ -140,7 +140,7 @@ export class Game extends EventTarget {
 
   moveTo(cell: Cell): void {
     const activePlayer = this.getActivePlayer();
-    activePlayer.setPosition(cell.getPosition());
+    activePlayer.moveTo(cell.getPosition());
     activePlayer.consumeAction();
     this.updatePlayerActionIndicators();
   }
@@ -197,7 +197,7 @@ export class Game extends EventTarget {
     }
 
     const activePlayer = this.getActivePlayer();
-    activePlayer.setPosition(cell.getPosition());
+    activePlayer.moveTo(cell.getPosition());
     cell.setConfirmingExplore(false);
     this.cellBeingConfirmed = null;
   
@@ -206,12 +206,18 @@ export class Game extends EventTarget {
     if (expandDir == Direction.UP) {
       this.players.forEach(player => {
         const pos = player.getPosition();
-        player.setPosition(new Position(pos.row + 1, pos.col));
+        const lastPos = player.getLastPosition();
+        player.setPositions(
+            new Position(pos.row + 1, pos.col),
+            new Position(lastPos.row + 1, lastPos.col));
       });
     } else if (expandDir == Direction.LEFT) {
       this.players.forEach(player => {
         const pos = player.getPosition();
-        player.setPosition(new Position(pos.row, pos.col + 1));
+        const lastPos = player.getLastPosition();
+        player.setPositions(
+            new Position(pos.row, pos.col + 1),
+            new Position(lastPos.row, lastPos.col + 1));
       });
     }
 
