@@ -7,6 +7,8 @@ import { TileBag } from './tile/tilebag';
 import { StarterTile } from './tile/starter_tile';
 import { Direction } from './direction';
 import { Position } from './position';
+import { TileType } from './tile/tiletype';
+import { TokenBag } from './token/tokenbag';
 
 export class Game extends EventTarget {
 
@@ -16,6 +18,7 @@ export class Game extends EventTarget {
   private players = new Array<Player>();
   private dungeon = new Dungeon();
   private tileBag = new TileBag();
+  private tokenBag = new TokenBag();
   private started = false;
   private activePlayerIndex = 0;
   private cellBeingConfirmed: Cell | null = null;
@@ -209,6 +212,13 @@ export class Game extends EventTarget {
             new Position(pos.row, pos.col + 1),
             new Position(lastPos.row, lastPos.col + 1));
       });
+    }
+
+    // If a room was explored, reveal a token.
+    if (cell.getTile()!.getType() == TileType.ROOM) {
+      const token = this.tokenBag.drawToken();
+      cell.setToken(token);
+      // TODO: Maybe trigger fight.
     }
 
     this.updatePlayerActionIndicators();

@@ -1,9 +1,11 @@
 import { Position } from "./position";
 import { Tile } from "./tile/tile";
+import { Token } from "./token/token";
 
 export class Cell {
  
   private tile: Tile | null = null;
+  private token: Token | null = null;
   private explorable = false;
   private moveable = false;
   private confirmingExplore = false;
@@ -22,6 +24,20 @@ export class Cell {
     this.tile = tile;
   }
 
+  getToken(): Token | null {
+    return this.token;
+  }
+
+  setToken(token: Token): void {
+    if (this.tile == null) {
+      throw new Error('Cannot set a token without a tile.');
+    }
+    if (this.token != null) {
+      throw new Error('Cell already had a token.');
+    }
+    this.token = token;
+  }
+
   isEmpty(): boolean {
     return this.tile == null;
   }
@@ -30,6 +46,10 @@ export class Cell {
     return this.tile != null;
   }
 
+  hasToken(): boolean {
+    return this.token != null;
+  }
+  
   getPosition(): Position {
     return this.pos;
   }

@@ -9,6 +9,10 @@
       src="{{cell.getTile()!.imageUrl}}"
       [style.transform]="getTileRotationTransform()">
 
+  <div *ngIf="cell.hasToken()" class="token-container">
+    <img class="token" src="{{cell.getToken()!.imageUrl}}">
+  </div>
+
   <div *ngIf="hasPlayers()" class="players">
     <div *ngFor="let player of getPlayers()"
         [ngClass]="{
