@@ -5,16 +5,19 @@
   justify-content: center;
 }
 
-.new-game-help-text {
+.new-game-help {
   width: 100%;
   font-size: 30px;
+  height: 60px;
 }
 
-.characters {
-  margin-bottom: 40px;
+.new-game-help-text.error {
+  text-decoration: underline;
+  text-decoration-color: red;
 }
 
-.start-game-container {
-  width: 100%;
-  display: inline-block;
+.start-game {
+  margin-left: 30px;
+  margin-top: 5px;
+  vertical-align: top;
 }

@@ -1,6 +1,14 @@
 <div class="new-game-setup">
-  <div class="new-game-help-text">
-    Select 2-5 Characters
+  <div class="new-game-help">
+    <span [ngClass]="{
+      'new-game-help-text': true,
+      'error': showError()
+    }">
+      Select 2-5 Characters
+    </span>
+    <button class="start-game" (click)="startGame()">
+      Start Game
+    </button>
   </div>
 
   <div class="characters">
@@ -8,11 +16,5 @@
       *ngFor="let character of getCharacters()"
       [character]="character">
     </app-character>
-  </div>
-
-  <div class="start-game-container">
-    <button class="start-game" (click)="startGame()">
-      Start Game
-    </button>
   </div>
 </div>

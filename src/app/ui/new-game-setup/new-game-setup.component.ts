@@ -13,6 +13,8 @@ import { GameService } from 'src/app/service/game.service';
 })
 export class NewGameSetupComponent {
 
+  private invalidGameStart = false;
+
   constructor(
     private characterCollection: CharacterCollection,
     private gameService: GameService,
@@ -24,6 +26,7 @@ export class NewGameSetupComponent {
   }
 
   startGame(): void {
+    this.invalidGameStart = false;
     const game = new Game();
     for (let character of this.characterCollection.getCharacters()) {
       if (character.isSelected()) {
@@ -32,11 +35,15 @@ export class NewGameSetupComponent {
     }
 
     if (!game.isValidToStart()) {
-      // TODO: Render something to tell the user.
+      this.invalidGameStart = true;
       return;
     }
 
     this.gameService.startGame(game);
     this.router.navigate(['game', game.getId()]);
+  }
+
+  showError(): boolean {
+    return this.invalidGameStart;
   }
 }
