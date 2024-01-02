@@ -40,6 +40,14 @@ export class Game extends EventTarget {
     return player;
   }
 
+  getTilesRemaining(): number {
+    return this.tileBag.getNumTiles();
+  }
+
+  getTokensRemaining(): number {
+    return this.tokenBag.getNumTokens();
+  }
+
   startNextTurn(): void {
     if (!this.canEndTurn()) {
       throw new Error('Cannot end turn right now.');
