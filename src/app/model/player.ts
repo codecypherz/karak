@@ -3,6 +3,12 @@ import { Character } from './character';
 import { Position } from './position';
 import { Monster } from './token/monster';
 
+export enum CombatResult {
+  WIN,
+  LOSS,
+  TIE
+}
+
 export class Player extends EventTarget {
 
   static COMBAT_CONFIRMED_EVENT = 'combat_confirmed';
@@ -10,10 +16,15 @@ export class Player extends EventTarget {
   private id = uuidv4();
   private active = false;
   private actionsRemaining = 0;
+
   private lastPosition: Position | null = null; // Null until game start
   private position: Position | null = null; // Null until game start
+
   private activeMonster: Monster | null = null;
   private hadCombat = false;
+  private dieOne = 0;
+  private dieTwo = 0;
+  private madeCombatRoll = false;
 
   constructor(
       readonly character: Character) {
@@ -28,6 +39,7 @@ export class Player extends EventTarget {
     this.active = true;
     this.activeMonster = null;
     this.hadCombat = false;
+    this.madeCombatRoll = false;
     this.actionsRemaining = 4;
   }
 
@@ -96,12 +108,58 @@ export class Player extends EventTarget {
     return this.activeMonster;
   }
 
-  confirmCombatResult(): void {
-    if (this.activeMonster == null) {
+  makeCombatRoll(): void {
+    if (!this.isInCombat()) {
       throw new Error('Player not in combat.');
     }
 
-    // TODO
+    this.dieOne = this.rollDie();
+    this.dieTwo = this.rollDie();
+    this.madeCombatRoll = true;
+  }
+
+  hasMadeCombatRoll(): boolean {
+    return this.madeCombatRoll;
+  }
+
+  getDieOne(): number {
+    return this.dieOne;
+  }
+
+  getDieTwo(): number {
+    return this.dieTwo;
+  }
+
+  getPendingCombatResult(): CombatResult {
+    if (!this.isInCombat()) {
+      throw new Error('Player not in combat.');
+    }
+    if (this.canConfirmCombatResult()) {
+      throw new Error('Player cannot yet confirm combat result.');
+    }
+
+    const monsterStrength = this.activeMonster!.getStrength();
+    const playerStrength = this.dieOne + this.dieTwo;
+
+    if (monsterStrength < playerStrength) {
+      return CombatResult.WIN;
+    } else if (monsterStrength > playerStrength) {
+      return CombatResult.LOSS;
+    } else {
+      return CombatResult.TIE;
+    }
+  }
+
+  canConfirmCombatResult(): boolean {
+    return this.hasMadeCombatRoll();
+  }
+
+  confirmCombatResult(): void {
+    if (!this.isInCombat()) {
+      throw new Error('Player not in combat.');
+    }
+
+    // TODO Claim reward?
 
     this.activeMonster = null;
     this.hadCombat = true;
@@ -111,5 +169,9 @@ export class Player extends EventTarget {
 
   hasHadCombat(): boolean {
     return this.hadCombat;
+  }
+
+  private rollDie(): number {
+    return Math.floor(Math.random() * 6) + 1;
   }
 }

@@ -23,6 +23,19 @@
   margin-right: 10px;
 }
 
+.roll-container {
+  width: 100px;
+  margin-right: 10px;
+}
+
+.roll, .die {
+  display: inline-block;
+}
+
+.die.one {
+  margin-right: 10px;
+}
+
 .monster {
   width: 100%;
 }
