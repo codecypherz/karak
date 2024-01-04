@@ -1,0 +1,9 @@
+<div *ngIf="player.isInCombat()" class="monster-battle">
+
+  <div class="monster-container">
+    <img class="monster" src="{{player.getActiveMonster()!.imageUrl}}">
+  </div>
+
+  <button (click)="player.confirmCombatResult()">Confirm</button>
+
+</div>

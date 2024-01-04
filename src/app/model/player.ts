@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Character } from './character';
 import { Position } from './position';
+import { Monster } from './token/monster';
 
 export class Player {
 
@@ -9,6 +10,7 @@ export class Player {
   private actionsRemaining = 0;
   private lastPosition: Position | null = null; // Null until game start
   private position: Position | null = null; // Null until game start
+  private activeMonster: Monster | null = null;
 
   constructor(
     readonly character: Character) {
@@ -72,5 +74,29 @@ export class Player {
   getPosition(): Position {
     // Assumed to only be accessed after game start.
     return this.position!;
+  }
+
+  startCombat(monster: Monster): void {
+    this.activeMonster = monster;
+
+    // TODO Roll dice
+  }
+
+  isInCombat(): boolean {
+    return this.activeMonster != null;
+  }
+
+  getActiveMonster(): Monster | null {
+    return this.activeMonster;
+  }
+  
+  confirmCombatResult(): void {
+    if (this.activeMonster == null) {
+      throw new Error('Player not in combat.');
+    }
+
+    // TODO
+
+    this.activeMonster = null;
   }
 }

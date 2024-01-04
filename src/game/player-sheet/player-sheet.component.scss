@@ -6,7 +6,6 @@
   height: 186px;
   position: relative;
   background-color: #111;
-  overflow: hidden;
 }
 
 .player-sheet.active {
@@ -16,6 +15,8 @@
 
 .sheet {
   width: 100%;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .character-image {

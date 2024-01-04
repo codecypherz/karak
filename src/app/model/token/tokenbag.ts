@@ -35,7 +35,7 @@ export class TokenBag {
       this.tokens.push(new GiantRat());
     }
     for (let i = 0; i < 10; i++) {
-      this.tokens.push(new Treasure());
+      //this.tokens.push(new Treasure());
     }
   }
 

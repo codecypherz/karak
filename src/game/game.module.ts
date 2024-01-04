@@ -11,6 +11,7 @@ import { PlayerSheetComponent } from './player-sheet/player-sheet.component';
 import { CellComponent } from './cell/cell.component';
 import { GameInfoComponent } from './game-info/game-info.component';
 import { PlayerComponent } from './player/player.component';
+import { MonsterBattleComponent } from './monster-battle/monster-battle.component';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { PlayerComponent } from './player/player.component';
     GameComponent,
     GameInfoComponent,
     GameOverComponent,
+    MonsterBattleComponent,
     PlayerComponent,
     PlayerSheetComponent,
     PlayerSheetsComponent,

@@ -4,6 +4,7 @@
     }">
   <img class="sheet" src="/images/character/character_sheet.jpg">
   <img class="character-image" src="{{player.character.imageUrl}}">
+
   <div *ngIf="player.isActive()">
     <button class="end-turn" (click)="endTurn()" [disabled]="endTurnDisabled()">
       End Turn
@@ -12,4 +13,7 @@
       Actions: {{player.getActionsRemaining()}}
     </div>
   </div>
+
+  <app-monster-battle [player]="player"></app-monster-battle>
+
 </div>

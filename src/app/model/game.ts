@@ -9,6 +9,7 @@ import { Direction } from './direction';
 import { Position } from './position';
 import { TileType } from './tile/tiletype';
 import { TokenBag } from './token/tokenbag';
+import { Monster } from './token/monster';
 
 export class Game extends EventTarget {
 
@@ -60,7 +61,7 @@ export class Game extends EventTarget {
   }
 
   canEndTurn(): boolean {
-    return this.cellBeingConfirmed == null;
+    return this.cellBeingConfirmed == null && !this.getActivePlayer().isInCombat();
   }
 
   isStarted(): boolean {
@@ -103,40 +104,6 @@ export class Game extends EventTarget {
     this.getActivePlayer().startTurn();
     this.updatePlayerActionIndicators();
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
-  }
-
-  private updatePlayerActionIndicators(): void {
-    const activePlayer = this.getActivePlayer();
-    this.dungeon.forEachCell(cell => {
-      cell.setExplorable(false);
-      cell.setMoveable(false);
-    });
-
-    if (activePlayer.getActionsRemaining() == 0
-      || this.cellBeingConfirmed != null) {
-      return;
-    }
-
-    // Mark immediately adjacent, connected cells as explorable.
-    const playerCell = this.dungeon.getCell(activePlayer.getPosition());
-    this.dungeon.getConnectedCells(playerCell).forEach(connectedCell => {
-      if (connectedCell.isEmpty() && !this.tileBag.isEmpty()) {
-        connectedCell.setExplorable(true);
-      } else {
-        // The connected cell has a tile, but the target tile must also
-        // contain the player cell in *it's* connected set for it to make
-        // a viable movement path.
-        const targetConnectedCells = this.dungeon.getConnectedCells(connectedCell);
-        let foundPath = false;
-        for (let targetConnectedCell of targetConnectedCells) {
-          if (targetConnectedCell.getPosition().equals(playerCell.getPosition())) {
-            foundPath = true;
-            break;
-          }
-        }
-        connectedCell.setMoveable(foundPath);
-      }
-    });
   }
 
   moveTo(cell: Cell): void {
@@ -223,10 +190,14 @@ export class Game extends EventTarget {
     }
 
     // If a room was explored, reveal a token.
-    if (cell.getTile()!.getType() == TileType.ROOM) {
+    if (cell.getTile()!.getType() == TileType.ROOM
+        && !this.tokenBag.isEmpty()) {
       const token = this.tokenBag.drawToken();
       cell.setToken(token);
-      // TODO: Maybe trigger fight.
+
+      if (token instanceof Monster) {
+        this.getActivePlayer().startCombat(token);
+      }
     }
 
     this.updatePlayerActionIndicators();
@@ -235,5 +206,40 @@ export class Game extends EventTarget {
   isGameOver(): boolean {
     // TODO
     return false;
+  }
+
+  private updatePlayerActionIndicators(): void {
+    const activePlayer = this.getActivePlayer();
+    this.dungeon.forEachCell(cell => {
+      cell.setExplorable(false);
+      cell.setMoveable(false);
+    });
+
+    if (activePlayer.getActionsRemaining() == 0
+      || this.cellBeingConfirmed != null
+      || activePlayer.isInCombat()) {
+      return;
+    }
+
+    // Mark immediately adjacent, connected cells as explorable.
+    const playerCell = this.dungeon.getCell(activePlayer.getPosition());
+    this.dungeon.getConnectedCells(playerCell).forEach(connectedCell => {
+      if (connectedCell.isEmpty() && !this.tileBag.isEmpty()) {
+        connectedCell.setExplorable(true);
+      } else {
+        // The connected cell has a tile, but the target tile must also
+        // contain the player cell in *it's* connected set for it to make
+        // a viable movement path.
+        const targetConnectedCells = this.dungeon.getConnectedCells(connectedCell);
+        let foundPath = false;
+        for (let targetConnectedCell of targetConnectedCells) {
+          if (targetConnectedCell.getPosition().equals(playerCell.getPosition())) {
+            foundPath = true;
+            break;
+          }
+        }
+        connectedCell.setMoveable(foundPath);
+      }
+    });
   }
 }
