@@ -15,13 +15,13 @@ export class CharacterCollection {
       throw new Error('Singleton violation: CharacterCollection');
     }
 
-    this.characters.push(new Character("Horan the Warrior", "Horan", "horan.jpg"));
-    this.characters.push(new Character("Argentus the Wizard", "Argentus", "argentus.jpg"));
-    this.characters.push(new Character("Lord Xanros the Warlock", "Xanros", "xanros.jpg"));
-    this.characters.push(new Character("Aderyn the Thief", "Aderyn", "aderyn.jpg"));
-    this.characters.push(new Character("Victorius the Swordsman", "Victorius", "victorius.jpg"));
-    this.characters.push(new Character("Taia the Oracle", "Taia", "taia.jpg"));
-    this.characters.push(new Character("Elspeth the Warrior Princess", "Elspeth", "elspeth.jpg"));
+    this.characters.push(new Character("Horan the Warrior", "Horan", "horan.jpg", "horan_icon.jpg"));
+    this.characters.push(new Character("Argentus the Wizard", "Argentus", "argentus.jpg", "argentus_icon.jpg"));
+    this.characters.push(new Character("Lord Xanros the Warlock", "Xanros", "xanros.jpg", "xanros_icon.jpg"));
+    this.characters.push(new Character("Aderyn the Thief", "Aderyn", "aderyn.jpg", "aderyn_icon.jpg"));
+    this.characters.push(new Character("Victorius the Swordsman", "Victorius", "victorius.jpg", "victorius_icon.jpg"));
+    this.characters.push(new Character("Taia the Oracle", "Taia", "taia.jpg", "taia_icon.jpg"));
+    this.characters.push(new Character("Elspeth the Warrior Princess", "Elspeth", "elspeth.jpg", "elspeth_icon.jpg"));
   }
 
   getCharacters(): Array<Character> {

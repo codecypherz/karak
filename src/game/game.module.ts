@@ -10,6 +10,7 @@ import { DungeonComponent } from './dungeon/dungeon.component';
 import { PlayerSheetComponent } from './player-sheet/player-sheet.component';
 import { CellComponent } from './cell/cell.component';
 import { GameInfoComponent } from './game-info/game-info.component';
+import { PlayerComponent } from './player/player.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { GameInfoComponent } from './game-info/game-info.component';
     GameComponent,
     GameInfoComponent,
     GameOverComponent,
+    PlayerComponent,
     PlayerSheetComponent,
     PlayerSheetsComponent,
   ],

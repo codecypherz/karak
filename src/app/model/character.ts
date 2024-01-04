@@ -6,13 +6,16 @@ export class Character {
 
   private id = uuidv4();
   readonly imageUrl: string;
+  readonly iconUrl: string;
   private selected = false;
 
   constructor(
     readonly name : string,
     readonly shortName: string,
-    imageFile: string) {
+    imageFile: string,
+    iconFile: string) {
       this.imageUrl = Character.IMAGE_PATH + imageFile;
+      this.iconUrl = Character.IMAGE_PATH + iconFile;
   }
 
   getId(): string {
