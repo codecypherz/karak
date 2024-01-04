@@ -88,10 +88,13 @@ export class Game extends EventTarget {
     const starterCell = this.dungeon.getCenterCell();
     starterCell.setTile(new StarterTile());
 
-    // Put the players on the starting tile.
+    // Initialize players
     this.players.forEach(player => {
+      player.addEventListener(
+          Player.COMBAT_CONFIRMED_EVENT,
+          this.onCombatConfirmed.bind(this));
       player.setPositions(starterCell.getPosition(), starterCell.getPosition());
-    });
+    }, this);
 
     // Shuffle the player order randomly.
     shuffle(this.players);
@@ -206,6 +209,10 @@ export class Game extends EventTarget {
   isGameOver(): boolean {
     // TODO
     return false;
+  }
+
+  private onCombatConfirmed(): void {
+    this.updatePlayerActionIndicators();
   }
 
   private updatePlayerActionIndicators(): void {

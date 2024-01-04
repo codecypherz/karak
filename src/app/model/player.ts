@@ -3,7 +3,9 @@ import { Character } from './character';
 import { Position } from './position';
 import { Monster } from './token/monster';
 
-export class Player {
+export class Player extends EventTarget {
+
+  static COMBAT_CONFIRMED_EVENT = 'combat_confirmed';
 
   private id = uuidv4();
   private active = false;
@@ -11,9 +13,11 @@ export class Player {
   private lastPosition: Position | null = null; // Null until game start
   private position: Position | null = null; // Null until game start
   private activeMonster: Monster | null = null;
+  private hadCombat = false;
 
   constructor(
-    readonly character: Character) {
+      readonly character: Character) {
+    super();
   }
 
   getId(): string {
@@ -22,6 +26,8 @@ export class Player {
 
   startTurn(): void {
     this.active = true;
+    this.activeMonster = null;
+    this.hadCombat = false;
     this.actionsRemaining = 4;
   }
 
@@ -89,7 +95,7 @@ export class Player {
   getActiveMonster(): Monster | null {
     return this.activeMonster;
   }
-  
+
   confirmCombatResult(): void {
     if (this.activeMonster == null) {
       throw new Error('Player not in combat.');
@@ -98,5 +104,12 @@ export class Player {
     // TODO
 
     this.activeMonster = null;
+    this.hadCombat = true;
+    this.actionsRemaining = 0;
+    this.dispatchEvent(new Event(Player.COMBAT_CONFIRMED_EVENT));
+  }
+
+  hasHadCombat(): boolean {
+    return this.hadCombat;
   }
 }
