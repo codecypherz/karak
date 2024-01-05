@@ -4,22 +4,29 @@
     <img class="monster" src="{{player.getActiveMonster()!.imageUrl}}">
   </div>
 
-  
+  <div class="vs">
+    VS
+  </div>
+
   <div  class="roll-container">
     <button *ngIf="!player.hasMadeCombatRoll()"
       class="roll"
       (click)="player.makeCombatRoll()">Roll</button>
     <div *ngIf="player.hasMadeCombatRoll()"
         class="roll-result">
-      <div class="die one">{{player.getDieOne()}}</div>
-      <div class="die two">{{player.getDieTwo()}}</div>
+      <div class="die one">
+        <img src="{{getDieOneImageUrl()}}">
+      </div>
+      <div class="die two">
+        <img src="{{getDieTwoImageUrl()}}">
+      </div>
     </div>
   </div>
 
-  <button class="confirm"
-      (click)="player.confirmCombatResult()"
-      [disabled]="!player.canConfirmCombatResult()">
-    Confirm
+  <button *ngIf="player.canConfirmCombatResult()"
+      class="confirm {{getConfirmClass()}}"
+      (click)="player.confirmCombatResult()">
+    {{getConfirmText()}}
   </button>
 
 </div>

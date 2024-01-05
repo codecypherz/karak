@@ -134,7 +134,7 @@ export class Player extends EventTarget {
     if (!this.isInCombat()) {
       throw new Error('Player not in combat.');
     }
-    if (this.canConfirmCombatResult()) {
+    if (!this.canConfirmCombatResult()) {
       throw new Error('Player cannot yet confirm combat result.');
     }
 

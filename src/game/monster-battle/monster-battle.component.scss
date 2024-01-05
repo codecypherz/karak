@@ -23,19 +23,50 @@
   margin-right: 10px;
 }
 
-.roll-container {
-  width: 100px;
+.monster {
+  width: 100%;
+}
+
+.vs {
+  font-size: 35px;
   margin-right: 10px;
+  margin-top: -6px;
+}
+
+.roll-container {
+  width: 120px;
+}
+
+.roll {
+  width: 100px;
+  height: 40px;
 }
 
 .roll, .die {
   display: inline-block;
 }
 
+.die {
+  width: 50px;
+  height: 50px;
+  border: 1px solid white;
+  overflow: hidden;
+  border-radius: 9px;
+}
+
 .die.one {
   margin-right: 10px;
 }
 
-.monster {
-  width: 100%;
+.die > img {
+  width: 67.5px;
+  background: white;
+  margin-left: -9px;
+  margin-top: -9px;
+}
+
+.confirm {
+  width: 120px;
+  height: 70px;
+  margin-left: 10px;
 }
