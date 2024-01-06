@@ -17,10 +17,11 @@ export class PlayerSheetComponent {
   constructor(private gameService: GameService) {}
 
   getHpSlotImageUrl(hpSlot: number): string {
-    if (this.player.getHitPoints() >= hpSlot) {
-      return PlayerSheetComponent.HEALTH_IMAGE;
+    const damage = 5 - this.player.getHitPoints();
+    if (damage >= hpSlot) {
+      return PlayerSheetComponent.DAMAGE_IMAGE;
     }
-    return PlayerSheetComponent.DAMAGE_IMAGE;
+    return PlayerSheetComponent.HEALTH_IMAGE;
   }
 
   endTurnDisabled(): boolean {
