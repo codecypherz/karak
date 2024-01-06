@@ -24,10 +24,12 @@
 
   <img class="character-image" src="{{player.character.imageUrl}}">
 
-  <div *ngIf="player.getWeaponOne() != null" class="weapon one">
+  <div *ngIf="player.getWeaponOne() != null" class="weapon one"
+      [ngClass]="{'weapon-active': player.hasMadeCombatRoll()}">
     <img src="{{player.getWeaponOne()!.imageUrl}}">
   </div>
-  <div *ngIf="player.getWeaponTwo() != null" class="weapon two">
+  <div *ngIf="player.getWeaponTwo() != null" class="weapon two"
+      [ngClass]="{'weapon-active': player.hasMadeCombatRoll()}">
     <img src="{{player.getWeaponTwo()!.imageUrl}}">
   </div>
 

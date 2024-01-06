@@ -39,6 +39,10 @@ export class MonsterBattleComponent {
     return "";
   }
 
+  getCombatBonus(): number {
+    return this.player.getCombatBonus();
+  }
+
   getCombatResultClass(): string {
     if (!this.player.canConfirmCombatResult()) {
       return "";

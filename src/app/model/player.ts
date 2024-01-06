@@ -186,14 +186,18 @@ export class Player extends EventTarget {
   }
 
   getCombatStrength(): number {
-    let strength = this.dieOne + this.dieTwo;
+    return this.dieOne + this.dieTwo + this.getCombatBonus();
+  }
+
+  getCombatBonus(): number {
+    let bonus = 0;
     if (this.weaponOne != null) {
-      strength += this.weaponOne.getStrength();
+      bonus += this.weaponOne.getStrength();
     }
     if (this.weaponTwo != null) {
-      strength += this.weaponTwo.getStrength();
+      bonus += this.weaponTwo.getStrength();
     }
-    return strength;
+    return bonus;
   }
 
   canConfirmCombatResult(): boolean {
@@ -208,6 +212,7 @@ export class Player extends EventTarget {
     const combatResult = this.getPendingCombatResult();
 
     this.activeMonster = null;
+    this.madeCombatRoll = false;
     this.hadCombat = true;
     this.actionsRemaining = 0;
     this.dispatchEvent(new CombatConfirmedEvent(combatResult));

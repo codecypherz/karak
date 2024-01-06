@@ -20,6 +20,12 @@
       <div class="die two">
         <img src="{{getDieTwoImageUrl()}}">
       </div>
+      <div *ngIf="player.getCombatBonus() > 0" class="plus">
+        +
+      </div>
+      <div *ngIf="player.getCombatBonus() > 0" class="combat-bonus">
+        {{player.getCombatBonus()}}
+      </div>
       <div class="equals">
         =
       </div>

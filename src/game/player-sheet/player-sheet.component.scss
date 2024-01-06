@@ -56,12 +56,26 @@
   border: 1px solid black;
 }
 
+.weapon.weapon-active {
+  left: 179px;
+  border-radius: 13px;
+  border: 3px solid var(--bonus_color);
+}
+
 .weapon.one {
   top: 13px;
 }
 
+.weapon.one.weapon-active {
+  top: 11px;
+}
+
 .weapon.two {
   top: 69px;
+}
+
+.weapon.two.weapon-active {
+  top: 67px;
 }
 
 .weapon > img {
