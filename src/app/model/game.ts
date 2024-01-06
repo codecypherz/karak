@@ -238,10 +238,11 @@ export class Game extends EventTarget {
         activeCell.replaceToken(monsterToken.getReward());
         break;
       case CombatResult.LOSS:
-        // TODO
+        activePlayer.reduceHitPoints();
+        activePlayer.moveToLastPosition();
         break;
       case CombatResult.TIE:
-        // TODO
+        activePlayer.moveToLastPosition();
         break;
     }
 
@@ -261,7 +262,6 @@ export class Game extends EventTarget {
       || activePlayer.isInCombat()) {
       return;
     }
-
     
     if (activeCell.hasToken()) {
       const token = activeCell.getToken()!;

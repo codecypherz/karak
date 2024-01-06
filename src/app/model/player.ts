@@ -22,6 +22,8 @@ export class Player extends EventTarget {
   private lastPosition: Position | null = null; // Null until game start
   private position: Position | null = null; // Null until game start
 
+  private hitPoints = 5;
+
   private activeMonster: Monster | null = null;
   private hadCombat = false;
   private dieOne = 0;
@@ -86,6 +88,10 @@ export class Player extends EventTarget {
     this.position = position;
   }
 
+  moveToLastPosition(): void {
+    this.position = this.lastPosition;
+  }
+
   getLastPosition(): Position {
     // Assumed to only be accessed after game start.
     return this.lastPosition!;
@@ -94,6 +100,23 @@ export class Player extends EventTarget {
   getPosition(): Position {
     // Assumed to only be accessed after game start.
     return this.position!;
+  }
+
+  getHitPoints(): number {
+    return this.hitPoints;
+  }
+
+  reduceHitPoints(): void {
+    if (this.hitPoints > 0) {
+      this.hitPoints--;
+    }
+  }
+
+  setHitPoints(hitPoints: number) {
+    if (hitPoints < 0 || hitPoints > 5) {
+      throw new Error('Invalid hit points.');
+    }
+    this.hitPoints = hitPoints;
   }
 
   startCombat(monster: Monster): void {

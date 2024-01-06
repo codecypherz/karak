@@ -19,6 +19,26 @@
   border-top-right-radius: 6px;
 }
 
+.hp-container {
+  position: absolute;
+  top: 11px;
+  left: 10px;
+}
+
+.hp-slot {
+  display: block;
+  margin-bottom: 4px;
+  width: 28px;
+  height: 28px;
+  border: 1px solid black;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.hp-slot > img {
+  width: 100%;
+}
+
 .character-image {
   width: 120px;
   position: absolute;

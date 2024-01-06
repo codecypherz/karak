@@ -9,9 +9,19 @@ import { GameService } from 'src/app/service/game.service';
 })
 export class PlayerSheetComponent {
 
+  static HEALTH_IMAGE = "/images/token/health.jpg";
+  static DAMAGE_IMAGE = "/images/token/damage.jpg";
+
   @Input() player!: Player;
 
   constructor(private gameService: GameService) {}
+
+  getHpSlotImageUrl(hpSlot: number): string {
+    if (this.player.getHitPoints() >= hpSlot) {
+      return PlayerSheetComponent.HEALTH_IMAGE;
+    }
+    return PlayerSheetComponent.DAMAGE_IMAGE;
+  }
 
   endTurnDisabled(): boolean {
     const game = this.gameService.getGame();
