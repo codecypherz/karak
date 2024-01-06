@@ -39,7 +39,7 @@ export class MonsterBattleComponent {
     return "";
   }
 
-  getConfirmClass(): string {
+  getCombatResultClass(): string {
     if (!this.player.canConfirmCombatResult()) {
       return "";
     }

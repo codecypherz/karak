@@ -8,7 +8,7 @@
     VS
   </div>
 
-  <div  class="roll-container">
+  <div class="roll-container">
     <button *ngIf="!player.hasMadeCombatRoll()"
       class="roll"
       (click)="player.makeCombatRoll()">Roll</button>
@@ -20,11 +20,17 @@
       <div class="die two">
         <img src="{{getDieTwoImageUrl()}}">
       </div>
+      <div class="equals">
+        =
+      </div>
+      <div class="combat-result {{getCombatResultClass()}}">
+        {{player.getCombatStrength()}}
+      </div>
     </div>
   </div>
 
   <button *ngIf="player.canConfirmCombatResult()"
-      class="confirm {{getConfirmClass()}}"
+      class="confirm {{getCombatResultClass()}}"
       (click)="player.confirmCombatResult()">
     {{getConfirmText()}}
   </button>

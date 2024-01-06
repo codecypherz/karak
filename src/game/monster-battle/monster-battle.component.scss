@@ -14,13 +14,13 @@
 }
 
 .monster-container {
-  width: 80px;
-  height: 80px;
-  border-radius: 17px;
+  width: 100px;
+  height: 100px;
+  border-radius: 22px;
   overflow: hidden;
   border: 1px solid black;
   box-shadow: 1px 1px black;
-  margin-right: 10px;
+  margin-right: 30px;
 }
 
 .monster {
@@ -29,12 +29,12 @@
 
 .vs {
   font-size: 35px;
-  margin-right: 10px;
+  margin-right: 30px;
   margin-top: -6px;
 }
 
-.roll-container {
-  width: 120px;
+.roll-container, .roll-result {
+  display: inline-flex;
 }
 
 .roll {
@@ -52,9 +52,6 @@
   border: 1px solid white;
   overflow: hidden;
   border-radius: 9px;
-}
-
-.die.one {
   margin-right: 10px;
 }
 
@@ -65,8 +62,42 @@
   margin-top: -9px;
 }
 
+.equals {
+  font-size: 35px;
+  margin-right: 10px;
+}
+
+.combat-result {
+  font-size: 35px;
+  margin-right: 30px;
+  font-weight: bold;
+}
+
+.combat-result.win {
+  color: var(--win_color);
+}
+
+.combat-result.loss {
+  color: var(--loss_color);
+}
+
+.combat-result.tie {
+  color: var(--tie_color);
+}
+
 .confirm {
   width: 120px;
   height: 70px;
-  margin-left: 10px;
+}
+
+.confirm.win {
+  border-color: var(--win_color);
+}
+
+.confirm.loss {
+  border-color: var(--loss_color);
+}
+
+.confirm.tie {
+  border-color: var(--tie_color);
 }

@@ -139,7 +139,7 @@ export class Player extends EventTarget {
     }
 
     const monsterStrength = this.activeMonster!.getStrength();
-    const playerStrength = this.dieOne + this.dieTwo;
+    const playerStrength = this.getCombatStrength();
 
     if (monsterStrength < playerStrength) {
       return CombatResult.WIN;
@@ -148,6 +148,10 @@ export class Player extends EventTarget {
     } else {
       return CombatResult.TIE;
     }
+  }
+
+  getCombatStrength(): number {
+    return this.dieOne + this.dieTwo;
   }
 
   canConfirmCombatResult(): boolean {
