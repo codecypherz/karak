@@ -113,6 +113,14 @@ export class Game extends EventTarget {
     const activePlayer = this.getActivePlayer();
     activePlayer.moveTo(cell.getPosition());
     activePlayer.consumeAction();
+
+    if (cell.hasToken()) {
+      const token = cell.getToken()!;
+      if (token instanceof Monster) {
+        activePlayer.startCombat(token);
+      }
+    }
+
     this.updatePlayerActionIndicators();
   }
 

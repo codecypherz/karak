@@ -52,7 +52,16 @@
   border-bottom: none;
 }
 
-.move, .pick-up, .explore, .confirm {
+.move {
+  top: 3px;
+  right: 3px;
+  width: 60px;
+  height: 35px;
+  position: absolute;
+  font-size: 16px;
+}
+
+.pick-up, .explore, .confirm {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -62,7 +71,7 @@
   height: 35px;
 }
 
-.move, .pick-up {
+.pick-up {
   top: 80%;
 }
 

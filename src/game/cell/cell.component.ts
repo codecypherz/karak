@@ -14,23 +14,34 @@ export class CellComponent {
 
   constructor(private gameService: GameService) {}
 
-  onClick(): void {
-    //console.log('clicked cell at ' + this.cell.getPosition().toString());
+  getActivePlayer(): Player | null {
+    const activePlayer = this.gameService.getGame().getActivePlayer();
+    if (this.isPlayerInCell(activePlayer)) {
+      return activePlayer;
+    }
+    return null;
+  }
+
+  getInactivePlayers(): Array<Player> {
+    return this.gameService.getGame().getPlayers().filter(player => {
+      return !player.isActive() && this.isPlayerInCell(player);
+    });
+  }
+
+  private isPlayerInCell(player: Player): boolean {
+    return player.getPosition().equals(this.cell.getPosition());
   }
 
   move(): void {
-    const game = this.gameService.getGame();
-    game.moveTo(this.cell);
+    this.gameService.getGame().moveTo(this.cell);
   }
 
   pickUp(): void {
-    const game = this.gameService.getGame();
-    game.pickUp(this.cell);
+    this.gameService.getGame().pickUp(this.cell);
   }
 
   explore(): void {
-    const game = this.gameService.getGame();
-    game.explore(this.cell);
+    this.gameService.getGame().explore(this.cell);
   }
 
   rotateClockwise(): void {
@@ -55,13 +66,11 @@ export class CellComponent {
   }
 
   confirmDisabled(): boolean {
-    const game = this.gameService.getGame();
-    return !game.canConfirmExplore(this.cell);
+    return !this.gameService.getGame().canConfirmExplore(this.cell);
   }
   
   confirmExplore(): void {
-    const game = this.gameService.getGame();
-    game.confirmExplore(this.cell);
+    this.gameService.getGame().confirmExplore(this.cell);
   }
 
   hasPlayers(): boolean {

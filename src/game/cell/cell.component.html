@@ -1,8 +1,7 @@
 <div [ngClass]="{
       'cell': true,
       'empty': cell.isEmpty()
-    }"
-    (click)="onClick()">
+    }">
 
   <img *ngIf="cell.hasTile()"
       class="tile"
@@ -13,7 +12,11 @@
     <img class="token" src="{{cell.getToken()!.imageUrl}}">
   </div>
 
-  <app-player *ngFor="let player of getPlayers(); let i = index" [player]="player" [index]="i">
+  <app-player *ngIf="getActivePlayer() != null"
+      [player]="getActivePlayer()!" [index]="-1">
+  </app-player>
+  <app-player *ngFor="let player of getInactivePlayers(); let i = index"
+      [player]="player" [index]="i">
   </app-player>
 
   <button *ngIf="cell.isMoveable()"
