@@ -24,6 +24,13 @@
 
   <img class="character-image" src="{{player.character.imageUrl}}">
 
+  <div *ngIf="player.getWeaponOne() != null" class="weapon one">
+    <img src="{{player.getWeaponOne()!.imageUrl}}">
+  </div>
+  <div *ngIf="player.getWeaponTwo() != null" class="weapon two">
+    <img src="{{player.getWeaponTwo()!.imageUrl}}">
+  </div>
+
   <div *ngIf="player.isActive()">
     <button class="end-turn" (click)="endTurn()" [disabled]="endTurnDisabled()">
       End Turn

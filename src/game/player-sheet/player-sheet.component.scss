@@ -46,6 +46,28 @@
   top: 13px;
 }
 
+.weapon {
+  width: 48px;
+  height: 47px;
+  left: 181px;
+  position: absolute;
+  border-radius: 11px;
+  overflow: hidden;
+  border: 1px solid black;
+}
+
+.weapon.one {
+  top: 13px;
+}
+
+.weapon.two {
+  top: 69px;
+}
+
+.weapon > img {
+  width: 100%;
+}
+
 .end-turn {
   position: absolute;
   left: 5px;

@@ -4,6 +4,7 @@ import { Position } from './position';
 import { Monster } from './token/monster';
 import { Token } from './token/token';
 import { Item } from './token/item';
+import { Weapon } from './token/weapon';
 
 export enum CombatResult {
   WIN,
@@ -29,6 +30,9 @@ export class Player extends EventTarget {
   private dieOne = 0;
   private dieTwo = 0;
   private madeCombatRoll = false;
+
+  private weaponOne: Weapon | null = null;
+  private weaponTwo: Weapon | null = null;
 
   constructor(
       readonly character: Character) {
@@ -119,10 +123,16 @@ export class Player extends EventTarget {
     this.hitPoints = hitPoints;
   }
 
+  getWeaponOne(): Weapon | null {
+    return this.weaponOne;
+  }
+
+  getWeaponTwo(): Weapon | null {
+    return this.weaponTwo;
+  }
+
   startCombat(monster: Monster): void {
     this.activeMonster = monster;
-
-    // TODO Roll dice
   }
 
   isInCombat(): boolean {
@@ -176,7 +186,14 @@ export class Player extends EventTarget {
   }
 
   getCombatStrength(): number {
-    return this.dieOne + this.dieTwo;
+    let strength = this.dieOne + this.dieTwo;
+    if (this.weaponOne != null) {
+      strength += this.weaponOne.getStrength();
+    }
+    if (this.weaponTwo != null) {
+      strength += this.weaponTwo.getStrength();
+    }
+    return strength;
   }
 
   canConfirmCombatResult(): boolean {
@@ -209,8 +226,15 @@ export class Player extends EventTarget {
       throw Error('Cannot pick up token.');
     }
 
-    // TODO
-    console.log('Picked up', token);
+    if (token instanceof Weapon) {
+      if (this.weaponOne == null) {
+        this.weaponOne = token;
+      } else if (this.weaponTwo == null) {
+        this.weaponTwo = token;
+      } else {
+        throw new Error('TODO: Handle weapon swaps.');
+      }
+    }
   }
 
   private rollDie(): number {
