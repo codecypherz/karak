@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Player } from './player';
+import { CombatConfirmedEvent, CombatResult, Player } from './player';
 import { shuffle } from '../util/arrays';
 import { Dungeon } from './dungeon';
 import { Cell } from './cell';
@@ -116,6 +116,17 @@ export class Game extends EventTarget {
     this.updatePlayerActionIndicators();
   }
 
+  pickUp(cell: Cell): void {
+    if (!cell.hasToken()) {
+      throw new Error('Cell had nothing to pick up');
+    }
+
+    const token = cell.getToken()!;
+    this.getActivePlayer().pickUp(token);
+    cell.removeToken();
+    this.updatePlayerActionIndicators();
+  }
+
   explore(cell: Cell): void {
     const activePlayer = this.getActivePlayer();
     if (this.cellBeingConfirmed != null) {
@@ -211,20 +222,53 @@ export class Game extends EventTarget {
     return false;
   }
 
-  private onCombatConfirmed(): void {
+  private onCombatConfirmed(e: Event): void {
+    const event = e as CombatConfirmedEvent;
+    const combatResult = event.combatResult;
+    const activePlayer = this.getActivePlayer();
+    const activeCell = this.dungeon.getCell(activePlayer.getPosition());
+    const monsterToken = activeCell.getToken();
+    if (!(monsterToken instanceof Monster)) {
+      throw new Error('Unexpected combat confirmation on non-monster token.');
+    }
+
+    switch (combatResult) {
+      case CombatResult.WIN:
+        // Place the reward in the cell.
+        activeCell.replaceToken(monsterToken.getReward());
+        break;
+      case CombatResult.LOSS:
+        // TODO
+        break;
+      case CombatResult.TIE:
+        // TODO
+        break;
+    }
+
     this.updatePlayerActionIndicators();
   }
 
   private updatePlayerActionIndicators(): void {
     const activePlayer = this.getActivePlayer();
+    const activeCell = this.dungeon.getCell(activePlayer.getPosition());
     this.dungeon.forEachCell(cell => {
       cell.setExplorable(false);
       cell.setMoveable(false);
+      cell.setPickupItem(false);
     });
 
-    if (activePlayer.getActionsRemaining() == 0
-      || this.cellBeingConfirmed != null
+    if (this.cellBeingConfirmed != null
       || activePlayer.isInCombat()) {
+      return;
+    }
+
+    
+    if (activeCell.hasToken()) {
+      const token = activeCell.getToken()!;
+      activeCell.setPickupItem(activePlayer.canPickUp(token));
+    }
+
+    if (activePlayer.getActionsRemaining() == 0) {
       return;
     }
 

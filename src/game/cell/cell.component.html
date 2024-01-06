@@ -20,6 +20,10 @@
       class="move"
       (click)="move()">Move</button>
 
+  <button *ngIf="cell.canPickupItem()"
+      class="pick-up"
+      (click)="pickUp()">Pick Up</button>
+
   <button *ngIf="cell.isExplorable()"
       class="explore"
       (click)="explore()">Explore</button>

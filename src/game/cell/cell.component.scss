@@ -52,7 +52,7 @@
   border-bottom: none;
 }
 
-.move, .explore, .confirm {
+.move, .pick-up, .explore, .confirm {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -62,7 +62,7 @@
   height: 35px;
 }
 
-.move {
+.move, .pick-up {
   top: 80%;
 }
 

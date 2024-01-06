@@ -8,6 +8,7 @@ export class Cell {
   private token: Token | null = null;
   private explorable = false;
   private moveable = false;
+  private pickupItem = false;
   private confirmingExplore = false;
 
   constructor(private pos: Position) {
@@ -36,6 +37,23 @@ export class Cell {
       throw new Error('Cell already had a token.');
     }
     this.token = token;
+  }
+
+  replaceToken(token: Token): void {
+    if (this.tile == null) {
+      throw new Error('Cannot set a token without a tile.');
+    }
+    if (this.token == null) {
+      throw new Error('Expected a token to already exist.');
+    }
+    this.token = token;
+  }
+
+  removeToken(): void {
+    if (this.token == null) {
+      throw new Error('No token to remove.');
+    }
+    this.token = null;
   }
 
   isEmpty(): boolean {
@@ -80,5 +98,13 @@ export class Cell {
 
   setMoveable(moveable: boolean): void {
     this.moveable = moveable;
+  }
+
+  canPickupItem(): boolean {
+    return this.pickupItem;
+  }
+
+  setPickupItem(pickupItem: boolean): void {
+    this.pickupItem = pickupItem;
   }
 }

@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Character } from './character';
 import { Position } from './position';
 import { Monster } from './token/monster';
+import { Token } from './token/token';
+import { Item } from './token/item';
 
 export enum CombatResult {
   WIN,
@@ -163,19 +165,39 @@ export class Player extends EventTarget {
       throw new Error('Player not in combat.');
     }
 
-    // TODO Claim reward?
+    const combatResult = this.getPendingCombatResult();
 
     this.activeMonster = null;
     this.hadCombat = true;
     this.actionsRemaining = 0;
-    this.dispatchEvent(new Event(Player.COMBAT_CONFIRMED_EVENT));
+    this.dispatchEvent(new CombatConfirmedEvent(combatResult));
   }
 
   hasHadCombat(): boolean {
     return this.hadCombat;
   }
 
+  canPickUp(token: Token): boolean {
+    return token instanceof Item;
+  }
+
+  pickUp(token: Token) {
+    if (!this.canPickUp(token)) {
+      throw Error('Cannot pick up token.');
+    }
+
+    // TODO
+    console.log('Picked up', token);
+  }
+
   private rollDie(): number {
     return Math.floor(Math.random() * 6) + 1;
+  }
+}
+
+export class CombatConfirmedEvent extends Event {
+
+  constructor(readonly combatResult: CombatResult) {
+    super(Player.COMBAT_CONFIRMED_EVENT);
   }
 }

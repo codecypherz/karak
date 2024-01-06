@@ -23,6 +23,11 @@ export class CellComponent {
     game.moveTo(this.cell);
   }
 
+  pickUp(): void {
+    const game = this.gameService.getGame();
+    game.pickUp(this.cell);
+  }
+
   explore(): void {
     const game = this.gameService.getGame();
     game.explore(this.cell);
