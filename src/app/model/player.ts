@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Character } from './character';
 import { Position } from './position';
-import { Monster } from './token/monster';
+import { Monster } from './token/monster/monster';
 import { Token } from './token/token';
 import { Item } from './token/item';
-import { Weapon } from './token/weapon';
+import { Weapon } from './token/weapon/weapon';
 
 export enum CombatResult {
   WIN,

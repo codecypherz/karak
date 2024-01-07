@@ -1,9 +1,9 @@
 import { removeRandom } from "src/app/util/arrays";
 import { Token } from "./token";
-import { GiantRat } from "./giant-rat";
+import { GiantRat } from "./monster/giant-rat";
 import { Treasure } from "./treasture";
-import { SkeletonWarrior } from "./skeleton-warrior";
-import { SkeletonKing } from "./skeleton-king";
+import { SkeletonWarrior } from "./monster/skeleton-warrior";
+import { SkeletonKing } from "./monster/skeleton-king";
 
 export class TokenBag {
 

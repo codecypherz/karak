@@ -9,8 +9,8 @@ import { Direction } from './direction';
 import { Position } from './position';
 import { TileType } from './tile/tiletype';
 import { TokenBag } from './token/tokenbag';
-import { Monster } from './token/monster';
-import { Weapon } from './token/weapon';
+import { Monster } from './token/monster/monster';
+import { Weapon } from './token/weapon/weapon';
 
 export class Game extends EventTarget {
 

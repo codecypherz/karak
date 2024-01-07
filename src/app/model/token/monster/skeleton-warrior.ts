@@ -1,6 +1,6 @@
 import { Monster } from "./monster";
-import { Token } from "./token";
-import { Sword } from "./sword";
+import { Token } from "../token";
+import { Sword } from "../weapon/sword";
 
 export class SkeletonWarrior extends Monster {
 

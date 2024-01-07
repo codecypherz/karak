@@ -1,6 +1,6 @@
-import { Token } from "./token";
+import { Item } from "../item";
 
-export abstract class Monster extends Token {
+export class Weapon extends Item {
 
   private strength: number;
 
@@ -12,6 +12,4 @@ export abstract class Monster extends Token {
   getStrength(): number {
     return this.strength;
   }
-
-  abstract getReward(): Token;
 }

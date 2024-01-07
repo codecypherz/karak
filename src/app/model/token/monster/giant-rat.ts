@@ -1,6 +1,6 @@
 import { Monster } from "./monster";
-import { Daggers } from "./daggers";
-import { Token } from "./token";
+import { Daggers } from "../weapon/daggers";
+import { Token } from "../token";
 
 export class GiantRat extends Monster {
 
