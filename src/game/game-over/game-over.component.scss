@@ -22,9 +22,19 @@
   z-index: var(--z_dialog);
 }
 
+.title {
+  font-size: 22px;
+}
+
+.character-image {
+  width: 200px;
+  margin: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
 .new-game {
   display: block;
   margin: auto;
   padding: 10px 30px;
-  margin-top: 20px;
 }

@@ -358,6 +358,10 @@ export class Player extends EventTarget {
     return this.treasure;
   }
 
+  addTreasure(treasure: number): void {
+    this.treasure += treasure;
+  }
+
   private rollDie(): number {
     return Math.floor(Math.random() * 6) + 1;
   }

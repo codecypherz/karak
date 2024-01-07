@@ -11,6 +11,7 @@ import { TokenBag } from './token/tokenbag';
 import { Monster } from './token/monster/monster';
 import { Weapon } from './token/weapon/weapon';
 import { Treasure } from './token/treasture';
+import { Dragon } from './token/monster/dragon';
 
 export class Game extends EventTarget {
 
@@ -24,6 +25,7 @@ export class Game extends EventTarget {
   private started = false;
   private activePlayerIndex = 0;
   private cellBeingConfirmed: Cell | null = null;
+  private dragonKilled = false;
 
   getId(): string {
     return this.id;
@@ -286,8 +288,24 @@ export class Game extends EventTarget {
   }
 
   isGameOver(): boolean {
-    // TODO
-    return false;
+    return this.dragonKilled;
+  }
+
+  getWinningPlayers(): Array<Player> {
+    if (!this.isGameOver()) {
+      throw new Error('Game is not over');
+    }
+
+    let bestScore = 0;
+    this.players.forEach(player => {
+      if (player.getTreasure() > bestScore) {
+        bestScore = player.getTreasure();
+      }
+    });
+
+    return this.players.filter(player => {
+      return player.getTreasure() == bestScore;
+    });
   }
 
   private onCombatConfirmed(e: Event): void {
@@ -304,6 +322,12 @@ export class Game extends EventTarget {
       case CombatResult.WIN:
         // Place the reward in the cell.
         activeCell.replaceToken(monsterToken.getReward());
+
+        // Special handling of the Dragon.
+        if (monsterToken instanceof Dragon) {
+          activePlayer.addTreasure(1.5);
+          this.dragonKilled = true;
+        }
         break;
       case CombatResult.LOSS:
         activePlayer.reduceHitPoints();

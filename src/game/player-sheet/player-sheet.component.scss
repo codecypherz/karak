@@ -64,10 +64,11 @@
 .treasure-value {
   font-size: 12px;
   position: absolute;
-  right: 155px;
+  left: 139px;
   top: 14px;
   color: black;
   font-weight: bold;
+  text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.8);
 }
 
 .weapon {

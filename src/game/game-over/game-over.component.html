@@ -1,7 +1,11 @@
-<div *ngIf="isGameOver()">
+<div *ngIf="game.isGameOver()">
   <div class="dialog-overlay"></div>
   <div class="dialog">
-    TODO won!
+    <div class="title">
+      Winning Players:
+    </div>
+    <img *ngFor="let player of game.getWinningPlayers()"
+        class="character-image" src="{{player.character.imageUrl}}">
     <button class="new-game" (click)="newGame()">New Game</button>
   </div>
 </div>
