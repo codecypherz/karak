@@ -27,6 +27,10 @@
       class="pick-up"
       (click)="pickUp()">Pick Up</button>
 
+  <button *ngIf="cell.canOpenTreasure()"
+      class="open"
+      (click)="openTreasure()">Open</button>
+
   <button *ngIf="cell.isExplorable()"
       class="explore"
       (click)="explore()">Explore</button>

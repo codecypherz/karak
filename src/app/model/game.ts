@@ -10,6 +10,7 @@ import { Position } from './position';
 import { TokenBag } from './token/tokenbag';
 import { Monster } from './token/monster/monster';
 import { Weapon } from './token/weapon/weapon';
+import { Treasure } from './token/treasture';
 
 export class Game extends EventTarget {
 
@@ -151,6 +152,20 @@ export class Game extends EventTarget {
     }
 
     this.updatePlayerActionIndicators();
+  }
+
+  openTreasure(cell: Cell) {
+    if (!cell.hasToken()) {
+      throw new Error('Cell had no token');
+    }
+    const token = cell.getToken()!;
+    if (!(token instanceof Treasure)) {
+      throw new Error('Can only open treasure');
+    }
+    const activePlayer = this.getActivePlayer();
+    activePlayer.openTreasure();
+    cell.removeToken();
+    this.startNextTurn();
   }
 
   cancelSwap(): void {
@@ -309,6 +324,7 @@ export class Game extends EventTarget {
       cell.setExplorable(false);
       cell.setMoveable(false);
       cell.setPickupItem(false);
+      cell.setOpenTreasure(false);
     });
 
     if (this.cellBeingConfirmed != null
@@ -319,6 +335,9 @@ export class Game extends EventTarget {
     if (activeCell.hasToken() && !activePlayer.isSwappingWeapons()) {
       const token = activeCell.getToken()!;
       activeCell.setPickupItem(activePlayer.canPickUp(token));
+      if (token instanceof Treasure) {
+        activeCell.setOpenTreasure(activePlayer.hasSkeletonKey());
+      }
     }
 
     if (activePlayer.getActionsRemaining() == 0) {

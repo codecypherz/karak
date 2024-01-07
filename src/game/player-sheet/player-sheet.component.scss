@@ -46,6 +46,30 @@
   top: 13px;
 }
 
+.treasure {
+  position: absolute;
+  right: 130px;
+  top: 13px;
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid black;
+}
+
+.treasure > img {
+  width: 100%;
+}
+
+.treasure-value {
+  font-size: 12px;
+  position: absolute;
+  right: 155px;
+  top: 14px;
+  color: black;
+  font-weight: bold;
+}
+
 .weapon {
   width: 48px;
   height: 47px;
@@ -79,6 +103,21 @@
 }
 
 .weapon > img {
+  width: 100%;
+}
+
+.skeleton-key {
+  width: 48px;
+  height: 47px;
+  top: 125px;
+  left: 181px;
+  position: absolute;
+  border-radius: 11px;
+  overflow: hidden;
+  border: 1px solid black;
+}
+
+.skeleton-key > img {
   width: 100%;
 }
 

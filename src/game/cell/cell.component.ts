@@ -36,6 +36,10 @@ export class CellComponent {
     this.gameService.getGame().pickUp(this.cell);
   }
 
+  openTreasure(): void {
+    this.gameService.getGame().openTreasure(this.cell);
+  }
+
   isSwappingWeapons(): boolean {
     const activePlayer = this.getActivePlayerInCell();
     if (activePlayer == null) {

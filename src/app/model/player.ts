@@ -6,6 +6,7 @@ import { Token } from './token/token';
 import { Item } from './token/item';
 import { Weapon } from './token/weapon/weapon';
 import { Cell } from './cell';
+import { SkeletonKey } from './token/skeleton-key';
 
 export enum CombatResult {
   WIN,
@@ -35,8 +36,12 @@ export class Player extends EventTarget {
   private weaponOne: Weapon | null = null;
   private weaponTwo: Weapon | null = null;
   private swappingWeapons = false;
+
+  private skeletonKey: SkeletonKey | null = null;
   
   private tokenToSwap: Token | null = null;
+
+  private treasure = 0;
 
   constructor(
       readonly character: Character) {
@@ -249,7 +254,15 @@ export class Player extends EventTarget {
   }
 
   canPickUp(token: Token): boolean {
-    return token instanceof Item;
+    // Can only pick up items.
+    if (!(token instanceof Item)) {
+      return false;
+    }
+    // Can only hold one skeleton key. Swaps don't make sense.
+    if (token instanceof SkeletonKey && this.hasSkeletonKey()) {
+      return false;
+    }
+    return true;
   }
 
   pickUp(token: Token) {
@@ -265,6 +278,8 @@ export class Player extends EventTarget {
       } else {
         throw new Error('Weapon slots are full.');
       }
+    } else if (token instanceof SkeletonKey) {
+      this.skeletonKey = token;
     }
   }
 
@@ -321,6 +336,26 @@ export class Player extends EventTarget {
     this.swappingWeapons = false;
     this.tokenToSwap = null;
     return discardedToken;
+  }
+
+  hasSkeletonKey(): boolean {
+    return this.skeletonKey != null;
+  }
+
+  getSkeletonKey(): SkeletonKey | null {
+    return this.skeletonKey;
+  }
+
+  openTreasure(): void {
+    if (this.skeletonKey == null) {
+      throw new Error('Unable to open treasure without a skeleton key');
+    }
+    this.treasure++;
+    this.skeletonKey = null;
+  }
+
+  getTreasure(): number {
+    return this.treasure;
   }
 
   private rollDie(): number {
