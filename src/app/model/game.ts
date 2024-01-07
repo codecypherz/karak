@@ -7,7 +7,6 @@ import { TileBag } from './tile/tilebag';
 import { StarterTile } from './tile/starter_tile';
 import { Direction } from './direction';
 import { Position } from './position';
-import { TileType } from './tile/tiletype';
 import { TokenBag } from './token/tokenbag';
 import { Monster } from './token/monster/monster';
 import { Weapon } from './token/weapon/weapon';
@@ -58,7 +57,13 @@ export class Game extends EventTarget {
     if (!this.canEndTurn()) {
       throw new Error('Cannot end turn right now.');
     }
-    this.getActivePlayer().endTurn();
+
+    // End the currently active player's turn.
+    const oldActivePlayer = this.getActivePlayer();
+    const oldActiveCell = this.getActivePlayerCell();
+    oldActivePlayer.endTurn(oldActiveCell);
+
+    // Make the next player active.
     this.activePlayerIndex = (this.activePlayerIndex + 1) % this.players.length;
     this.getActivePlayer().startTurn();
     this.updatePlayerActionIndicators();
@@ -252,8 +257,8 @@ export class Game extends EventTarget {
     }
 
     // If a room was explored, reveal a token.
-    if (cell.getTile()!.getType() == TileType.ROOM
-        && !this.tokenBag.isEmpty()) {
+    const tile = cell.getTile()!;
+    if (tile.revealsToken() && !this.tokenBag.isEmpty()) {
       const token = this.tokenBag.drawToken();
       cell.setToken(token);
 

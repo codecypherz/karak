@@ -1,6 +1,5 @@
 import { Direction } from "../direction";
 import { Tile } from "./tile";
-import { TileType } from "./tiletype";
 
 export class StarterTile extends Tile {
 
@@ -11,6 +10,10 @@ export class StarterTile extends Tile {
     pathDirections.add(Direction.LEFT);
     pathDirections.add(Direction.RIGHT);
 
-    super(TileType.STARTER, "starter.jpg", pathDirections);
+    super("starter.jpg", pathDirections);
+  }
+
+  override healsOnEndOfTurn(): boolean {
+    return true;
   }
 }

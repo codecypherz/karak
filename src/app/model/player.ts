@@ -5,6 +5,7 @@ import { Monster } from './token/monster/monster';
 import { Token } from './token/token';
 import { Item } from './token/item';
 import { Weapon } from './token/weapon/weapon';
+import { Cell } from './cell';
 
 export enum CombatResult {
   WIN,
@@ -56,7 +57,23 @@ export class Player extends EventTarget {
     this.actionsRemaining = 4;
   }
 
-  endTurn(): void {
+  endTurn(cell: Cell): void {
+    if (!cell.hasTile()) {
+      throw new Error('Must end turn on a tile.');
+    }
+    const tile = cell.getTile()!;
+
+    if (tile.healsOnEndOfTurn()) {
+      this.hitPoints = 5;
+    }
+
+    if (cell.hasToken()) {
+      const token = cell.getToken()!;
+      if (token instanceof Monster) {
+        throw new Error('Cannot end turn on a Monster');
+      }
+    }
+
     this.active = false;
     this.actionsRemaining = 0;
   }
