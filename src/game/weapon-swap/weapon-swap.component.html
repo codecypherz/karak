@@ -1,0 +1,17 @@
+<div class="weapon-swap">
+  <div class="title">Weapon Swap</div>
+  <div class="selection">
+    <div (click)="swapWeaponOne()"
+        class="weapon one" [ngClass]="{'selected': isWeaponOneSelected()}">
+      <img src="{{player.getWeaponOne()!.imageUrl}}">
+    </div>
+    <div (click)="swapWeaponTwo()"
+        class="weapon two" [ngClass]="{'selected': isWeaponTwoSelected()}">
+      <img src="{{player.getWeaponTwo()!.imageUrl}}">
+    </div>
+  </div>
+  <div class="buttons">
+    <button class="cancel" (click)="cancel()">Cancel</button>
+    <button class="confirm" (click)="confirm()" [disabled]="!player.canConfirmSwap()">Confirm</button>
+  </div>
+</div>

@@ -33,6 +33,9 @@ export class Player extends EventTarget {
 
   private weaponOne: Weapon | null = null;
   private weaponTwo: Weapon | null = null;
+  private swappingWeapons = false;
+  
+  private tokenToSwap: Token | null = null;
 
   constructor(
       readonly character: Character) {
@@ -48,6 +51,8 @@ export class Player extends EventTarget {
     this.activeMonster = null;
     this.hadCombat = false;
     this.madeCombatRoll = false;
+    this.swappingWeapons = false;
+    this.tokenToSwap = null;
     this.actionsRemaining = 4;
   }
 
@@ -65,6 +70,10 @@ export class Player extends EventTarget {
       throw new Error('No more actions to consume.');
     }
     this.actionsRemaining--;
+  }
+
+  setActionsRemaining(actionsRemaining: number) {
+    this.actionsRemaining = actionsRemaining;
   }
 
   getActionsRemaining(): number {
@@ -237,9 +246,64 @@ export class Player extends EventTarget {
       } else if (this.weaponTwo == null) {
         this.weaponTwo = token;
       } else {
-        throw new Error('TODO: Handle weapon swaps.');
+        throw new Error('Weapon slots are full.');
       }
     }
+  }
+
+  hasTwoWeapons(): boolean {
+    return this.weaponOne != null && this.weaponTwo != null;
+  }
+
+  setSwappingWeapons(swappingWeapons: boolean): void {
+    this.swappingWeapons = swappingWeapons;
+    this.tokenToSwap = null;
+  }
+
+  isSwappingWeapons(): boolean {
+    return this.swappingWeapons;
+  }
+
+  setTokenToSwap(token: Token): void {
+    if (!this.isSwappingWeapons()) {
+      throw new Error('Not swapping weapons');
+    }
+    this.tokenToSwap = token;
+  }
+
+  getTokenToSwap(): Token | null {
+    return this.tokenToSwap;
+  }
+
+  canConfirmSwap(): boolean {
+    return this.isSwappingWeapons() && this.tokenToSwap != null;
+  }
+
+  confirmSwap(newToken: Token): Token {
+    if (!this.canConfirmSwap()) {
+      throw new Error('Cannot confirm swap');
+    }
+
+    let swapped = false;
+    if (newToken instanceof Weapon) {
+      if (this.weaponOne == this.tokenToSwap) {
+        this.weaponOne = newToken;
+        swapped = true;
+      }
+      if (this.weaponTwo == this.tokenToSwap) {
+        this.weaponTwo = newToken;
+        swapped = true;
+      }
+    }
+
+    if (!swapped) {
+      throw new Error('Failed to swap');
+    }
+    
+    const discardedToken = this.tokenToSwap!;
+    this.swappingWeapons = false;
+    this.tokenToSwap = null;
+    return discardedToken;
   }
 
   private rollDie(): number {

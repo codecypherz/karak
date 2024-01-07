@@ -39,14 +39,16 @@ export class Cell {
     this.token = token;
   }
 
-  replaceToken(token: Token): void {
+  replaceToken(newToken: Token): Token {
     if (this.tile == null) {
       throw new Error('Cannot set a token without a tile.');
     }
     if (this.token == null) {
       throw new Error('Expected a token to already exist.');
     }
-    this.token = token;
+    const oldToken = this.token;
+    this.token = newToken;
+    return oldToken;
   }
 
   removeToken(): void {

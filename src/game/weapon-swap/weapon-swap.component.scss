@@ -1,0 +1,63 @@
+.weapon-swap {
+  position: absolute;
+  top: -150%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background-color: #111;
+  border: 2px solid white;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+}
+
+.title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.selection {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.weapon {
+  width: 80px;
+  height: 80px;
+  border-radius: 17px;
+  overflow: hidden;
+  border: 1px solid black;
+  margin-bottom: 2px;
+}
+
+.weapon.selected {
+  border: 3px solid white;
+  border-radius: 20px;
+  margin-top: -2px;
+  margin-left: -2px;
+  margin-bottom: 0px;
+}
+
+.weapon > img {
+  width: 100%;
+}
+
+.weapon.one {
+  margin-right: 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.buttons > button {
+  width: 100px;
+}
+
+.cancel {
+  margin-right: 10px;
+}

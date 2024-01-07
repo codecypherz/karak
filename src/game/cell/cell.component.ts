@@ -14,7 +14,7 @@ export class CellComponent {
 
   constructor(private gameService: GameService) {}
 
-  getActivePlayer(): Player | null {
+  getActivePlayerInCell(): Player | null {
     const activePlayer = this.gameService.getGame().getActivePlayer();
     if (this.isPlayerInCell(activePlayer)) {
       return activePlayer;
@@ -22,14 +22,10 @@ export class CellComponent {
     return null;
   }
 
-  getInactivePlayers(): Array<Player> {
+  getInactivePlayersInCell(): Array<Player> {
     return this.gameService.getGame().getPlayers().filter(player => {
       return !player.isActive() && this.isPlayerInCell(player);
     });
-  }
-
-  private isPlayerInCell(player: Player): boolean {
-    return player.getPosition().equals(this.cell.getPosition());
   }
 
   move(): void {
@@ -38,6 +34,14 @@ export class CellComponent {
 
   pickUp(): void {
     this.gameService.getGame().pickUp(this.cell);
+  }
+
+  isSwappingWeapons(): boolean {
+    const activePlayer = this.getActivePlayerInCell();
+    if (activePlayer == null) {
+      return false;
+    }
+    return activePlayer.isSwappingWeapons();
   }
 
   explore(): void {
@@ -73,10 +77,6 @@ export class CellComponent {
     this.gameService.getGame().confirmExplore(this.cell);
   }
 
-  hasPlayers(): boolean {
-    return this.getPlayers().size > 0;
-  }
-
   getPlayers(): Set<Player> {
     const game = this.gameService.getGame();
     const players = new Set<Player>();
@@ -86,5 +86,9 @@ export class CellComponent {
       }
     });
     return players;
+  }
+
+  private isPlayerInCell(player: Player): boolean {
+    return player.getPosition().equals(this.cell.getPosition());
   }
 }

@@ -10,6 +10,7 @@ import { Position } from './position';
 import { TileType } from './tile/tiletype';
 import { TokenBag } from './token/tokenbag';
 import { Monster } from './token/monster';
+import { Weapon } from './token/weapon';
 
 export class Game extends EventTarget {
 
@@ -39,6 +40,10 @@ export class Game extends EventTarget {
   getActivePlayer(): Player {
     let player = this.players[this.activePlayerIndex];
     return player;
+  }
+
+  getActivePlayerCell(): Cell {
+    return this.dungeon.getCell(this.getActivePlayer().getPosition());
   }
 
   getTilesRemaining(): number {
@@ -128,11 +133,46 @@ export class Game extends EventTarget {
     if (!cell.hasToken()) {
       throw new Error('Cell had nothing to pick up');
     }
-
     const token = cell.getToken()!;
-    this.getActivePlayer().pickUp(token);
-    cell.removeToken();
+    const activePlayer = this.getActivePlayer();
+    
+    if (token instanceof Weapon && activePlayer.hasTwoWeapons()) {
+      activePlayer.setSwappingWeapons(true);
+    } else {
+      activePlayer.pickUp(token);
+      cell.removeToken();
+      activePlayer.setActionsRemaining(0);
+      this.startNextTurn();
+    }
+
     this.updatePlayerActionIndicators();
+  }
+
+  cancelSwap(): void {
+    const activePlayer = this.getActivePlayer();
+    if (!activePlayer.isSwappingWeapons()) {
+      throw new Error('Active player was not swapping weapons.');
+    }
+    activePlayer.setSwappingWeapons(false);
+    this.updatePlayerActionIndicators();
+  }
+
+  confirmSwap(): void {
+    const activePlayer = this.getActivePlayer();
+    if (!activePlayer.isSwappingWeapons()) {
+      throw new Error('Active player was not swapping weapons.');
+    }
+
+    const activeCell = this.getActivePlayerCell();
+    if (!activeCell.hasToken()) {
+      throw new Error('Cell had nothing to pick up');
+    }
+    const tokenToPickUp = activeCell.getToken()!;
+
+    const discardedToken = activePlayer.confirmSwap(tokenToPickUp);
+    activeCell.replaceToken(discardedToken);
+    activePlayer.setActionsRemaining(0);
+    this.startNextTurn();
   }
 
   explore(cell: Cell): void {
@@ -234,7 +274,7 @@ export class Game extends EventTarget {
     const event = e as CombatConfirmedEvent;
     const combatResult = event.combatResult;
     const activePlayer = this.getActivePlayer();
-    const activeCell = this.dungeon.getCell(activePlayer.getPosition());
+    const activeCell = this.getActivePlayerCell();
     const monsterToken = activeCell.getToken();
     if (!(monsterToken instanceof Monster)) {
       throw new Error('Unexpected combat confirmation on non-monster token.');
@@ -259,7 +299,7 @@ export class Game extends EventTarget {
 
   private updatePlayerActionIndicators(): void {
     const activePlayer = this.getActivePlayer();
-    const activeCell = this.dungeon.getCell(activePlayer.getPosition());
+    const activeCell = this.getActivePlayerCell();
     this.dungeon.forEachCell(cell => {
       cell.setExplorable(false);
       cell.setMoveable(false);
@@ -271,7 +311,7 @@ export class Game extends EventTarget {
       return;
     }
     
-    if (activeCell.hasToken()) {
+    if (activeCell.hasToken() && !activePlayer.isSwappingWeapons()) {
       const token = activeCell.getToken()!;
       activeCell.setPickupItem(activePlayer.canPickUp(token));
     }
@@ -281,7 +321,7 @@ export class Game extends EventTarget {
     }
 
     // Mark immediately adjacent, connected cells as explorable.
-    const playerCell = this.dungeon.getCell(activePlayer.getPosition());
+    const playerCell = this.getActivePlayerCell();
     this.dungeon.getConnectedCells(playerCell).forEach(connectedCell => {
       if (connectedCell.isEmpty() && !this.tileBag.isEmpty()) {
         connectedCell.setExplorable(true);

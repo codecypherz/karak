@@ -12,6 +12,7 @@ import { CellComponent } from './cell/cell.component';
 import { GameInfoComponent } from './game-info/game-info.component';
 import { PlayerComponent } from './player/player.component';
 import { MonsterBattleComponent } from './monster-battle/monster-battle.component';
+import { WeaponSwapComponent } from './weapon-swap/weapon-swap.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { MonsterBattleComponent } from './monster-battle/monster-battle.componen
     PlayerComponent,
     PlayerSheetComponent,
     PlayerSheetsComponent,
+    WeaponSwapComponent,
   ],
 })
 export class GameModule { }

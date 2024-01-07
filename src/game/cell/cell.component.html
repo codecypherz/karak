@@ -12,10 +12,10 @@
     <img class="token" src="{{cell.getToken()!.imageUrl}}">
   </div>
 
-  <app-player *ngIf="getActivePlayer() != null"
-      [player]="getActivePlayer()!" [index]="-1">
+  <app-player *ngIf="getActivePlayerInCell() != null"
+      [player]="getActivePlayerInCell()!" [index]="-1">
   </app-player>
-  <app-player *ngFor="let player of getInactivePlayers(); let i = index"
+  <app-player *ngFor="let player of getInactivePlayersInCell(); let i = index"
       [player]="player" [index]="i">
   </app-player>
 
@@ -41,4 +41,8 @@
   <button *ngIf="cell.isConfirmingExplore()"
       class="counter-clockwise"
       (click)="rotateCounterClockwise()">CCW</button>
+
+  <app-weapon-swap *ngIf="isSwappingWeapons()" [player]="getActivePlayerInCell()!">
+  </app-weapon-swap>
+
 </div>
