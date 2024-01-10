@@ -14,8 +14,12 @@ export class CellComponent {
 
   constructor(private gameService: GameService) {}
 
+  getActivePlayer(): Player {
+    return this.gameService.getGame().getActivePlayer();
+  }
+
   getActivePlayerInCell(): Player | null {
-    const activePlayer = this.gameService.getGame().getActivePlayer();
+    const activePlayer = this.getActivePlayer();
     if (this.isPlayerInCell(activePlayer)) {
       return activePlayer;
     }
@@ -29,15 +33,15 @@ export class CellComponent {
   }
 
   move(): void {
-    this.gameService.getGame().moveTo(this.cell);
+    this.getActivePlayer().moveTo(this.cell);
   }
 
   pickUp(): void {
-    this.gameService.getGame().pickUp(this.cell);
+    this.getActivePlayer().pickUp(this.cell);
   }
 
   openTreasure(): void {
-    this.gameService.getGame().openTreasure(this.cell);
+    this.getActivePlayer().openTreasure(this.cell);
   }
 
   isSwappingWeapons(): boolean {
@@ -49,7 +53,8 @@ export class CellComponent {
   }
 
   explore(): void {
-    this.gameService.getGame().explore(this.cell);
+    this.getActivePlayer().startExploring(
+        this.cell, this.gameService.getGame().getTileBag());
   }
 
   rotateClockwise(): void {
@@ -74,11 +79,13 @@ export class CellComponent {
   }
 
   confirmDisabled(): boolean {
-    return !this.gameService.getGame().canConfirmExplore(this.cell);
+    return !this.getActivePlayer().canConfirmExploring(
+        this.cell, this.gameService.getGame().getDungeon());
   }
   
   confirmExplore(): void {
-    this.gameService.getGame().confirmExplore(this.cell);
+    this.getActivePlayer().confirmExplore(
+        this.cell, this.gameService.getGame().getTokenBag());
   }
 
   getPlayers(): Set<Player> {

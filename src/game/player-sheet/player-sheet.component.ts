@@ -25,12 +25,10 @@ export class PlayerSheetComponent {
   }
 
   endTurnDisabled(): boolean {
-    const game = this.gameService.getGame();
-    return !game.canEndTurn();
+    return !this.gameService.getGame().canEndTurn();
   }
 
   endTurn(): void {
-    const game = this.gameService.getGame();
-    game.startNextTurn();
+    this.gameService.getGame().endTurn();
   }
 }

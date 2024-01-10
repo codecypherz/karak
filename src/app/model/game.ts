@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { CombatConfirmedEvent, CombatResult, Player } from './player';
+import { CombatConfirmedEvent, CombatResult, ExplorationFinishedEvent, Player } from './player';
 import { shuffle } from '../util/arrays';
 import { Dungeon } from './dungeon';
 import { Cell } from './cell';
@@ -9,8 +9,6 @@ import { Direction } from './direction';
 import { Position } from './position';
 import { TokenBag } from './token/tokenbag';
 import { Monster } from './token/monster/monster';
-import { Weapon } from './token/weapon/weapon';
-import { Treasure } from './token/treasture';
 import { Dragon } from './token/monster/dragon';
 
 export class Game extends EventTarget {
@@ -24,7 +22,6 @@ export class Game extends EventTarget {
   private tokenBag = new TokenBag();
   private started = false;
   private activePlayerIndex = 0;
-  private cellBeingConfirmed: Cell | null = null;
   private dragonKilled = false;
 
   getId(): string {
@@ -48,15 +45,11 @@ export class Game extends EventTarget {
     return this.dungeon.getCell(this.getActivePlayer().getPosition());
   }
 
-  getTilesRemaining(): number {
-    return this.tileBag.getNumTiles();
+  canEndTurn(): boolean {
+    return this.getActivePlayer().canEndTurn();
   }
 
-  getTokensRemaining(): number {
-    return this.tokenBag.getNumTokens();
-  }
-
-  startNextTurn(): void {
+  endTurn(): void {
     if (!this.canEndTurn()) {
       throw new Error('Cannot end turn right now.');
     }
@@ -73,16 +66,20 @@ export class Game extends EventTarget {
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
   }
 
-  canEndTurn(): boolean {
-    return this.cellBeingConfirmed == null && !this.getActivePlayer().isInCombat();
-  }
-
   isStarted(): boolean {
     return this.started;
   }
 
   getDungeon(): Dungeon {
     return this.dungeon;
+  }
+
+  getTileBag(): TileBag {
+    return this.tileBag;
+  }
+
+  getTokenBag(): TokenBag {
+    return this.tokenBag;
   }
 
   isValidToStart(): boolean {
@@ -104,8 +101,32 @@ export class Game extends EventTarget {
     // Initialize players
     this.players.forEach(player => {
       player.addEventListener(
-          Player.COMBAT_CONFIRMED_EVENT,
-          this.onCombatConfirmed.bind(this));
+        Player.MOVE_EVENT,
+        this.onMove.bind(this));
+      player.addEventListener(
+        Player.COMBAT_CONFIRMED_EVENT,
+        this.onCombatConfirmed.bind(this));
+      player.addEventListener(
+        Player.EXPLORATION_STARTED_EVENT,
+        this.onExplorationStarted.bind(this));
+      player.addEventListener(
+        Player.EXPLORATION_FINISHED_EVENT,
+        this.onExplorationFinished.bind(this));
+      player.addEventListener(
+        Player.TREASURE_OPENED_EVENT,
+        this.onTreasureOpened.bind(this));
+      player.addEventListener(
+        Player.SWAPPING_STARTED_EVENT,
+        this.onSwappingStarted.bind(this));
+      player.addEventListener(
+        Player.SWAPPING_CANCELED_EVENT,
+        this.onSwappingCanceled.bind(this));
+      player.addEventListener(
+        Player.SWAP_CONFIRMED_EVENT,
+        this.onSwapConfirmed.bind(this));
+      player.addEventListener(
+        Player.PICKED_UP_EVENT,
+        this.onPickUp.bind(this));
       player.setPositions(starterCell.getPosition(), starterCell.getPosition());
     }, this);
 
@@ -120,171 +141,6 @@ export class Game extends EventTarget {
     this.getActivePlayer().startTurn();
     this.updatePlayerActionIndicators();
     this.dispatchEvent(new Event(Game.START_TURN_EVENT));
-  }
-
-  moveTo(cell: Cell): void {
-    const activePlayer = this.getActivePlayer();
-    activePlayer.moveTo(cell.getPosition());
-    activePlayer.consumeAction();
-
-    if (cell.hasToken()) {
-      const token = cell.getToken()!;
-      if (token instanceof Monster) {
-        activePlayer.startCombat(token);
-      }
-    }
-
-    this.updatePlayerActionIndicators();
-  }
-
-  pickUp(cell: Cell): void {
-    if (!cell.hasToken()) {
-      throw new Error('Cell had nothing to pick up');
-    }
-    const token = cell.getToken()!;
-    const activePlayer = this.getActivePlayer();
-    
-    if (token instanceof Weapon && activePlayer.hasTwoWeapons()) {
-      activePlayer.setSwappingWeapons(true);
-    } else {
-      activePlayer.pickUp(token);
-      cell.removeToken();
-      activePlayer.setActionsRemaining(0);
-      this.startNextTurn();
-    }
-
-    this.updatePlayerActionIndicators();
-  }
-
-  openTreasure(cell: Cell) {
-    if (!cell.hasToken()) {
-      throw new Error('Cell had no token');
-    }
-    const token = cell.getToken()!;
-    if (!(token instanceof Treasure)) {
-      throw new Error('Can only open treasure');
-    }
-    const activePlayer = this.getActivePlayer();
-    activePlayer.openTreasure();
-    cell.removeToken();
-    this.startNextTurn();
-  }
-
-  cancelSwap(): void {
-    const activePlayer = this.getActivePlayer();
-    if (!activePlayer.isSwappingWeapons()) {
-      throw new Error('Active player was not swapping weapons.');
-    }
-    activePlayer.setSwappingWeapons(false);
-    this.updatePlayerActionIndicators();
-  }
-
-  confirmSwap(): void {
-    const activePlayer = this.getActivePlayer();
-    if (!activePlayer.isSwappingWeapons()) {
-      throw new Error('Active player was not swapping weapons.');
-    }
-
-    const activeCell = this.getActivePlayerCell();
-    if (!activeCell.hasToken()) {
-      throw new Error('Cell had nothing to pick up');
-    }
-    const tokenToPickUp = activeCell.getToken()!;
-
-    const discardedToken = activePlayer.confirmSwap(tokenToPickUp);
-    activeCell.replaceToken(discardedToken);
-    activePlayer.setActionsRemaining(0);
-    this.startNextTurn();
-  }
-
-  explore(cell: Cell): void {
-    const activePlayer = this.getActivePlayer();
-    if (this.cellBeingConfirmed != null) {
-      throw new Error('Another cell is currently being explored.');
-    }
-    if (!activePlayer.hasActionsRemaining()) {
-      throw new Error('Player cannot explore without remaining actions.');
-    }
-    if (!cell.isExplorable()) {
-      throw new Error('Cannot explore an unexplorable tile.');
-    }
-    if (cell.hasTile()) {
-      throw new Error('Cell has already been explored.');
-    }
-
-    cell.setTile(this.tileBag.drawTile());
-    cell.setConfirmingExplore(true);
-    this.cellBeingConfirmed = cell;
-    activePlayer.consumeAction();
-    this.updatePlayerActionIndicators();
-  }
-
-  canConfirmExplore(cell: Cell): boolean {
-    const activePlayer = this.getActivePlayer();
-    if (this.cellBeingConfirmed == null) {
-      return false;
-    }
-    if (cell != this.cellBeingConfirmed) {
-      return false;
-    }
-    if (cell.getPosition().equals(activePlayer.getPosition())) {
-      throw new Error('Player and cell positions should be different.');
-    }
-
-    // The current player position needs to be linked to the cell.
-    let connectedCells = this.dungeon.getConnectedCells(cell);
-    for (let connectedCell of connectedCells) {
-      if (connectedCell.getPosition().equals(activePlayer.getPosition())) {
-        return true;
-      }
-    }
-
-    // No link found, so invalid rotation.
-    return false;
-  }
-
-  confirmExplore(cell: Cell): void {
-    if (!this.canConfirmExplore(cell)) {
-      throw new Error('Cannot confirm explore.');
-    }
-
-    const activePlayer = this.getActivePlayer();
-    activePlayer.moveTo(cell.getPosition());
-    cell.setConfirmingExplore(false);
-    this.cellBeingConfirmed = null;
-  
-    // After successfully placing a tile, we might need to expand the grid.
-    const expandDir = this.dungeon.maybeExpandGrid();
-    if (expandDir == Direction.UP) {
-      this.players.forEach(player => {
-        const pos = player.getPosition();
-        const lastPos = player.getLastPosition();
-        player.setPositions(
-            new Position(pos.row + 1, pos.col),
-            new Position(lastPos.row + 1, lastPos.col));
-      });
-    } else if (expandDir == Direction.LEFT) {
-      this.players.forEach(player => {
-        const pos = player.getPosition();
-        const lastPos = player.getLastPosition();
-        player.setPositions(
-            new Position(pos.row, pos.col + 1),
-            new Position(lastPos.row, lastPos.col + 1));
-      });
-    }
-
-    // If a room was explored, reveal a token.
-    const tile = cell.getTile()!;
-    if (tile.revealsToken() && !this.tokenBag.isEmpty()) {
-      const token = this.tokenBag.drawToken();
-      cell.setToken(token);
-
-      if (token instanceof Monster) {
-        this.getActivePlayer().startCombat(token);
-      }
-    }
-
-    this.updatePlayerActionIndicators();
   }
 
   isGameOver(): boolean {
@@ -308,11 +164,72 @@ export class Game extends EventTarget {
     });
   }
 
+  private onMove(e: Event): void {
+    this.updatePlayerActionIndicators();
+    if (!this.canActivePlayerTakeAnyAction()) {
+      this.endTurn();
+    }
+  }
+
+  private onExplorationStarted(e: Event): void {
+    this.updatePlayerActionIndicators();
+  }
+
+  private onExplorationFinished(e: Event): void {
+    const event = e as ExplorationFinishedEvent;
+    const cell = event.cell;
+
+    // After successfully placing a tile, we might need to expand the grid.
+    const expandDir = this.dungeon.maybeExpandGrid();
+    if (expandDir == Direction.UP) {
+      this.players.forEach(player => {
+        const pos = player.getPosition();
+        const lastPos = player.getLastPosition();
+        player.setPositions(
+          new Position(pos.row + 1, pos.col),
+          new Position(lastPos.row + 1, lastPos.col));
+      });
+    } else if (expandDir == Direction.LEFT) {
+      this.players.forEach(player => {
+        const pos = player.getPosition();
+        const lastPos = player.getLastPosition();
+        player.setPositions(
+          new Position(pos.row, pos.col + 1),
+          new Position(lastPos.row, lastPos.col + 1));
+      });
+    }
+
+    this.updatePlayerActionIndicators();
+    if (!this.canActivePlayerTakeAnyAction()) {
+      this.endTurn();
+    }
+  }
+
+  private onSwappingStarted(e: Event): void {
+    this.updatePlayerActionIndicators();
+  }
+
+  private onSwappingCanceled(e: Event): void {
+    this.updatePlayerActionIndicators();
+  }
+
+  private onSwapConfirmed(e: Event): void {
+    this.endTurn();
+  }
+
+  private onPickUp(e: Event): void {
+    this.endTurn();
+  }
+
+  private onTreasureOpened(e: Event): void {
+    this.endTurn();
+  }
+
   private onCombatConfirmed(e: Event): void {
     const event = e as CombatConfirmedEvent;
     const combatResult = event.combatResult;
     const activePlayer = this.getActivePlayer();
-    const activeCell = this.getActivePlayerCell();
+    let activeCell = this.getActivePlayerCell();
     const monsterToken = activeCell.getToken();
     if (!(monsterToken instanceof Monster)) {
       throw new Error('Unexpected combat confirmation on non-monster token.');
@@ -339,54 +256,20 @@ export class Game extends EventTarget {
     }
 
     this.updatePlayerActionIndicators();
+    if (!this.canActivePlayerTakeAnyAction()) {
+      this.endTurn();
+    }
+  }
+
+  private canActivePlayerTakeAnyAction(): boolean {
+    return this.getActivePlayer().canPerformAnAction(this.dungeon);
   }
 
   private updatePlayerActionIndicators(): void {
     const activePlayer = this.getActivePlayer();
     const activeCell = this.getActivePlayerCell();
     this.dungeon.forEachCell(cell => {
-      cell.setExplorable(false);
-      cell.setMoveable(false);
-      cell.setPickupItem(false);
-      cell.setOpenTreasure(false);
-    });
-
-    if (this.cellBeingConfirmed != null
-      || activePlayer.isInCombat()) {
-      return;
-    }
-    
-    if (activeCell.hasToken() && !activePlayer.isSwappingWeapons()) {
-      const token = activeCell.getToken()!;
-      activeCell.setPickupItem(activePlayer.canPickUp(token));
-      if (token instanceof Treasure) {
-        activeCell.setOpenTreasure(activePlayer.hasSkeletonKey());
-      }
-    }
-
-    if (activePlayer.getActionsRemaining() == 0) {
-      return;
-    }
-
-    // Mark immediately adjacent, connected cells as explorable.
-    const playerCell = this.getActivePlayerCell();
-    this.dungeon.getConnectedCells(playerCell).forEach(connectedCell => {
-      if (connectedCell.isEmpty() && !this.tileBag.isEmpty()) {
-        connectedCell.setExplorable(true);
-      } else {
-        // The connected cell has a tile, but the target tile must also
-        // contain the player cell in *it's* connected set for it to make
-        // a viable movement path.
-        const targetConnectedCells = this.dungeon.getConnectedCells(connectedCell);
-        let foundPath = false;
-        for (let targetConnectedCell of targetConnectedCells) {
-          if (targetConnectedCell.getPosition().equals(playerCell.getPosition())) {
-            foundPath = true;
-            break;
-          }
-        }
-        connectedCell.setMoveable(foundPath);
-      }
+      activePlayer.setActionIndicators(cell, activeCell, this.dungeon, this.tileBag);
     });
   }
 }

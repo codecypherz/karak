@@ -35,18 +35,18 @@ export class TokenBag {
     // 2 Skeleton Mage
     //
 
-    // for (let i = 0; i < 8; i++) {
-    //   this.tokens.push(new GiantRat());
-    // }
-    // for (let i = 0; i < 12; i++) {
-    //   this.tokens.push(new SkeletonJailer());
-    // }
-    // for (let i = 0; i < 5; i++) {
-    //   this.tokens.push(new SkeletonWarrior());
-    // }
-    // for (let i = 0; i < 3; i++) {
-    //   this.tokens.push(new SkeletonKing());
-    // }
+    for (let i = 0; i < 8; i++) {
+      this.tokens.push(new GiantRat());
+    }
+    for (let i = 0; i < 12; i++) {
+      this.tokens.push(new SkeletonJailer());
+    }
+    for (let i = 0; i < 5; i++) {
+      this.tokens.push(new SkeletonWarrior());
+    }
+    for (let i = 0; i < 3; i++) {
+      this.tokens.push(new SkeletonKing());
+    }
     for (let i = 0; i < 10; i++) {
       this.tokens.push(new Treasure());
     }

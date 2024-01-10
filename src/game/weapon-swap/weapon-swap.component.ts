@@ -14,26 +14,27 @@ export class WeaponSwapComponent {
   constructor(private gameService: GameService) {}
 
   cancel(): void {
-    this.gameService.getGame().cancelSwap();
+    this.player.cancelSwap();
   }
 
   swapWeaponOne(): void {
-    this.player.setTokenToSwap(this.player.getWeaponOne()!);
+    this.player.setTokenToDiscard(this.player.getWeaponOne()!);
   }
 
   swapWeaponTwo(): void {
-    this.player.setTokenToSwap(this.player.getWeaponTwo()!);
+    this.player.setTokenToDiscard(this.player.getWeaponTwo()!);
   }
 
   confirm(): void {
-    this.gameService.getGame().confirmSwap();
+    const cell = this.gameService.getGame().getActivePlayerCell();
+    this.player.confirmSwap(cell);
   }
 
   isWeaponOneSelected(): boolean {
-    return this.player.getWeaponOne() == this.player.getTokenToSwap();
+    return this.player.getWeaponOne() == this.player.getTokenToDiscard();
   }
 
   isWeaponTwoSelected(): boolean {
-    return this.player.getWeaponTwo() == this.player.getTokenToSwap();
+    return this.player.getWeaponTwo() == this.player.getTokenToDiscard();
   }
 }

@@ -11,10 +11,10 @@ export class GameInfoComponent {
   @Input() game!: Game;
 
   getTilesRemaining(): number {
-    return this.game.getTilesRemaining();
+    return this.game.getTileBag().getNumTiles();
   }
 
   getTokensRemaining(): number {
-    return this.game.getTokensRemaining();
+    return this.game.getTokenBag().getNumTokens();
   }
 }
