@@ -23,9 +23,9 @@
   </div>
 
   <img [ngClass]="{
-        'character-image': true,
-        'dead': player.isDead()
+        'character-image': true
       }"
+      [@deadAlive]="player.isDead() ? 'dead' : 'alive'"
       src="{{player.character.imageUrl}}">
 
   <div *ngIf="player.getTreasure() > 0" class="treasure">

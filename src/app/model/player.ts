@@ -39,7 +39,7 @@ export class Player extends EventTarget {
   private lastPosition: Position | null = null; // Null until game start
   private position: Position | null = null; // Null until game start
 
-  private hitPoints = 2;
+  private hitPoints = 5;
   private skippedTurnForDeath = false;
 
   private dieOne = 0;
