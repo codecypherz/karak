@@ -36,6 +36,16 @@ export class Game extends EventTarget {
     return this.players;
   }
 
+  getPlayersInOrder(): Array<Player> {
+    let inOrderPlayers = new Array<Player>();
+    let index = this.activePlayerIndex;
+    for (let i = 0; i < this.players.length; i++) {
+      inOrderPlayers.push(this.players[index]);
+      index = (index + 1) % this.players.length;
+    }
+    return inOrderPlayers;
+  }
+
   getActivePlayer(): Player {
     let player = this.players[this.activePlayerIndex];
     return player;
