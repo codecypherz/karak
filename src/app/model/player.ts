@@ -29,6 +29,8 @@ export class Player extends EventTarget {
   static SWAPPING_CANCELED_EVENT = 'swapping_canceled';
   static SWAP_CONFIRMED_EVENT = 'swap_confirmed';
   static PICKED_UP_EVENT = 'picked_up';
+  static DIED_EVENT = 'died';
+  static REVIVED_EVENT = 'revived';
 
   private id = uuidv4();
   private active = false;
@@ -37,7 +39,8 @@ export class Player extends EventTarget {
   private lastPosition: Position | null = null; // Null until game start
   private position: Position | null = null; // Null until game start
 
-  private hitPoints = 5;
+  private hitPoints = 2;
+  private skippedTurnForDeath = false;
 
   private dieOne = 0;
   private dieTwo = 0;
@@ -78,7 +81,12 @@ export class Player extends EventTarget {
     this.exploring = false;
     this.tokenToDiscard = null;
     this.targetTokenToPickup = null;
-    this.actionsRemaining = 4;
+
+    this.actionsRemaining = this.isDead() ? 0 : 4;
+
+    if (this.isDead() && !this.skippedTurnForDeath) {
+      this.skippedTurnForDeath = true;
+    }
   }
 
   canEndTurn(): boolean {
@@ -92,7 +100,11 @@ export class Player extends EventTarget {
     const tile = cell.getTile()!;
 
     if (tile.healsOnEndOfTurn()) {
-      this.hitPoints = 5;
+      this.fullHeal();
+    }
+
+    if (this.hitPoints == 0 && this.skippedTurnForDeath) {
+      this.revive();
     }
 
     if (cell.hasToken()) {
@@ -159,13 +171,31 @@ export class Player extends EventTarget {
     if (this.hitPoints > 0) {
       this.hitPoints--;
     }
+    if (this.hitPoints == 0) {
+      this.dispatchEvent(new Event(Player.DIED_EVENT));
+    }
   }
 
-  setHitPoints(hitPoints: number) {
-    if (hitPoints < 0 || hitPoints > 5) {
-      throw new Error('Invalid hit points.');
+  private revive(): void {
+    if (this.hitPoints != 0) {
+      throw new Error('Hit points should have been zero');
     }
-    this.hitPoints = hitPoints;
+    this.hitPoints = 1;
+    this.skippedTurnForDeath = false;
+    this.dispatchEvent(new Event(Player.REVIVED_EVENT));
+  }
+
+  private fullHeal(): void {
+    const oldHitPoints = this.hitPoints;
+    this.hitPoints = 5;
+    if (oldHitPoints == 0) {
+      this.skippedTurnForDeath = false;
+      this.dispatchEvent(new Event(Player.REVIVED_EVENT));
+    }
+  }
+
+  isDead(): boolean {
+    return this.hitPoints <= 0;
   }
 
   getWeaponOne(): Weapon | null {
@@ -282,6 +312,9 @@ export class Player extends EventTarget {
     if (this.isBusy()) {
       return true;
     }
+    if (this.isDead()) {
+      return false;
+    }
     for (let row of dungeon.getRows()) {
       for (let cell of row) {
         if (cell.isExplorable()
@@ -388,10 +421,10 @@ export class Player extends EventTarget {
 
   private canExplore(
       targetCell: Cell, playerCell: Cell, dungeon: Dungeon, tileBag: TileBag): boolean {
-    if (this.actionsRemaining <= 0) {
+    if (this.isBusy() || this.isDead()) {
       return false;
     }
-    if (this.isBusy()) {
+    if (this.actionsRemaining <= 0) {
       return false;
     }
     if (tileBag.isEmpty()) {
@@ -469,10 +502,10 @@ export class Player extends EventTarget {
   }
 
   private canMoveTo(targetCell: Cell, playerCell: Cell, dungeon: Dungeon): boolean {
-    if (this.actionsRemaining <= 0) {
+    if (this.isBusy() || this.isDead()) {
       return false;
     }
-    if (this.isBusy()) {
+    if (this.actionsRemaining <= 0) {
       return false;
     }
     if (targetCell.isEmpty()) {
@@ -500,10 +533,10 @@ export class Player extends EventTarget {
   }
 
   private canPickUp(targetCell: Cell): boolean {
-    if (!targetCell.getPosition().equals(this.position)) {
+    if (this.isBusy() || this.isDead()) {
       return false;
     }
-    if (this.isBusy()) {
+    if (!targetCell.getPosition().equals(this.position)) {
       return false;
     }
     if (targetCell.isEmpty()) {
@@ -560,10 +593,10 @@ export class Player extends EventTarget {
   }
 
   private canOpenTreasure(targetCell: Cell): boolean {
-    if (!targetCell.getPosition().equals(this.position)) {
+    if (this.isBusy() || this.isDead()) {
       return false;
     }
-    if (this.isBusy()) {
+    if (!targetCell.getPosition().equals(this.position)) {
       return false;
     }
     if (targetCell.isEmpty()) {

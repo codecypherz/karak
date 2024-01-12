@@ -46,6 +46,10 @@
   top: 13px;
 }
 
+.character-image.dead {
+  filter: brightness(30%);
+}
+
 .treasure {
   position: absolute;
   right: 130px;

@@ -22,7 +22,11 @@
     </div>
   </div>
 
-  <img class="character-image" src="{{player.character.imageUrl}}">
+  <img [ngClass]="{
+        'character-image': true,
+        'dead': player.isDead()
+      }"
+      src="{{player.character.imageUrl}}">
 
   <div *ngIf="player.getTreasure() > 0" class="treasure">
     <img class="sheet" src="/images/token/treasure_open.jpg">

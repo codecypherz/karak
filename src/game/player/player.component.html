@@ -1,3 +1,7 @@
-<div class="{{getClass()}}" [ngClass]="{'active': player.isActive()}">
+<div class="{{getClass()}}"
+    [ngClass]="{
+      'active': player.isActive(),
+      'dead': player.isDead()
+    }">
   <img src="{{player.character.iconUrl}}">
 </div>

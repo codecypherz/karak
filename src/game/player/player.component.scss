@@ -12,6 +12,10 @@
   border: 2px solid var(--player_active);
 }
 
+.player.dead {
+  filter: brightness(50%);
+}
+
 .player > img {
   width: 100%;
 }
