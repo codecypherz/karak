@@ -2,7 +2,7 @@
       'character': true,
       'selected': isSelected()
     }"
-    (click)="toggleSelect()">
+    (mousedown)="toggleSelect()">
   <img class="character-image" src="{{character.imageUrl}}">
   <div class="character-name">{{character.name}}</div>
 </div>
