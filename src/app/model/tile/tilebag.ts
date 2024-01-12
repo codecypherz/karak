@@ -1,6 +1,8 @@
 import { removeRandom } from "src/app/util/arrays";
 import { Tile } from "./tile";
 import { RoomTile, RoomType } from "./room_tile";
+import { TunnelTile, TunnelType } from "./tunnel_tile";
+import { HealingCornerTile } from "./healing_corner_tile";
 
 export class TileBag {
 
@@ -48,6 +50,18 @@ export class TileBag {
     }
     for (let i = 0; i < 13; i++) {
       this.tiles.push(new RoomTile(RoomType.CORNER));
+    }
+    for (let i = 0; i < 5; i++) {
+      this.tiles.push(new TunnelTile(TunnelType.THREE_WAY));
+    }
+    for (let i = 0; i < 4; i++) {
+      this.tiles.push(new TunnelTile(TunnelType.TWO_WAY));
+    }
+    for (let i = 0; i < 4; i++) {
+      this.tiles.push(new TunnelTile(TunnelType.CORNER));
+    }
+    for (let i = 0; i < 2; i++) {
+      this.tiles.push(new HealingCornerTile());
     }
   }
 
