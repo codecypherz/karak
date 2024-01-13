@@ -3,6 +3,7 @@ import { Tile } from "./tile";
 import { RoomTile, RoomType } from "./room_tile";
 import { TunnelTile, TunnelType } from "./tunnel_tile";
 import { HealingCornerTile } from "./healing_corner_tile";
+import { TunnelTeleportTile } from "./tunnel_teleport_tile";
 
 export class TileBag {
 
@@ -26,6 +27,7 @@ export class TileBag {
     // 4  2-way Tunnel
     // 4  Corner Tunnel
     //
+    this.addBaseGameTiles();
 
     // Regent Expansion (18 tiles):
     //
@@ -38,7 +40,9 @@ export class TileBag {
 
     // A general rule if customizing tile/token proportions:
     // *Rooms* must always exceed tokens in the token bag.
+  }
 
+  private addBaseGameTiles(): void {
     for (let i = 0; i < 21; i++) {
       this.tiles.push(new RoomTile(RoomType.FOUR_WAY));
     }
@@ -62,6 +66,9 @@ export class TileBag {
     }
     for (let i = 0; i < 2; i++) {
       this.tiles.push(new HealingCornerTile());
+    }
+    for (let i = 0; i < 4; i++) {
+      this.tiles.push(new TunnelTeleportTile());
     }
   }
 

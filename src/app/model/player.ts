@@ -11,6 +11,7 @@ import { Treasure } from './token/treasture';
 import { Dungeon } from './dungeon';
 import { TileBag } from './tile/tilebag';
 import { TokenBag } from './token/tokenbag';
+import { TunnelTeleportTile } from './tile/tunnel_teleport_tile';
 
 export enum CombatResult {
   WIN,
@@ -510,6 +511,13 @@ export class Player extends EventTarget {
     }
     if (targetCell.isEmpty()) {
       return false;
+    }
+    const playerTile = playerCell.getTile();
+    const targetTile = targetCell.getTile();
+    if (playerTile instanceof TunnelTeleportTile
+        && targetTile instanceof TunnelTeleportTile
+        && playerTile != targetTile) {
+      return true;
     }
     const targetConnectedToPlayer = dungeon.getConnectedCells(targetCell).has(playerCell);
     const playerConnectedToTarget = dungeon.getConnectedCells(playerCell).has(targetCell);
