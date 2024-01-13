@@ -37,6 +37,8 @@ export class Player extends EventTarget {
   static STARTING_SPELL_CAST_EVENT = 'starting_spell_cast';
   static CANCEL_SPELL_CAST_EVENT = 'cancel_spell_cast';
   static CONFIRM_SPELL_CAST_EVENT = 'confirm_spell_cast';
+  static STARTING_CURSE_MOVE_EVENT = 'starting_curse_move';
+  static CURSE_MOVED_EVENT = 'curse_moved';
 
   private id = uuidv4();
   private active = false;
@@ -47,6 +49,7 @@ export class Player extends EventTarget {
 
   private hitPoints = 5;
   private skippedTurnForDeath = false;
+  private cursed = false;
 
   private dieOne = 0;
   private dieTwo = 0;
@@ -76,6 +79,8 @@ export class Player extends EventTarget {
   private castingHealingTeleport: HealingTeleport | null = null;
   private healingTeleportTargetPlayer: Player | null = null;
   private healingTeleportTargetCell: Cell | null = null;
+  private movingCurse = false;
+  private curseTarget: Player | null = null;
 
   constructor(
       readonly character: Character) {
@@ -94,6 +99,8 @@ export class Player extends EventTarget {
     this.swappingWeapons = false;
     this.swappingSpells = false;
     this.exploring = false;
+    this.movingCurse = false;
+    this.curseTarget = null;
     this.castingHealingTeleport = null;
     this.healingTeleportTargetPlayer = null;
     this.healingTeleportTargetCell = null;
@@ -210,6 +217,7 @@ export class Player extends EventTarget {
       this.skippedTurnForDeath = false;
       this.dispatchEvent(new Event(Player.REVIVED_EVENT));
     }
+    this.cursed = false;
   }
 
   isDead(): boolean {
@@ -369,6 +377,44 @@ export class Player extends EventTarget {
   isExploring(): boolean {
     return this.exploring;
   }
+
+  isCursed(): boolean {
+    return this.cursed;
+  }
+
+  setCursed(cursed: boolean): void {
+    this.cursed = cursed;
+  }
+
+  isMovingCurse(): boolean {
+    return this.movingCurse;
+  }
+
+  startMovingCurse(): void {
+    this.movingCurse = true;
+  }
+
+  setCurseTarget(player: Player): void {
+    this.curseTarget = player;
+  }
+
+  getCurseTarget(): Player | null {
+    return this.curseTarget;
+  }
+
+  canConfirmCurseMove(): boolean {
+    return this.curseTarget != null;
+  }
+
+  confirmCurseMove(): void {
+    if (!this.canConfirmCurseMove()) {
+      throw new Error('Unable to confirm curse move');
+    }
+    const curseTarget = this.curseTarget!;
+    this.movingCurse = false;
+    this.curseTarget = null;
+    this.dispatchEvent(new CurseMovedEvent(curseTarget));
+  }
   
   startCastingHealingTeleport(spell: HealingTeleport): void {
     this.castingHealingTeleport = spell;
@@ -474,7 +520,8 @@ export class Player extends EventTarget {
         || this.isExploring()
         || this.isSwappingWeapons()
         || this.isSwappingSpells()
-        || this.isCastingHealingTeleport();
+        || this.isCastingHealingTeleport()
+        || this.isMovingCurse();
   }
 
   startCombat(monster: Monster): void {
@@ -556,13 +603,7 @@ export class Player extends EventTarget {
 
     switch (combatResult) {
       case CombatResult.WIN:
-        this.addTreasure(monster.getTreasureReward());
-        const tokenReward = monster.getTokenReward();
-        if (tokenReward != null) {
-          combatCell.replaceToken(tokenReward);
-        } else {
-          combatCell.removeToken();
-        }
+        monster.handleDefeat(this, combatCell);
         break;
       case CombatResult.LOSS:
         this.reduceHitPoints();
@@ -841,5 +882,11 @@ export class CombatConfirmedEvent extends Event {
       readonly monster: Monster,
       readonly combatResult: CombatResult) {
     super(Player.COMBAT_CONFIRMED_EVENT);
+  }
+}
+
+export class CurseMovedEvent extends Event {
+  constructor(readonly curseTarget: Player) {
+    super(Player.CURSE_MOVED_EVENT);
   }
 }

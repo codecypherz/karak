@@ -2,14 +2,14 @@ import { Cell } from "../../cell";
 import { Player } from "../../player";
 import { Monster } from "./monster";
 
-export class Dragon extends Monster {
+export class Mummy extends Monster {
 
   constructor() {
-    super("dragon.jpg", 15);
+    super("mummy.jpg", 7);
   }
 
   override handleDefeat(player: Player, cell: Cell): void {
     cell.removeToken();
-    player.addTreasure(1.5);
+    player.startMovingCurse();
   }
 }

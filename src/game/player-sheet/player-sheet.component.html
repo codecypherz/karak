@@ -29,10 +29,14 @@
       src="{{player.character.imageUrl}}">
 
   <div *ngIf="player.getTreasure() > 0" class="treasure">
-    <img class="sheet" src="/images/token/treasure_open.jpg">
+    <img src="/images/token/treasure_open.jpg">
   </div>
   <div *ngIf="player.getTreasure() > 0" class="treasure-value">
     {{player.getTreasure()}}
+  </div>
+
+  <div *ngIf="player.isCursed()" class="curse">
+    <img src="/images/token/curse.jpg">
   </div>
 
   <div *ngIf="player.getWeaponOne() != null"
@@ -85,6 +89,11 @@
   <app-player-select *ngIf="player.isCastingHealingTeleport()"
       [player]="player"
       selectionTitle="Select a player and location to teleport">
+  </app-player-select>
+
+  <app-player-select *ngIf="player.isMovingCurse()"
+      [player]="player"
+      selectionTitle="Select a player to curse">
   </app-player-select>
 
 </div>

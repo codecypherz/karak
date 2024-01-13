@@ -52,8 +52,8 @@
 
 .treasure {
   position: absolute;
-  right: 130px;
-  top: 13px;
+  left: 130px;
+  top: 16px;
   width: 35px;
   height: 35px;
   border-radius: 8px;
@@ -68,11 +68,26 @@
 .treasure-value {
   font-size: 12px;
   position: absolute;
-  left: 139px;
-  top: 14px;
+  left: 136px;
+  top: 16px;
   color: black;
   font-weight: bold;
   text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.8);
+}
+
+.curse {
+  position: absolute;
+  left: 53px;
+  top: 16px;
+  width: 35px;
+  height: 35px;
+  border-radius: 35px;
+  overflow: hidden;
+  border: 1px solid black;
+}
+
+.curse > img {
+  width: 100%;
 }
 
 .weapon {

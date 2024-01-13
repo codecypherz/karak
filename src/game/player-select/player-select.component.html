@@ -9,11 +9,17 @@
           'dead': p.isDead()
         }"
         (click)="selectPlayer(p)">
+
         <img src="{{p.character.iconUrl}}">
+
+        <div *ngIf="p.isCursed()" class="curse">
+          <img src="/images/token/curse.jpg">
+        </div>
+
     </div>
   </div>
   <div class="buttons">
-    <button class="cancel" (click)="cancel()">Cancel</button>
+    <button *ngIf="showCancel()" class="cancel" (click)="cancel()">Cancel</button>
     <button class="confirm" (click)="confirm()" [disabled]="!canConfirm()">Confirm</button>
   </div>
 </div>

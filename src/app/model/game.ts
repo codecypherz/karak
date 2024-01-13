@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { CombatConfirmedEvent, CombatResult, ExplorationFinishedEvent, Player } from './player';
+import { CombatConfirmedEvent, CombatResult, CurseMovedEvent, ExplorationFinishedEvent, Player } from './player';
 import { shuffle } from '../util/arrays';
 import { Dungeon } from './dungeon';
 import { Cell } from './cell';
@@ -146,6 +146,12 @@ export class Game extends EventTarget {
       player.addEventListener(
         Player.CONFIRM_SPELL_CAST_EVENT,
         this.updatePlayerActionIndicators.bind(this));
+      player.addEventListener(
+        Player.STARTING_CURSE_MOVE_EVENT,
+        this.updatePlayerActionIndicators.bind(this));
+      player.addEventListener(
+        Player.CURSE_MOVED_EVENT,
+        this.onCurseMoved.bind(this));
       player.setPositions(starterCell.getPosition(), starterCell.getPosition());
     }, this);
 
@@ -252,6 +258,20 @@ export class Game extends EventTarget {
     if (combatResult == CombatResult.WIN
         && monster instanceof Dragon) {
       this.gameOver = true;
+    }
+
+    this.updatePlayerActionIndicators();
+    if (!this.canActivePlayerTakeAnyAction()) {
+      this.endTurn();
+    }
+  }
+
+  private onCurseMoved(e: Event): void {
+    const event = e as CurseMovedEvent;
+    const curseTarget = event.curseTarget;
+
+    for (let player of this.players) {
+      player.setCursed(player == curseTarget);
     }
 
     this.updatePlayerActionIndicators();

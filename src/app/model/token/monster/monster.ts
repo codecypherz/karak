@@ -1,3 +1,5 @@
+import { Cell } from "../../cell";
+import { Player } from "../../player";
 import { Token } from "../token";
 
 export abstract class Monster extends Token {
@@ -13,11 +15,6 @@ export abstract class Monster extends Token {
     return this.strength;
   }
 
-  getTreasureReward(): number {
-    return 0;
-  }
-
-  getTokenReward(): Token | null {
-    return null;
+  handleDefeat(player: Player, cell: Cell): void {
   }
 }

@@ -18,6 +18,10 @@ export class PlayerSelectComponent {
     return this.gameService.getGame().getPlayersInOrder();
   }
 
+  showCancel(): boolean {
+    return this.player.isCastingHealingTeleport();
+  }
+
   cancel(): void {
     if (this.player.isCastingHealingTeleport()) {
       this.player.cancelHealingTeleport();
@@ -25,25 +29,36 @@ export class PlayerSelectComponent {
   }
 
   selectPlayer(player: Player): void {
-    if (this.player.isCastingHealingTeleport()) {
+    if (this.player.isMovingCurse()) {
+      this.player.setCurseTarget(player);
+    } else if (this.player.isCastingHealingTeleport()) {
       this.player.setHealingTeleportTargetPlayer(player);
     }
   }
 
   canConfirm(): boolean {
-    if (this.player.isCastingHealingTeleport()) {
+    if (this.player.isMovingCurse()) {
+      return this.player.canConfirmCurseMove();
+    } else if (this.player.isCastingHealingTeleport()) {
       return this.player.canConfirmHealingTeleport();
     }
     return false;
   }
 
   confirm(): void {
-    if (this.player.isCastingHealingTeleport()) {
+    if (this.player.isMovingCurse()) {
+      this.player.confirmCurseMove();
+    } else if (this.player.isCastingHealingTeleport()) {
       this.player.confirmHealingTeleport();
     }
   }
 
   isPlayerSelected(player: Player): boolean {
-    return this.player.getHealingTeleportTargetPlayer() == player;
+    if (this.player.isMovingCurse()) {
+      return this.player.getCurseTarget() == player;
+    } else if (this.player.isCastingHealingTeleport()) {
+      return this.player.getHealingTeleportTargetPlayer() == player;
+    }
+    return false;
   }
 }

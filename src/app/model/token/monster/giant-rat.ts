@@ -1,6 +1,7 @@
 import { Monster } from "./monster";
 import { Daggers } from "../weapon/daggers";
-import { Token } from "../token";
+import { Cell } from "../../cell";
+import { Player } from "../../player";
 
 export class GiantRat extends Monster {
 
@@ -8,7 +9,7 @@ export class GiantRat extends Monster {
     super("giant_rat.jpg", 5);
   }
 
-  override getTokenReward(): Token | null {
-    return new Daggers();
+  override handleDefeat(player: Player, cell: Cell): void {
+    cell.replaceToken(new Daggers());
   }
 }

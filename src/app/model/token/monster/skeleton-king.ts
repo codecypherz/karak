@@ -1,6 +1,7 @@
 import { Monster } from "./monster";
-import { Token } from "../token";
 import { BattleAxe } from "../weapon/battle-axe";
+import { Cell } from "../../cell";
+import { Player } from "../../player";
 
 export class SkeletonKing extends Monster {
 
@@ -8,7 +9,7 @@ export class SkeletonKing extends Monster {
     super("skeleton_king.jpg", 10);
   }
 
-  override getTokenReward(): Token | null {
-    return new BattleAxe();
+  override handleDefeat(player: Player, cell: Cell): void {
+    cell.replaceToken(new BattleAxe());
   }
 }

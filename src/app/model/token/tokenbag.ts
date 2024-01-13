@@ -8,6 +8,7 @@ import { SkeletonJailer } from "./monster/skeleton-jailer";
 import { Dragon } from "./monster/dragon";
 import { Fallen } from "./monster/fallent";
 import { GiantSpider } from "./monster/giant-spider";
+import { Mummy } from "./monster/mummy";
 
 export class TokenBag {
 
@@ -45,6 +46,9 @@ export class TokenBag {
     }
     for (let i = 0; i < 4; i++) {
       this.tokens.push(new GiantSpider());
+    }
+    for (let i = 0; i < 8; i++) {
+      this.tokens.push(new Mummy());
     }
     for (let i = 0; i < 12; i++) {
       this.tokens.push(new SkeletonJailer());
