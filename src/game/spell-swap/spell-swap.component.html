@@ -1,0 +1,21 @@
+<div class="spell-swap">
+  <div class="title">Choose Spell to Discard</div>
+  <div class="selection">
+    <div (click)="swapSpellOne()"
+        class="spell one" [ngClass]="{'selected': isSpellOneSelected()}">
+      <img src="{{player.getSpellOne()!.imageUrl}}">
+    </div>
+    <div (click)="swapSpellTwo()"
+        class="spell two" [ngClass]="{'selected': isSpellTwoSelected()}">
+      <img src="{{player.getSpellTwo()!.imageUrl}}">
+    </div>
+    <div (click)="swapSpellThree()"
+        class="spell three" [ngClass]="{'selected': isSpellThreeSelected()}">
+      <img src="{{player.getSpellThree()!.imageUrl}}">
+    </div>
+  </div>
+  <div class="buttons">
+    <button class="cancel" (click)="cancel()">Cancel</button>
+    <button class="confirm" (click)="confirm()" [disabled]="!player.canConfirmSwap()">Confirm</button>
+  </div>
+</div>

@@ -7,6 +7,7 @@ import { SkeletonKing } from "./monster/skeleton-king";
 import { SkeletonJailer } from "./monster/skeleton-jailer";
 import { Dragon } from "./monster/dragon";
 import { Fallen } from "./monster/fallent";
+import { GiantSpider } from "./monster/giant-spider";
 
 export class TokenBag {
 
@@ -41,6 +42,9 @@ export class TokenBag {
   private addBaseGameTokens(): void {
     for (let i = 0; i < 8; i++) {
       this.tokens.push(new GiantRat());
+    }
+    for (let i = 0; i < 4; i++) {
+      this.tokens.push(new GiantSpider());
     }
     for (let i = 0; i < 12; i++) {
       this.tokens.push(new SkeletonJailer());

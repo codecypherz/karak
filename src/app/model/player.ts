@@ -12,6 +12,8 @@ import { Dungeon } from './dungeon';
 import { TileBag } from './tile/tilebag';
 import { TokenBag } from './token/tokenbag';
 import { TunnelTeleportTile } from './tile/tunnel_teleport_tile';
+import { Spell } from './token/spell/spell';
+import { HealingTeleport } from './token/spell/healing-teleport';
 
 export enum CombatResult {
   WIN,
@@ -52,7 +54,11 @@ export class Player extends EventTarget {
   private weaponTwo: Weapon | null = null;
 
   private skeletonKey: SkeletonKey | null = null;
-  
+
+  private spellOne: Spell | null = null;
+  private spellTwo: Spell | null = null;
+  private spellThree: Spell | null = null;
+
   // Swapping
   private targetTokenToPickup: Token | null = null;
   private tokenToDiscard: Token | null = null;
@@ -62,6 +68,7 @@ export class Player extends EventTarget {
   // Busy indicators
   private activeMonster: Monster | null = null;
   private swappingWeapons = false;
+  private swappingSpells = false;
   private exploring = false;
 
   constructor(
@@ -219,8 +226,29 @@ export class Player extends EventTarget {
     return this.dieTwo;
   }
 
+  getSpellOne(): Spell | null {
+    return this.spellOne;
+  }
+
+  getSpellTwo(): Spell | null {
+    return this.spellTwo;
+  }
+
+  getSpellThree(): Spell | null {
+    return this.spellThree;
+  }
+
   private startSwappingWeapons(targetTokenToPickup: Token): void {
     this.swappingWeapons = true;
+    this.startSwapping(targetTokenToPickup);
+  }
+
+  private startSwappingSpells(targetTokenToPickup: Token): void {
+    this.swappingSpells = true;
+    this.startSwapping(targetTokenToPickup);
+  }
+
+  private startSwapping(targetTokenToPickup: Token): void {
     this.targetTokenToPickup = targetTokenToPickup;
     this.tokenToDiscard = null;
     this.dispatchEvent(new Event(Player.SWAPPING_STARTED_EVENT));
@@ -230,9 +258,13 @@ export class Player extends EventTarget {
     return this.swappingWeapons;
   }
 
+  isSwappingSpells(): boolean {
+    return this.swappingSpells;
+  }
+
   setTokenToDiscard(token: Token): void {
-    if (!this.isSwappingWeapons()) {
-      throw new Error('Not swapping weapons');
+    if (!this.isSwappingWeapons() && !this.isSwappingSpells()) {
+      throw new Error('Not swapping anything');
     }
     this.tokenToDiscard = token;
   }
@@ -242,11 +274,13 @@ export class Player extends EventTarget {
   }
 
   canConfirmSwap(): boolean {
-    return this.isSwappingWeapons() && this.tokenToDiscard != null;
+    return (this.isSwappingWeapons() || this.isSwappingSpells())
+        && this.tokenToDiscard != null;
   }
 
   cancelSwap(): void {
     this.swappingWeapons = false;
+    this.swappingSpells = false;
     this.targetTokenToPickup = null;
     this.tokenToDiscard = null;
     this.dispatchEvent(new Event(Player.SWAPPING_CANCELED_EVENT));
@@ -268,6 +302,20 @@ export class Player extends EventTarget {
         swapped = true;
       }
     }
+    if (this.targetTokenToPickup instanceof Spell) {
+      if (this.spellOne == this.tokenToDiscard) {
+        this.spellOne = this.targetTokenToPickup;
+        swapped = true;
+      }
+      if (this.spellTwo == this.tokenToDiscard) {
+        this.spellTwo = this.targetTokenToPickup;
+        swapped = true;
+      }
+      if (this.spellThree == this.tokenToDiscard) {
+        this.spellThree = this.targetTokenToPickup;
+        swapped = true;
+      }
+    }
 
     if (!swapped) {
       throw new Error('Failed to swap');
@@ -275,6 +323,7 @@ export class Player extends EventTarget {
     
     cell.replaceToken(this.tokenToDiscard!);
     this.swappingWeapons = false;
+    this.swappingSpells = false;
     this.tokenToDiscard = null;
     this.targetTokenToPickup = null;
     this.actionsRemaining = 0;
@@ -330,7 +379,10 @@ export class Player extends EventTarget {
   }
   
   private isBusy(): boolean {
-    return this.isInCombat() || this.isExploring() || this.isSwappingWeapons();
+    return this.isInCombat()
+        || this.isExploring()
+        || this.isSwappingWeapons()
+        || this.isSwappingSpells();
   }
 
   startCombat(monster: Monster): void {
@@ -582,7 +634,8 @@ export class Player extends EventTarget {
     }
 
     // Can only hold one skeleton key. Swaps don't make sense.
-    if (token instanceof SkeletonKey && this.hasSkeletonKey()) {
+    if (token instanceof SkeletonKey
+        && this.hasSkeletonKey()) {
       return false;
     }
 
@@ -608,6 +661,22 @@ export class Player extends EventTarget {
         pickedUpToken = true;
       } else {
         throw new Error('Weapon slots are full.');
+      }
+    } else if (token instanceof Spell) {
+      if (this.spellOne != null && this.spellTwo != null && this.spellThree != null) {
+        this.startSwappingSpells(token);
+        return;
+      } else if (this.spellOne == null) {
+        this.spellOne = token;
+        pickedUpToken = true;
+      } else if (this.spellTwo == null) {
+        this.spellTwo = token;
+        pickedUpToken = true;
+      } else if (this.spellThree == null) {
+        this.spellThree = token;
+        pickedUpToken = true;
+      } else {
+        throw new Error('Spell slots are full.');
       }
     } else if (token instanceof SkeletonKey) {
       this.skeletonKey = token;

@@ -35,17 +35,27 @@
     {{player.getTreasure()}}
   </div>
 
-  <div *ngIf="player.getWeaponOne() != null" class="weapon one"
-      [ngClass]="{'weapon-active': player.hasMadeCombatRoll()}">
+  <div *ngIf="player.getWeaponOne() != null" class="item weapon one"
+      [ngClass]="{'item-active': player.hasMadeCombatRoll()}">
     <img src="{{player.getWeaponOne()!.imageUrl}}">
   </div>
-  <div *ngIf="player.getWeaponTwo() != null" class="weapon two"
-      [ngClass]="{'weapon-active': player.hasMadeCombatRoll()}">
+  <div *ngIf="player.getWeaponTwo() != null" class="item weapon two"
+      [ngClass]="{'item-active': player.hasMadeCombatRoll()}">
     <img src="{{player.getWeaponTwo()!.imageUrl}}">
   </div>
 
-  <div *ngIf="player.hasSkeletonKey()" class="skeleton-key">
+  <div *ngIf="player.hasSkeletonKey()" class="item skeleton-key">
     <img src="{{player.getSkeletonKey()!.imageUrl}}">
+  </div>
+
+  <div *ngIf="player.getSpellOne() != null" class="item spell one">
+    <img src="{{player.getSpellOne()!.imageUrl}}">
+  </div>
+  <div *ngIf="player.getSpellTwo() != null" class="item spell two">
+    <img src="{{player.getSpellTwo()!.imageUrl}}">
+  </div>
+  <div *ngIf="player.getSpellThree() != null" class="item spell three">
+    <img src="{{player.getSpellThree()!.imageUrl}}">
   </div>
 
   <div *ngIf="player.isActive()">

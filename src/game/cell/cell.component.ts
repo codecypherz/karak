@@ -52,6 +52,14 @@ export class CellComponent {
     return activePlayer.isSwappingWeapons();
   }
 
+  isSwappingSpells(): boolean {
+    const activePlayer = this.getActivePlayerInCell();
+    if (activePlayer == null) {
+      return false;
+    }
+    return activePlayer.isSwappingSpells();
+  }
+
   explore(): void {
     this.getActivePlayer().startExploring(
         this.cell, this.gameService.getGame().getTileBag());

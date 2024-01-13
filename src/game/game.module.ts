@@ -13,6 +13,7 @@ import { GameInfoComponent } from './game-info/game-info.component';
 import { PlayerComponent } from './player/player.component';
 import { MonsterBattleComponent } from './monster-battle/monster-battle.component';
 import { WeaponSwapComponent } from './weapon-swap/weapon-swap.component';
+import { SpellSwapComponent } from './spell-swap/spell-swap.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { WeaponSwapComponent } from './weapon-swap/weapon-swap.component';
     PlayerComponent,
     PlayerSheetComponent,
     PlayerSheetsComponent,
+    SpellSwapComponent,
     WeaponSwapComponent,
   ],
 })
