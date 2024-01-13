@@ -47,8 +47,11 @@ export class PlayerSheetComponent {
   }
 
   clickSpell(spell: Spell): void {
-    if (this.player.canCastSpell(spell)) {
+    if (this.player.isInCombat() && spell.canBeUsedInCombat()) {
+      spell.setSelected(!spell.isSelected());
+    } else if (this.player.canCastSpell(spell)) {
       spell.startCasting(this.player);
+      spell.setSelected(true);
     }
   }
 
@@ -56,7 +59,7 @@ export class PlayerSheetComponent {
     if (spell == null) {
       return false;
     }
-    return this.player.getCastingHealingTeleport() == spell;
+    return spell.isSelected();
   }
 
   endTurnDisabled(): boolean {

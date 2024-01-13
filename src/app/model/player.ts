@@ -422,6 +422,9 @@ export class Player extends EventTarget {
   }
 
   cancelHealingTeleport(): void {
+    if (this.castingHealingTeleport) {
+      this.castingHealingTeleport.setSelected(false);
+    }
     this.castingHealingTeleport = null;
     this.healingTeleportTargetPlayer = null;
     this.healingTeleportTargetCell = null;
@@ -580,13 +583,26 @@ export class Player extends EventTarget {
 
   getCombatBonus(): number {
     let bonus = 0;
-    if (this.weaponOne != null) {
-      bonus += this.weaponOne.getStrength();
-    }
-    if (this.weaponTwo != null) {
-      bonus += this.weaponTwo.getStrength();
-    }
+    bonus += this.getWeaponCombatBonus(this.weaponOne);
+    bonus += this.getWeaponCombatBonus(this.weaponTwo);
+    bonus += this.getSpellCombatBonus(this.spellOne);
+    bonus += this.getSpellCombatBonus(this.spellTwo);
+    bonus += this.getSpellCombatBonus(this.spellThree);
     return bonus;
+  }
+
+  private getWeaponCombatBonus(weapon: Weapon | null): number {
+    if (weapon == null) {
+      return 0;
+    }
+    return weapon.getStrength();
+  }
+
+  private getSpellCombatBonus(spell: Spell | null): number {
+    if (spell == null || !spell.isSelected() || !spell.canBeUsedInCombat()) {
+      return 0;
+    }
+    return spell.getStrength();
   }
 
   canConfirmCombatResult(): boolean {
@@ -601,6 +617,18 @@ export class Player extends EventTarget {
     const monster = this.activeMonster!;
     const combatResult = this.getPendingCombatResult();
 
+    // Consume spells, if used.
+    if (this.wasUsedInCombat(this.spellOne)) {
+      this.spellOne = null;
+    }
+    if (this.wasUsedInCombat(this.spellTwo)) {
+      this.spellTwo = null;
+    }
+    if (this.wasUsedInCombat(this.spellThree)) {
+      this.spellThree = null;
+    }
+
+    // Handle result of combat.
     switch (combatResult) {
       case CombatResult.WIN:
         monster.handleDefeat(this, combatCell);
@@ -620,6 +648,10 @@ export class Player extends EventTarget {
     this.hadCombat = true;
     this.actionsRemaining = 0;
     this.dispatchEvent(new CombatConfirmedEvent(monster, combatResult));
+  }
+
+  private wasUsedInCombat(spell: Spell | null): boolean {
+    return spell != null && spell.isSelected() && spell.canBeUsedInCombat();
   }
 
   hasHadCombat(): boolean {

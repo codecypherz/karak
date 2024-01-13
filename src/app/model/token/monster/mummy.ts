@@ -1,5 +1,6 @@
 import { Cell } from "../../cell";
 import { Player } from "../../player";
+import { FireBolt } from "../spell/fire-bolt";
 import { Monster } from "./monster";
 
 export class Mummy extends Monster {
@@ -9,7 +10,7 @@ export class Mummy extends Monster {
   }
 
   override handleDefeat(player: Player, cell: Cell): void {
-    cell.removeToken();
+    cell.replaceToken(new FireBolt());
     player.startMovingCurse();
   }
 }
