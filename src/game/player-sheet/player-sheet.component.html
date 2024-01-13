@@ -35,11 +35,13 @@
     {{player.getTreasure()}}
   </div>
 
-  <div *ngIf="player.getWeaponOne() != null" class="item weapon one"
+  <div *ngIf="player.getWeaponOne() != null"
+      class="item weapon one"
       [ngClass]="{'item-active': player.hasMadeCombatRoll()}">
     <img src="{{player.getWeaponOne()!.imageUrl}}">
   </div>
-  <div *ngIf="player.getWeaponTwo() != null" class="item weapon two"
+  <div *ngIf="player.getWeaponTwo() != null"
+      class="item weapon two"
       [ngClass]="{'item-active': player.hasMadeCombatRoll()}">
     <img src="{{player.getWeaponTwo()!.imageUrl}}">
   </div>
@@ -50,16 +52,19 @@
 
   <div *ngIf="player.getSpellOne() != null"
       class="item spell one"
+      [ngClass]="{'item-active': isSpellActive(player.getSpellOne())}"
       (click)="clickSpell(player.getSpellOne()!)">
     <img src="{{player.getSpellOne()!.imageUrl}}">
   </div>
   <div *ngIf="player.getSpellTwo() != null"
       class="item spell two"
+      [ngClass]="{'item-active': isSpellActive(player.getSpellTwo())}"
       (click)="clickSpell(player.getSpellTwo()!)">
     <img src="{{player.getSpellTwo()!.imageUrl}}">
   </div>
   <div *ngIf="player.getSpellThree() != null"
       class="item spell three"
+      [ngClass]="{'item-active': isSpellActive(player.getSpellThree())}"
       (click)="clickSpell(player.getSpellThree()!)">
     <img src="{{player.getSpellThree()!.imageUrl}}">
   </div>

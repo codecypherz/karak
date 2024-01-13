@@ -386,6 +386,10 @@ export class Player extends EventTarget {
     return this.castingHealingTeleport != null;
   }
 
+  getCastingHealingTeleport(): HealingTeleport | null {
+    return this.castingHealingTeleport;
+  }
+
   setHealingTeleportTargetPlayer(player: Player): void {
     if (!this.isCastingHealingTeleport()) {
       throw new Error('Not casting healing teleport');

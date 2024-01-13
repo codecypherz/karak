@@ -52,6 +52,13 @@ export class PlayerSheetComponent {
     }
   }
 
+  isSpellActive(spell: Spell | null): boolean {
+    if (spell == null) {
+      return false;
+    }
+    return this.player.getCastingHealingTeleport() == spell;
+  }
+
   endTurnDisabled(): boolean {
     return !this.gameService.getGame().canEndTurn();
   }
