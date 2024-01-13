@@ -17,7 +17,7 @@ export class Tile {
     return false;
   }
 
-  healsOnEndOfTurn(): boolean {
+  heals(): boolean {
     return false;
   }
 

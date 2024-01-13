@@ -3,6 +3,9 @@
       'empty': cell.isEmpty()
     }">
 
+  <div *ngIf="isSelected()" class="selected">
+  </div>
+
   <img *ngIf="cell.hasTile()"
       class="tile"
       src="{{cell.getTile()!.imageUrl}}"
@@ -30,6 +33,10 @@
   <button *ngIf="cell.canOpenTreasure()"
       class="open"
       (click)="openTreasure()">Open</button>
+
+  <button *ngIf="cell.isSelectable()"
+      class="select"
+      (click)="select()">Select</button>
 
   <button *ngIf="cell.isExplorable()"
       class="explore"

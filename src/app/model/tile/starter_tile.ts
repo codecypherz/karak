@@ -13,7 +13,7 @@ export class StarterTile extends Tile {
     super("starter.jpg", pathDirections);
   }
 
-  override healsOnEndOfTurn(): boolean {
+  override heals(): boolean {
     return true;
   }
 }

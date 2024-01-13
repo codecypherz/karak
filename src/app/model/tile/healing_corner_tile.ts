@@ -16,7 +16,7 @@ export class HealingCornerTile extends Tile {
     super("healing_corner.jpg", pathDirections);
   }
 
-  override healsOnEndOfTurn(): boolean {
+  override heals(): boolean {
     return true;
   }
 }

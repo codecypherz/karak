@@ -1,0 +1,19 @@
+<div class="player-select">
+  <div class="title">{{selectionTitle}}</div>
+  <div class="selection">
+    <div *ngFor="let p of getPlayers()"
+        class="player"
+        [ngClass]="{
+          'selected': isPlayerSelected(p),
+          'active': p.isActive(),
+          'dead': p.isDead()
+        }"
+        (click)="selectPlayer(p)">
+        <img src="{{p.character.iconUrl}}">
+    </div>
+  </div>
+  <div class="buttons">
+    <button class="cancel" (click)="cancel()">Cancel</button>
+    <button class="confirm" (click)="confirm()" [disabled]="!canConfirm()">Confirm</button>
+  </div>
+</div>

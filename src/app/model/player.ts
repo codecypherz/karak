@@ -34,6 +34,9 @@ export class Player extends EventTarget {
   static PICKED_UP_EVENT = 'picked_up';
   static DIED_EVENT = 'died';
   static REVIVED_EVENT = 'revived';
+  static STARTING_SPELL_CAST_EVENT = 'starting_spell_cast';
+  static CANCEL_SPELL_CAST_EVENT = 'cancel_spell_cast';
+  static CONFIRM_SPELL_CAST_EVENT = 'confirm_spell_cast';
 
   private id = uuidv4();
   private active = false;
@@ -70,6 +73,9 @@ export class Player extends EventTarget {
   private swappingWeapons = false;
   private swappingSpells = false;
   private exploring = false;
+  private castingHealingTeleport: HealingTeleport | null = null;
+  private healingTeleportTargetPlayer: Player | null = null;
+  private healingTeleportTargetCell: Cell | null = null;
 
   constructor(
       readonly character: Character) {
@@ -86,7 +92,11 @@ export class Player extends EventTarget {
     this.hadCombat = false;
     this.madeCombatRoll = false;
     this.swappingWeapons = false;
+    this.swappingSpells = false;
     this.exploring = false;
+    this.castingHealingTeleport = null;
+    this.healingTeleportTargetPlayer = null;
+    this.healingTeleportTargetCell = null;
     this.tokenToDiscard = null;
     this.targetTokenToPickup = null;
 
@@ -107,7 +117,7 @@ export class Player extends EventTarget {
     }
     const tile = cell.getTile()!;
 
-    if (tile.healsOnEndOfTurn()) {
+    if (tile.heals()) {
       this.fullHeal();
     }
 
@@ -238,6 +248,16 @@ export class Player extends EventTarget {
     return this.spellThree;
   }
 
+  canCastSpell(spell: Spell) {
+    if (!this.isActive()) {
+      return false;
+    }
+    if (this.isBusy()) {
+      return false;
+    }
+    return spell.canCast();
+  }
+
   private startSwappingWeapons(targetTokenToPickup: Token): void {
     this.swappingWeapons = true;
     this.startSwapping(targetTokenToPickup);
@@ -350,12 +370,79 @@ export class Player extends EventTarget {
     return this.exploring;
   }
   
+  startCastingHealingTeleport(spell: HealingTeleport): void {
+    this.castingHealingTeleport = spell;
+    this.dispatchEvent(new Event(Player.STARTING_SPELL_CAST_EVENT));
+  }
+
+  cancelHealingTeleport(): void {
+    this.castingHealingTeleport = null;
+    this.healingTeleportTargetPlayer = null;
+    this.healingTeleportTargetCell = null;
+    this.dispatchEvent(new Event(Player.CANCEL_SPELL_CAST_EVENT));
+  }
+
+  isCastingHealingTeleport(): boolean {
+    return this.castingHealingTeleport != null;
+  }
+
+  setHealingTeleportTargetPlayer(player: Player): void {
+    if (!this.isCastingHealingTeleport()) {
+      throw new Error('Not casting healing teleport');
+    }
+    this.healingTeleportTargetPlayer = player;
+  }
+
+  setHealingTeleportTargetCell(cell: Cell): void {
+    if (!this.isCastingHealingTeleport()) {
+      throw new Error('Not casting healing teleport');
+    }
+    this.healingTeleportTargetCell = cell;
+  }
+
+  getHealingTeleportTargetPlayer(): Player | null {
+    return this.healingTeleportTargetPlayer;
+  }
+
+  getHealingTeleportTargetCell(): Cell | null {
+    return this.healingTeleportTargetCell;
+  }
+
+  canConfirmHealingTeleport(): boolean {
+    return this.healingTeleportTargetPlayer != null
+        && this.healingTeleportTargetCell != null;
+  }
+
+  confirmHealingTeleport(): void {
+    if (!this.canConfirmHealingTeleport()) {
+      throw new Error('Cannot confirm healing teleport');
+    }
+    this.healingTeleportTargetPlayer!.moveTo(this.healingTeleportTargetCell!, false);
+    this.healingTeleportTargetPlayer!.fullHeal();
+
+    // The spell is now consumed.
+    if (this.spellOne == this.castingHealingTeleport) {
+      this.spellOne = null;
+    } else if (this.spellTwo == this.castingHealingTeleport) {
+      this.spellTwo = null;
+    } else if (this.spellThree == this.castingHealingTeleport) {
+      this.spellThree = null;
+    }
+
+    // Reset everything.
+    this.castingHealingTeleport = null;
+    this.healingTeleportTargetPlayer = null;
+    this.healingTeleportTargetCell = null;
+    this.dispatchEvent(new Event(Player.CONFIRM_SPELL_CAST_EVENT));
+  }
+
   setActionIndicators(
       targetCell: Cell, playerCell: Cell, dungeon: Dungeon, tileBag: TileBag): void {
     targetCell.setExplorable(this.canExplore(targetCell, playerCell, dungeon, tileBag));
     targetCell.setMoveable(this.canMoveTo(targetCell, playerCell, dungeon));
     targetCell.setPickupItem(this.canPickUp(targetCell));
     targetCell.setOpenTreasure(this.canOpenTreasure(targetCell));
+    targetCell.setSelectable(this.canSelect(targetCell));
   }
 
   canPerformAnAction(dungeon: Dungeon): boolean {
@@ -382,7 +469,8 @@ export class Player extends EventTarget {
     return this.isInCombat()
         || this.isExploring()
         || this.isSwappingWeapons()
-        || this.isSwappingSpells();
+        || this.isSwappingSpells()
+        || this.isCastingHealingTeleport();
   }
 
   startCombat(monster: Monster): void {
@@ -597,11 +685,13 @@ export class Player extends EventTarget {
     return targetConnectedToPlayer && playerConnectedToTarget;
   }
 
-  moveTo(cell: Cell): void {
+  moveTo(cell: Cell, consumeAction: boolean): void {
     const newPosition = cell.getPosition();
     this.lastPosition = this.position;
     this.position = newPosition;
-    this.consumeAction();
+    if (consumeAction) {
+      this.consumeAction();
+    }
 
     if (cell.hasToken()) {
       const token = cell.getToken()!;
@@ -722,6 +812,17 @@ export class Player extends EventTarget {
     this.treasure++;
     this.skeletonKey = null;
     this.dispatchEvent(new Event(Player.TREASURE_OPENED_EVENT));
+  }
+
+  private canSelect(cell: Cell): boolean {
+    if (!this.isCastingHealingTeleport()) {
+      return false;
+    }
+    if (!cell.hasTile()) {
+      return false;
+    }
+    const tile = cell.getTile()!;
+    return tile.heals();
   }
 }
 

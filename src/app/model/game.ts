@@ -137,6 +137,15 @@ export class Game extends EventTarget {
       player.addEventListener(
         Player.PICKED_UP_EVENT,
         this.onPickUp.bind(this));
+      player.addEventListener(
+        Player.STARTING_SPELL_CAST_EVENT,
+        this.updatePlayerActionIndicators.bind(this));
+      player.addEventListener(
+        Player.CANCEL_SPELL_CAST_EVENT,
+        this.updatePlayerActionIndicators.bind(this));
+      player.addEventListener(
+        Player.CONFIRM_SPELL_CAST_EVENT,
+        this.updatePlayerActionIndicators.bind(this));
       player.setPositions(starterCell.getPosition(), starterCell.getPosition());
     }, this);
 

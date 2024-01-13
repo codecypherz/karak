@@ -11,6 +11,7 @@ export class Cell {
   private pickupItem = false;
   private openTreasure = false;
   private confirmingExplore = false;
+  private selectable = false;
 
   constructor(private pos: Position) {
   }
@@ -117,5 +118,13 @@ export class Cell {
 
   setOpenTreasure(openTreasure: boolean): void {
     this.openTreasure = openTreasure;
+  }
+
+  isSelectable(): boolean {
+    return this.selectable;
+  }
+
+  setSelectable(selectable: boolean): void {
+    this.selectable = selectable;
   }
 }

@@ -9,6 +9,7 @@ import {
   transition,
   // ...
 } from '@angular/animations';
+import { Spell } from 'src/app/model/token/spell/spell';
 
 @Component({
   selector: 'app-player-sheet',
@@ -43,6 +44,12 @@ export class PlayerSheetComponent {
       return PlayerSheetComponent.DAMAGE_IMAGE;
     }
     return PlayerSheetComponent.HEALTH_IMAGE;
+  }
+
+  clickSpell(spell: Spell): void {
+    if (this.player.canCastSpell(spell)) {
+      spell.startCasting(this.player);
+    }
   }
 
   endTurnDisabled(): boolean {

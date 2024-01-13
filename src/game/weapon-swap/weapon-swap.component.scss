@@ -34,7 +34,7 @@
 }
 
 .weapon.selected {
-  border: 3px solid white;
+  border: 3px solid var(--selected_color);
   border-radius: 20px;
   margin-top: -2px;
   margin-left: -2px;

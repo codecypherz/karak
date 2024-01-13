@@ -33,7 +33,7 @@ export class CellComponent {
   }
 
   move(): void {
-    this.getActivePlayer().moveTo(this.cell);
+    this.getActivePlayer().moveTo(this.cell, true);
   }
 
   pickUp(): void {
@@ -42,6 +42,21 @@ export class CellComponent {
 
   openTreasure(): void {
     this.getActivePlayer().openTreasure(this.cell);
+  }
+
+  select(): void {
+    const activePlayer = this.getActivePlayer();
+    if (activePlayer.isCastingHealingTeleport()) {
+      activePlayer.setHealingTeleportTargetCell(this.cell);
+    }
+  }
+
+  isSelected(): boolean {
+    const activePlayer = this.getActivePlayer();
+    if (activePlayer.isCastingHealingTeleport()) {
+      return activePlayer.getHealingTeleportTargetCell() == this.cell;
+    }
+    return false;
   }
 
   isSwappingWeapons(): boolean {

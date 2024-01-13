@@ -48,13 +48,19 @@
     <img src="{{player.getSkeletonKey()!.imageUrl}}">
   </div>
 
-  <div *ngIf="player.getSpellOne() != null" class="item spell one">
+  <div *ngIf="player.getSpellOne() != null"
+      class="item spell one"
+      (click)="clickSpell(player.getSpellOne()!)">
     <img src="{{player.getSpellOne()!.imageUrl}}">
   </div>
-  <div *ngIf="player.getSpellTwo() != null" class="item spell two">
+  <div *ngIf="player.getSpellTwo() != null"
+      class="item spell two"
+      (click)="clickSpell(player.getSpellTwo()!)">
     <img src="{{player.getSpellTwo()!.imageUrl}}">
   </div>
-  <div *ngIf="player.getSpellThree() != null" class="item spell three">
+  <div *ngIf="player.getSpellThree() != null"
+      class="item spell three"
+      (click)="clickSpell(player.getSpellThree()!)">
     <img src="{{player.getSpellThree()!.imageUrl}}">
   </div>
 
@@ -67,6 +73,13 @@
     </div>
   </div>
 
-  <app-monster-battle [player]="player"></app-monster-battle>
+  <app-monster-battle *ngIf="player.isInCombat()"
+      [player]="player">
+  </app-monster-battle>
+
+  <app-player-select *ngIf="player.isCastingHealingTeleport()"
+      [player]="player"
+      selectionTitle="Select a player and location to teleport">
+  </app-player-select>
 
 </div>

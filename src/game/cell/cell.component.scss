@@ -9,6 +9,16 @@
   border: 1px dashed gray;
 }
 
+.selected {
+  border: 8px solid var(--selected_color);
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  top: -4px;
+  bottom: -4px;
+  z-index: 1;
+}
+
 .tile {
   width: 100%;
 }
@@ -61,7 +71,7 @@
   font-size: 16px;
 }
 
-.pick-up, .open, .explore, .confirm {
+.pick-up, .open, .explore, .confirm, .select {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -69,9 +79,10 @@
   font-size: 16px;
   width: 80px;
   height: 35px;
+  z-index: 1;
 }
 
-.pick-up, .open, .confirm {
+.pick-up, .open, .confirm, .select {
   top: 80%;
 }
 
