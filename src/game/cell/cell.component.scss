@@ -77,18 +77,30 @@
 
 .clockwise, .counter-clockwise {
   position: absolute;
-  top: -20px;
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  font-size: 10px;
+  top: -25px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
   z-index: 1;
 }
 
 .clockwise {
-  right: -20px;
+  right: -25px;
+}
+
+.clockwise > img {
+  transform: scaleX(-1) rotate(90deg);
 }
 
 .counter-clockwise {
-  left: -20px;
+  left: -25px;
+}
+
+.counter-clockwise > img {
+  transform: rotate(90deg);
+}
+
+img.rotate {
+  width: 100%;
+  vertical-align: middle;
 }

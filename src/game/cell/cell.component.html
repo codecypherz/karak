@@ -41,10 +41,14 @@
       (click)="confirmExplore()">Confirm</button>
   <button *ngIf="cell.isConfirmingExplore()"
       class="clockwise"
-      (click)="rotateClockwise()">CW</button>
+      (click)="rotateClockwise()">
+    <img class="rotate" src="/images/rotate_black.png">
+  </button>
   <button *ngIf="cell.isConfirmingExplore()"
       class="counter-clockwise"
-      (click)="rotateCounterClockwise()">CCW</button>
+      (click)="rotateCounterClockwise()">
+    <img class="rotate" src="/images/rotate_black.png">
+  </button>
 
   <app-weapon-swap *ngIf="isSwappingWeapons()" [player]="getActivePlayerInCell()!">
   </app-weapon-swap>
