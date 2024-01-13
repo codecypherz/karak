@@ -13,5 +13,11 @@ export abstract class Monster extends Token {
     return this.strength;
   }
 
-  abstract getReward(): Token;
+  getTreasureReward(): number {
+    return 0;
+  }
+
+  getTokenReward(): Token | null {
+    return null;
+  }
 }

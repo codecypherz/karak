@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CombatResult, Player } from 'src/app/model/player';
+import { GameService } from 'src/app/service/game.service';
 
 @Component({
   selector: 'app-monster-battle',
@@ -9,6 +10,8 @@ import { CombatResult, Player } from 'src/app/model/player';
 export class MonsterBattleComponent {
 
   @Input() player!: Player;
+
+  constructor(private gameService: GameService) {}
 
   getDieOneImageUrl(): string {
     return this.getDieImageUrl(this.player.getDieOne());
@@ -67,5 +70,9 @@ export class MonsterBattleComponent {
       case CombatResult.TIE:
         return "Confirm Tie";
     }
+  }
+
+  confirmCombatResult(): void {
+    this.player.confirmCombatResult(this.gameService.getGame().getActivePlayerCell());
   }
 }

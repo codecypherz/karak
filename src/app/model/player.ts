@@ -402,18 +402,39 @@ export class Player extends EventTarget {
     return this.hasMadeCombatRoll();
   }
 
-  confirmCombatResult(): void {
+  confirmCombatResult(combatCell: Cell): void {
     if (!this.isInCombat()) {
       throw new Error('Player not in combat.');
     }
 
+    const monster = this.activeMonster!;
     const combatResult = this.getPendingCombatResult();
 
+    switch (combatResult) {
+      case CombatResult.WIN:
+        this.addTreasure(monster.getTreasureReward());
+        const tokenReward = monster.getTokenReward();
+        if (tokenReward != null) {
+          combatCell.replaceToken(tokenReward);
+        } else {
+          combatCell.removeToken();
+        }
+        break;
+      case CombatResult.LOSS:
+        this.reduceHitPoints();
+        this.moveToLastPosition();
+        break;
+      case CombatResult.TIE:
+        this.moveToLastPosition();
+        break;
+    }
+
+    // Clean up
     this.activeMonster = null;
     this.madeCombatRoll = false;
     this.hadCombat = true;
     this.actionsRemaining = 0;
-    this.dispatchEvent(new CombatConfirmedEvent(combatResult));
+    this.dispatchEvent(new CombatConfirmedEvent(monster, combatResult));
   }
 
   hasHadCombat(): boolean {
@@ -642,7 +663,9 @@ export class ExplorationFinishedEvent extends Event {
 }
 
 export class CombatConfirmedEvent extends Event {
-  constructor(readonly combatResult: CombatResult) {
+  constructor(
+      readonly monster: Monster,
+      readonly combatResult: CombatResult) {
     super(Player.COMBAT_CONFIRMED_EVENT);
   }
 }

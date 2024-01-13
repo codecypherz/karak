@@ -8,7 +8,7 @@ export class SkeletonWarrior extends Monster {
     super("skeleton_warrior.jpg", 9);
   }
 
-  getReward(): Token {
+  override getTokenReward(): Token | null {
     return new Sword();
   }
 }

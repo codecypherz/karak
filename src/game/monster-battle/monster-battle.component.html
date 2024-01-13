@@ -37,7 +37,7 @@
 
   <button *ngIf="player.canConfirmCombatResult()"
       class="confirm {{getCombatResultClass()}}"
-      (click)="player.confirmCombatResult()">
+      (click)="confirmCombatResult()">
     {{getConfirmText()}}
   </button>
 

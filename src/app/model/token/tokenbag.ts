@@ -6,6 +6,7 @@ import { SkeletonWarrior } from "./monster/skeleton-warrior";
 import { SkeletonKing } from "./monster/skeleton-king";
 import { SkeletonJailer } from "./monster/skeleton-jailer";
 import { Dragon } from "./monster/dragon";
+import { Fallen } from "./monster/fallent";
 
 export class TokenBag {
 
@@ -28,13 +29,16 @@ export class TokenBag {
     // 8  Mummies
     // 10 Treasure
     //
+    this.addBaseGameTokens();
 
     // Regent Expansion (8 tokens):
     //
     // 6 Bats
     // 2 Skeleton Mage
     //
+  }
 
+  private addBaseGameTokens(): void {
     for (let i = 0; i < 8; i++) {
       this.tokens.push(new GiantRat());
     }
@@ -49,6 +53,9 @@ export class TokenBag {
     }
     for (let i = 0; i < 10; i++) {
       this.tokens.push(new Treasure());
+    }
+    for (let i = 0; i < 2; i++) {
+      this.tokens.push(new Fallen());
     }
     this.tokens.push(new Dragon());
   }

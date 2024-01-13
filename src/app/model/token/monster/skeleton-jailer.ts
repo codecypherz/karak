@@ -8,7 +8,7 @@ export class SkeletonJailer extends Monster {
     super("skeleton_jailer.jpg", 8);
   }
 
-  getReward(): Token {
+  override getTokenReward(): Token | null {
     return new SkeletonKey();
   }
 }

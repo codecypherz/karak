@@ -1,12 +1,12 @@
 import { Monster } from "./monster";
 
-export class Dragon extends Monster {
+export class Fallen extends Monster {
 
   constructor() {
-    super("dragon.jpg", 15);
+    super("fallen.jpg", 12);
   }
 
   override getTreasureReward(): number {
-    return 1.5;
+    return 1;
   }
 }

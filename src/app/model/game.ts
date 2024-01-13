@@ -22,7 +22,7 @@ export class Game extends EventTarget {
   private tokenBag = new TokenBag();
   private started = false;
   private activePlayerIndex = 0;
-  private dragonKilled = false;
+  private gameOver = false;
 
   getId(): string {
     return this.id;
@@ -154,7 +154,7 @@ export class Game extends EventTarget {
   }
 
   isGameOver(): boolean {
-    return this.dragonKilled;
+    return this.gameOver;
   }
 
   getWinningPlayers(): Array<Player> {
@@ -237,32 +237,12 @@ export class Game extends EventTarget {
 
   private onCombatConfirmed(e: Event): void {
     const event = e as CombatConfirmedEvent;
+    const monster = event.monster;
     const combatResult = event.combatResult;
-    const activePlayer = this.getActivePlayer();
-    let activeCell = this.getActivePlayerCell();
-    const monsterToken = activeCell.getToken();
-    if (!(monsterToken instanceof Monster)) {
-      throw new Error('Unexpected combat confirmation on non-monster token.');
-    }
 
-    switch (combatResult) {
-      case CombatResult.WIN:
-        // Place the reward in the cell.
-        activeCell.replaceToken(monsterToken.getReward());
-
-        // Special handling of the Dragon.
-        if (monsterToken instanceof Dragon) {
-          activePlayer.addTreasure(1.5);
-          this.dragonKilled = true;
-        }
-        break;
-      case CombatResult.LOSS:
-        activePlayer.reduceHitPoints();
-        activePlayer.moveToLastPosition();
-        break;
-      case CombatResult.TIE:
-        activePlayer.moveToLastPosition();
-        break;
+    if (combatResult == CombatResult.WIN
+        && monster instanceof Dragon) {
+      this.gameOver = true;
     }
 
     this.updatePlayerActionIndicators();

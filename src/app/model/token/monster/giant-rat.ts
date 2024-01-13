@@ -8,7 +8,7 @@ export class GiantRat extends Monster {
     super("giant_rat.jpg", 5);
   }
 
-  getReward(): Token {
+  override getTokenReward(): Token | null {
     return new Daggers();
   }
 }
