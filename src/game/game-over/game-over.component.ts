@@ -16,6 +16,14 @@ export class GameOverComponent {
     private gameService: GameService,
     private router: Router) { }
 
+  getWinText(): string {
+    const winningPlayers = this.game.getWinningPlayers();
+    if (winningPlayers.length > 0) {
+      return "Winning Players:";
+    }
+    return "Winning Player:";
+  }
+  
   newGame(): void {
     this.gameService.endGame();
     this.router.navigate(['']);

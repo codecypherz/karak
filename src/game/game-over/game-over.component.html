@@ -2,7 +2,7 @@
   <div class="dialog-overlay"></div>
   <div class="dialog">
     <div class="title">
-      Winning Players:
+      {{getWinText()}}
     </div>
     <img *ngFor="let player of game.getWinningPlayers()"
         class="character-image" src="{{player.character.imageUrl}}">
