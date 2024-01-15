@@ -45,6 +45,17 @@ export class Dungeon {
     return this.cells[row][col];
   }
 
+  getSurroundingCells(cell: Cell): Set<Cell> {
+    const cells = new Set<Cell>();
+
+    this.addCellInDirection(cell, cells, Direction.UP);
+    this.addCellInDirection(cell, cells, Direction.DOWN);
+    this.addCellInDirection(cell, cells, Direction.LEFT);
+    this.addCellInDirection(cell, cells, Direction.RIGHT);
+
+    return cells;
+  }
+
   getConnectedCells(cell: Cell): Set<Cell> {
     const cells = new Set<Cell>();
     if (cell.isEmpty()) {
@@ -53,13 +64,17 @@ export class Dungeon {
 
     const tile = cell.getTile()!;
     tile.getPathDirections().forEach(pathDirection => {
-      const cellInDirection = this.getCellInDirection(cell, pathDirection);
-      if (cellInDirection != null) {
-        cells.add(cellInDirection);
-      }
+      this.addCellInDirection(cell, cells, pathDirection);
     })
 
     return cells;
+  }
+
+  private addCellInDirection(cell: Cell, cells: Set<Cell>, direction: Direction) {
+    const cellInDirection = this.getCellInDirection(cell, direction);
+    if (cellInDirection != null) {
+      cells.add(cellInDirection);
+    }
   }
 
   maybeExpandGrid(): Direction | null {

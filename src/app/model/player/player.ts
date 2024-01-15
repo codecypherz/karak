@@ -665,13 +665,13 @@ export class Player extends EventTarget {
     const combatResult = this.getPendingCombatResult();
 
     // Consume spells, if used.
-    if (this.wasUsedInCombat(this.spellOne)) {
+    if (this.shouldConsumeCombatSpell(this.spellOne)) {
       this.spellOne = null;
     }
-    if (this.wasUsedInCombat(this.spellTwo)) {
+    if (this.shouldConsumeCombatSpell(this.spellTwo)) {
       this.spellTwo = null;
     }
-    if (this.wasUsedInCombat(this.spellThree)) {
+    if (this.shouldConsumeCombatSpell(this.spellThree)) {
       this.spellThree = null;
     }
 
@@ -696,7 +696,7 @@ export class Player extends EventTarget {
     this.dispatchEvent(new CombatConfirmedEvent(monster, combatResult));
   }
 
-  private wasUsedInCombat(spell: Spell | null): boolean {
+  protected shouldConsumeCombatSpell(spell: Spell | null): boolean {
     return spell != null && spell.isSelected() && spell.canBeUsedInCombat();
   }
 
@@ -799,9 +799,13 @@ export class Player extends EventTarget {
         && playerTile != targetTile) {
       return true;
     }
-    const targetConnectedToPlayer = dungeon.getConnectedCells(targetCell).has(playerCell);
-    const playerConnectedToTarget = dungeon.getConnectedCells(playerCell).has(targetCell);
+    const targetConnectedToPlayer = this.getConnectedCells(targetCell, dungeon).has(playerCell);
+    const playerConnectedToTarget = this.getConnectedCells(playerCell, dungeon).has(targetCell);
     return targetConnectedToPlayer && playerConnectedToTarget;
+  }
+
+  protected getConnectedCells(cell: Cell, dungeon: Dungeon): Set<Cell> {
+    return dungeon.getConnectedCells(cell);
   }
 
   moveTo(cell: Cell, consumeAction: boolean): void {
