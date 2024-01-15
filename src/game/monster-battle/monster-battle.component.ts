@@ -13,6 +13,10 @@ export class MonsterBattleComponent {
 
   constructor(private gameService: GameService) {}
 
+  hasCombatAbilityText(): boolean {
+    return this.player.getCombatAbilityText() != null;
+  }
+
   getDieOneImageUrl(): string {
     return this.getDieImageUrl(this.player.getDieOne());
   }

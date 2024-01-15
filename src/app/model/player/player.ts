@@ -566,6 +566,10 @@ export class Player extends EventTarget {
         || this.isMovingCurse();
   }
 
+  getCombatAbilityText(): string | null {
+    return null;
+  }
+
   startCombat(monster: Monster): void {
     this.activeMonster = monster;
     this.dispatchEvent(new Event(Player.COMBAT_STARTED_EVENT));

@@ -8,10 +8,35 @@
   background-color: #111;
   border: 2px solid orangered;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   padding: 10px;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   border-radius: 10px;
+}
+
+.combat-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 600px;
+}
+
+.combat-title {
+  font-size: 24px;
+}
+
+.combat-ability {
+  margin: 10px 0;
+}
+
+.combat-ability.cursed {
+  text-decoration: line-through;
+  filter: brightness(30%);
+}
+
+.combat-content {
+  display: flex;
+  align-items: center;
+  margin: auto;
 }
 
 .monster-container {

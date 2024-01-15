@@ -5,8 +5,15 @@ import { Player } from "./player";
 
 export class Argentus extends Player {
 
+  static COMBAT_ABILITY_TEXT = "Magical Affinity: You do not discard "
+      + "your Magic Bolt spells after you use them.";
+
   constructor() {
     super('Argentus', 'Argentus the Wizard', 'argentus.jpg', 'argentus_icon.jpg');
+  }
+
+  override getCombatAbilityText(): string | null {
+    return Argentus.COMBAT_ABILITY_TEXT;
   }
 
   protected override getConnectedCells(cell: Cell, dungeon: Dungeon): Set<Cell> {

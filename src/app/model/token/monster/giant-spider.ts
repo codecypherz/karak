@@ -6,7 +6,7 @@ import { Player } from "../../player/player";
 export class GiantSpider extends Monster {
 
   constructor() {
-    super("giant_spider.jpg", 6);
+    super("Giant Spider", "giant_spider.jpg", 6);
   }
 
   override handleDefeat(player: Player, cell: Cell): void {

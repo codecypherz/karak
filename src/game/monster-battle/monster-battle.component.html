@@ -1,44 +1,56 @@
 <div class="monster-battle">
 
-  <div class="monster-container">
-    <img class="monster" src="{{player.getActiveMonster()!.imageUrl}}">
-  </div>
-
-  <div class="vs">
-    VS
-  </div>
-
-  <div class="roll-container">
-    <button *ngIf="!player.hasMadeCombatRoll()"
-      class="roll"
-      (click)="player.makeCombatRoll()">Roll</button>
-    <div *ngIf="player.hasMadeCombatRoll()"
-        class="roll-result">
-      <div class="die one">
-        <img src="{{getDieOneImageUrl()}}">
-      </div>
-      <div class="die two">
-        <img src="{{getDieTwoImageUrl()}}">
-      </div>
-      <div *ngIf="player.getCombatBonus() > 0" class="plus">
-        +
-      </div>
-      <div *ngIf="player.getCombatBonus() > 0" class="combat-bonus">
-        {{player.getCombatBonus()}}
-      </div>
-      <div class="equals">
-        =
-      </div>
-      <div class="combat-result {{getCombatResultClass()}}">
-        {{player.getCombatStrength()}}
-      </div>
+  <div class="combat-text">
+    <div class="combat-title">
+      Fight the {{player.getActiveMonster()!.getName()}}!
+    </div>
+    <div *ngIf="hasCombatAbilityText()"
+        class="combat-ability"
+        [ngClass]="{'cursed': player.isCursed()}">
+      {{player.getCombatAbilityText()}}
     </div>
   </div>
 
-  <button *ngIf="player.canConfirmCombatResult()"
-      class="confirm {{getCombatResultClass()}}"
-      (click)="confirmCombatResult()">
-    {{getConfirmText()}}
-  </button>
-
+  <div class="combat-content">
+    <div class="monster-container">
+      <img class="monster" src="{{player.getActiveMonster()!.imageUrl}}">
+    </div>
+  
+    <div class="vs">
+      VS
+    </div>
+  
+    <div class="roll-container">
+      <button *ngIf="!player.hasMadeCombatRoll()"
+        class="roll"
+        (click)="player.makeCombatRoll()">Roll</button>
+      <div *ngIf="player.hasMadeCombatRoll()"
+          class="roll-result">
+        <div class="die one">
+          <img src="{{getDieOneImageUrl()}}">
+        </div>
+        <div class="die two">
+          <img src="{{getDieTwoImageUrl()}}">
+        </div>
+        <div *ngIf="player.getCombatBonus() > 0" class="plus">
+          +
+        </div>
+        <div *ngIf="player.getCombatBonus() > 0" class="combat-bonus">
+          {{player.getCombatBonus()}}
+        </div>
+        <div class="equals">
+          =
+        </div>
+        <div class="combat-result {{getCombatResultClass()}}">
+          {{player.getCombatStrength()}}
+        </div>
+      </div>
+    </div>
+  
+    <button *ngIf="player.canConfirmCombatResult()"
+        class="confirm {{getCombatResultClass()}}"
+        (click)="confirmCombatResult()">
+      {{getConfirmText()}}
+    </button>
+  </div>
 </div>

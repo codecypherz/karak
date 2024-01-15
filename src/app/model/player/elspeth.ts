@@ -5,8 +5,14 @@ import { Player } from "./player";
 
 export class Elspeth extends Player {
 
+  static COMBAT_ABILITY_TEXT = "Dual Attack: You may re-roll any ONE die in combat.";
+
   constructor() {
     super('Elspeth', 'Elspeth the Warrior Princess', 'elspeth.jpg', 'elspeth_icon.jpg');
+  }
+
+  override getCombatAbilityText(): string | null {
+    return Elspeth.COMBAT_ABILITY_TEXT;
   }
 
   protected override automaticallyStartCombat(): boolean {

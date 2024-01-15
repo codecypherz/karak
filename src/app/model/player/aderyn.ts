@@ -4,8 +4,14 @@ import { CombatResult, Player } from "./player";
 
 export class Aderyn extends Player {
 
+  static COMBAT_ABILITY_TEXT = "Backstab: You win ties in combat.";
+
   constructor() {
     super('Aderyn', 'Aderyn the Thief', 'aderyn.jpg', 'aderyn_icon.jpg');
+  }
+
+  override getCombatAbilityText(): string | null {
+    return Aderyn.COMBAT_ABILITY_TEXT;
   }
 
   protected override getCombatResult(
