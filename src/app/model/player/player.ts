@@ -68,7 +68,6 @@ export class Player extends EventTarget {
 
   private dieOne = 0;
   private dieTwo = 0;
-  private hadCombat = false;
   private madeCombatRoll = false;
 
   private weaponOne: Weapon | null = null;
@@ -141,7 +140,6 @@ export class Player extends EventTarget {
   startTurn(): void {
     this.active = true;
     this.activeMonster = null;
-    this.hadCombat = false;
     this.madeCombatRoll = false;
     this.swappingWeapons = false;
     this.swappingSpells = false;
@@ -194,23 +192,15 @@ export class Player extends EventTarget {
     return this.active;
   }
 
-  consumeAction(): void {
+  private consumeAction(): void {
     if (this.actionsRemaining == 0) {
       throw new Error('No more actions to consume.');
     }
     this.actionsRemaining--;
   }
 
-  setActionsRemaining(actionsRemaining: number) {
-    this.actionsRemaining = actionsRemaining;
-  }
-
   getActionsRemaining(): number {
     return this.actionsRemaining;
-  }
-
-  hasActionsRemaining(): boolean {
-    return this.actionsRemaining > 0;
   }
 
   /**
@@ -221,7 +211,7 @@ export class Player extends EventTarget {
     this.lastPosition = lastPosition;
   }
 
-  moveToLastPosition(): void {
+  private moveToLastPosition(): void {
     this.position = this.lastPosition;
   }
 
@@ -239,7 +229,7 @@ export class Player extends EventTarget {
     return this.hitPoints;
   }
 
-  reduceHitPoints(): void {
+  private reduceHitPoints(): void {
     if (this.hitPoints > 0) {
       this.hitPoints--;
     }
@@ -574,7 +564,7 @@ export class Player extends EventTarget {
         || this.isMovingCurse();
   }
 
-  startCombat(monster: Monster): void {
+  private startCombat(monster: Monster): void {
     this.activeMonster = monster;
   }
 
@@ -702,17 +692,12 @@ export class Player extends EventTarget {
     // Clean up
     this.activeMonster = null;
     this.madeCombatRoll = false;
-    this.hadCombat = true;
     this.actionsRemaining = 0;
     this.dispatchEvent(new CombatConfirmedEvent(monster, combatResult));
   }
 
   private wasUsedInCombat(spell: Spell | null): boolean {
     return spell != null && spell.isSelected() && spell.canBeUsedInCombat();
-  }
-
-  hasHadCombat(): boolean {
-    return this.hadCombat;
   }
 
   private canExplore(
@@ -909,7 +894,7 @@ export class Player extends EventTarget {
 
     if (pickedUpToken) {
       cell.removeToken();
-      this.setActionsRemaining(0);
+      this.actionsRemaining = 0;
       this.dispatchEvent(new Event(Player.PICKED_UP_EVENT));
     }
   }
