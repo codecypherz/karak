@@ -1,7 +1,7 @@
 import { Monster } from "./monster";
 import { HealingTeleport } from "../spell/healing-teleport";
 import { Cell } from "../../cell";
-import { Player } from "../../player";
+import { Player } from "../../player/player";
 
 export class GiantSpider extends Monster {
 

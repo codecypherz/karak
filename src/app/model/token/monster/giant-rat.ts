@@ -1,7 +1,7 @@
 import { Monster } from "./monster";
 import { Daggers } from "../weapon/daggers";
 import { Cell } from "../../cell";
-import { Player } from "../../player";
+import { Player } from "../../player/player";
 
 export class GiantRat extends Monster {
 

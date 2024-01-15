@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CombatResult, Player } from 'src/app/model/player';
+import { CombatResult, Player } from 'src/app/model/player/player';
 import { GameService } from 'src/app/service/game.service';
 
 @Component({

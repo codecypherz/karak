@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Player } from 'src/app/model/player';
+import { Player } from 'src/app/model/player/player';
 
 @Component({
   selector: 'app-player',

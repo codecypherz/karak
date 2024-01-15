@@ -10,7 +10,7 @@
         }"
         (click)="selectPlayer(p)">
 
-        <img src="{{p.character.iconUrl}}">
+        <img src="{{p.getIconUrl()}}">
 
         <div *ngIf="p.isCursed()" class="curse">
           <img src="/images/token/curse.jpg">

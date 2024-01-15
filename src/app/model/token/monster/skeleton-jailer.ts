@@ -1,7 +1,7 @@
 import { Monster } from "./monster";
 import { SkeletonKey } from "../skeleton-key";
 import { Cell } from "../../cell";
-import { Player } from "../../player";
+import { Player } from "../../player/player";
 
 export class SkeletonJailer extends Monster {
 

@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { CombatConfirmedEvent, CombatResult, CurseMovedEvent, ExplorationFinishedEvent, Player } from './player';
+import { CombatConfirmedEvent, CombatResult, CurseMovedEvent, ExplorationFinishedEvent, Player } from './player/player';
 import { shuffle } from '../util/arrays';
 import { Dungeon } from './dungeon';
 import { Cell } from './cell';

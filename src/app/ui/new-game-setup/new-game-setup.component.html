@@ -12,9 +12,9 @@
   </div>
 
   <div class="characters">
-    <app-character
-      *ngFor="let character of getCharacters()"
-      [character]="character">
-    </app-character>
+    <app-playable-character
+      *ngFor="let playableCharacter of getPlayableCharacters()"
+      [playableCharacter]="playableCharacter">
+    </app-playable-character>
   </div>
 </div>

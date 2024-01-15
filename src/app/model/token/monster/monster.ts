@@ -1,5 +1,5 @@
 import { Cell } from "../../cell";
-import { Player } from "../../player";
+import { Player } from "../../player/player";
 import { Token } from "../token";
 
 export abstract class Monster extends Token {

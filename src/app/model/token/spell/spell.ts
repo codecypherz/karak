@@ -1,4 +1,4 @@
-import { Player } from "../../player";
+import { Player } from "../../player/player";
 import { Item } from "../item";
 
 export class Spell extends Item {
@@ -16,7 +16,7 @@ export class Spell extends Item {
   setSelected(selected: boolean): void {
     this.selected = selected;
   }
-  
+
   canBeUsedInCombat(): boolean {
     return false;
   }

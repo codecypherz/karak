@@ -1,4 +1,4 @@
-import { Player } from "../../player";
+import { Player } from "../../player/player";
 import { Spell } from "./spell";
 
 export class HealingTeleport extends Spell {

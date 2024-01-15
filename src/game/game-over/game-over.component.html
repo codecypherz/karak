@@ -5,7 +5,7 @@
       {{getWinText()}}
     </div>
     <img *ngFor="let player of game.getWinningPlayers()"
-        class="character-image" src="{{player.character.imageUrl}}">
+        class="character-image" src="{{player.getImageUrl()}}">
     <button class="new-game" (click)="newGame()">New Game</button>
   </div>
 </div>

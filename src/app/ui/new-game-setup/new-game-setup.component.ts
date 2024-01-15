@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { CharacterCollection } from 'src/app/collection/character-collection';
-import { Character } from 'src/app/model/character';
+import { PlayerService } from 'src/app/service/player.service';
 import { Game } from 'src/app/model/game';
-import { Player } from 'src/app/model/player';
+import { Player } from 'src/app/model/player/player';
 import { GameService } from 'src/app/service/game.service';
 
 @Component({
@@ -16,21 +15,21 @@ export class NewGameSetupComponent {
   private invalidGameStart = false;
 
   constructor(
-    private characterCollection: CharacterCollection,
+    private playerService: PlayerService,
     private gameService: GameService,
     private router: Router) {
   }
 
-  getCharacters(): Array<Character> {
-    return this.characterCollection.getCharacters();
+  getPlayableCharacters(): Array<Player> {
+    return this.playerService.getPlayableCharacters();
   }
 
   startGame(): void {
     this.invalidGameStart = false;
     const game = new Game();
-    for (let character of this.characterCollection.getCharacters()) {
-      if (character.isSelected()) {
-        game.addPlayer(new Player(character));
+    for (let player of this.getPlayableCharacters()) {
+      if (player.isSelected()) {
+        game.addPlayer(Player.newFrom(player));
       }
     }
 
@@ -38,6 +37,7 @@ export class NewGameSetupComponent {
       this.invalidGameStart = true;
       return;
     }
+    this.getPlayableCharacters().forEach(p => p.setSelected(false));
 
     this.gameService.startGame(game);
     this.router.navigate(['game', game.getId()]);

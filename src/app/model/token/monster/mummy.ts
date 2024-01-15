@@ -1,5 +1,5 @@
 import { Cell } from "../../cell";
-import { Player } from "../../player";
+import { Player } from "../../player/player";
 import { FireBolt } from "../spell/fire-bolt";
 import { Monster } from "./monster";
 

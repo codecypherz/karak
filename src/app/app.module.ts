@@ -9,9 +9,9 @@ import { GameCollection } from './collection/game-collection';
 import { GameService } from './service/game.service';
 import { GameModule } from 'src/game/game.module';
 import { DialogService } from './service/dialog.service';
-import { CharacterComponent } from './ui/character/character.component';
-import { CharacterCollection } from './collection/character-collection';
 import { NewGameSetupComponent } from './ui/new-game-setup/new-game-setup.component';
+import { PlayerService } from './service/player.service';
+import { PlayableCharacterComponent } from './ui/playable-character/playable-character.component';
 
 @NgModule({
   imports: [
@@ -25,16 +25,16 @@ import { NewGameSetupComponent } from './ui/new-game-setup/new-game-setup.compon
   ],
   declarations: [
     AppComponent,
-    CharacterComponent,
     NewGameSetupComponent,
+    PlayableCharacterComponent,
   ],
   providers: [
     // Services
     DialogService,
     GameService,
+    PlayerService,
 
     // Collections
-    CharacterCollection,
     GameCollection,
   ],
   bootstrap: [AppComponent],

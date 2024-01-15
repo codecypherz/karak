@@ -26,7 +26,7 @@
         'character-image': true
       }"
       [@deadAlive]="player.isDead() ? 'dead' : 'alive'"
-      src="{{player.character.imageUrl}}">
+      src="{{player.getImageUrl()}}">
 
   <div *ngIf="player.getTreasure() > 0" class="treasure">
     <img src="/images/token/treasure_open.jpg">

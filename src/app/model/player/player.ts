@@ -1,19 +1,19 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Character } from './character';
-import { Position } from './position';
-import { Monster } from './token/monster/monster';
-import { Token } from './token/token';
-import { Item } from './token/item';
-import { Weapon } from './token/weapon/weapon';
-import { Cell } from './cell';
-import { SkeletonKey } from './token/skeleton-key';
-import { Treasure } from './token/treasture';
-import { Dungeon } from './dungeon';
-import { TileBag } from './tile/tilebag';
-import { TokenBag } from './token/tokenbag';
-import { TunnelTeleportTile } from './tile/tunnel_teleport_tile';
-import { Spell } from './token/spell/spell';
-import { HealingTeleport } from './token/spell/healing-teleport';
+import { Position } from '../position';
+import { Monster } from '../token/monster/monster';
+import { Token } from '../token/token';
+import { Item } from '../token/item';
+import { Weapon } from '../token/weapon/weapon';
+import { Cell } from '../cell';
+import { SkeletonKey } from '../token/skeleton-key';
+import { Treasure } from '../token/treasture';
+import { Dungeon } from '../dungeon';
+import { TileBag } from '../tile/tilebag';
+import { TokenBag } from '../token/tokenbag';
+import { TunnelTeleportTile } from '../tile/tunnel_teleport_tile';
+import { Spell } from '../token/spell/spell';
+import { HealingTeleport } from '../token/spell/healing-teleport';
+import { Sound } from '../../util/sound';
 
 export enum CombatResult {
   WIN,
@@ -21,7 +21,15 @@ export enum CombatResult {
   TIE
 }
 
+export interface PlayerCtor {
+  new(): Player
+}
+
 export class Player extends EventTarget {
+
+  static newFrom(other: Player): Player {
+    return new (Object.getPrototypeOf(other).constructor as PlayerCtor)()
+  }
 
   static MOVE_EVENT = 'move';
   static COMBAT_CONFIRMED_EVENT = 'combat_confirmed';
@@ -41,6 +49,13 @@ export class Player extends EventTarget {
   static CURSE_MOVED_EVENT = 'curse_moved';
 
   private id = uuidv4();
+
+  private shortName: string;
+  private longName: string;
+  private imageUrl: string;
+  private iconUrl: string;
+  private selected = false;
+  
   private active = false;
   private actionsRemaining = 0;
 
@@ -82,13 +97,45 @@ export class Player extends EventTarget {
   private movingCurse = false;
   private curseTarget: Player | null = null;
 
-  constructor(
-      readonly character: Character) {
+  constructor(shortName: string, longName: string, imageFile: string, iconFile: string) {
     super();
+
+    this.shortName = shortName;
+    this.longName = longName;
+    this.imageUrl = '/images/character/' + imageFile;
+    this.iconUrl = '/images/character/' + iconFile;
   }
 
   getId(): string {
     return this.id;
+  }
+
+  getShortName(): string {
+    return this.shortName;
+  }
+
+  getLongName(): string {
+    return this.longName;
+  }
+
+  getImageUrl(): string {
+    return this.imageUrl;
+  }
+
+  getIconUrl(): string {
+    return this.iconUrl;
+  }
+
+  isSelected(): boolean {
+    return this.selected;
+  }
+
+  setSelected(selected: boolean): void {
+    this.selected = selected;
+  }
+  
+  toggleSelected(): void {
+    this.selected = !this.selected;
   }
 
   startTurn(): void {
@@ -546,7 +593,17 @@ export class Player extends EventTarget {
 
     this.dieOne = this.rollDie();
     this.dieTwo = this.rollDie();
+    this.getCombatSound().play();
+
     this.madeCombatRoll = true;
+  }
+
+  private getCombatSound(): Sound {
+    if (this.weaponOne != null || this.weaponTwo != null) {
+      return Sound.SWORD_HIT;
+    } else {
+      return Sound.PUNCH;
+    }
   }
 
   private rollDie(): number {

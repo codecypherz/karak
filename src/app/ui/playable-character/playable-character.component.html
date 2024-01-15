@@ -1,0 +1,8 @@
+<div [ngClass]="{
+      'playable-character': true,
+      'selected': playableCharacter.isSelected()
+    }"
+    (mousedown)="playableCharacter.toggleSelected()">
+  <img class="playable-character-image" src="{{playableCharacter.getImageUrl()}}">
+  <div class="playable-character-name">{{playableCharacter.getLongName()}}</div>
+</div>

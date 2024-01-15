@@ -1,5 +1,5 @@
 import { Cell } from "../../cell";
-import { Player } from "../../player";
+import { Player } from "../../player/player";
 import { Monster } from "./monster";
 
 export class Dragon extends Monster {

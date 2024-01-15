@@ -1,7 +1,7 @@
 import { Monster } from "./monster";
 import { BattleAxe } from "../weapon/battle-axe";
 import { Cell } from "../../cell";
-import { Player } from "../../player";
+import { Player } from "../../player/player";
 
 export class SkeletonKing extends Monster {
 
