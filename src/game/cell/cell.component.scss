@@ -71,7 +71,7 @@
   font-size: 16px;
 }
 
-.pick-up, .open, .explore, .confirm, .select {
+.pick-up, .open, .explore, .confirm, .select, .fight {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -82,8 +82,8 @@
   z-index: 1;
 }
 
-.pick-up, .open, .confirm, .select {
-  top: 80%;
+.pick-up, .open, .confirm, .select, .fight {
+  top: 75%;
 }
 
 .clockwise, .counter-clockwise {

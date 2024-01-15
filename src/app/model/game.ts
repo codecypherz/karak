@@ -117,26 +117,29 @@ export class Game extends EventTarget {
         Player.COMBAT_CONFIRMED_EVENT,
         this.onCombatConfirmed.bind(this));
       player.addEventListener(
+        Player.COMBAT_STARTED_EVENT,
+        this.updatePlayerActionIndicators.bind(this));
+      player.addEventListener(
         Player.EXPLORATION_STARTED_EVENT,
-        this.onExplorationStarted.bind(this));
+        this.updatePlayerActionIndicators.bind(this));
       player.addEventListener(
         Player.EXPLORATION_FINISHED_EVENT,
         this.onExplorationFinished.bind(this));
       player.addEventListener(
         Player.TREASURE_OPENED_EVENT,
-        this.onTreasureOpened.bind(this));
+        this.endTurn.bind(this));
       player.addEventListener(
         Player.SWAPPING_STARTED_EVENT,
-        this.onSwappingStarted.bind(this));
+        this.updatePlayerActionIndicators.bind(this));
       player.addEventListener(
         Player.SWAPPING_CANCELED_EVENT,
-        this.onSwappingCanceled.bind(this));
+        this.updatePlayerActionIndicators.bind(this));
       player.addEventListener(
         Player.SWAP_CONFIRMED_EVENT,
-        this.onSwapConfirmed.bind(this));
+        this.endTurn.bind(this));
       player.addEventListener(
         Player.PICKED_UP_EVENT,
-        this.onPickUp.bind(this));
+        this.endTurn.bind(this));
       player.addEventListener(
         Player.STARTING_SPELL_CAST_EVENT,
         this.updatePlayerActionIndicators.bind(this));
@@ -196,10 +199,6 @@ export class Game extends EventTarget {
     }
   }
 
-  private onExplorationStarted(e: Event): void {
-    this.updatePlayerActionIndicators();
-  }
-
   private onExplorationFinished(e: Event): void {
     const event = e as ExplorationFinishedEvent;
     const cell = event.cell;
@@ -209,7 +208,7 @@ export class Game extends EventTarget {
     if (expandDir == Direction.UP) {
       this.players.forEach(player => {
         const pos = player.getPosition();
-        const lastPos = player.getLastPosition();
+        const lastPos = player.getLastPositionWithoutMonster();
         player.setPositions(
           new Position(pos.row + 1, pos.col),
           new Position(lastPos.row + 1, lastPos.col));
@@ -217,7 +216,7 @@ export class Game extends EventTarget {
     } else if (expandDir == Direction.LEFT) {
       this.players.forEach(player => {
         const pos = player.getPosition();
-        const lastPos = player.getLastPosition();
+        const lastPos = player.getLastPositionWithoutMonster();
         player.setPositions(
           new Position(pos.row, pos.col + 1),
           new Position(lastPos.row, lastPos.col + 1));
@@ -228,26 +227,6 @@ export class Game extends EventTarget {
     if (!this.canActivePlayerTakeAnyAction()) {
       this.endTurn();
     }
-  }
-
-  private onSwappingStarted(e: Event): void {
-    this.updatePlayerActionIndicators();
-  }
-
-  private onSwappingCanceled(e: Event): void {
-    this.updatePlayerActionIndicators();
-  }
-
-  private onSwapConfirmed(e: Event): void {
-    this.endTurn();
-  }
-
-  private onPickUp(e: Event): void {
-    this.endTurn();
-  }
-
-  private onTreasureOpened(e: Event): void {
-    this.endTurn();
   }
 
   private onCombatConfirmed(e: Event): void {

@@ -7,6 +7,7 @@ export class Cell {
   private tile: Tile | null = null;
   private token: Token | null = null;
   private explorable = false;
+  private fightable = false;
   private moveable = false;
   private pickupItem = false;
   private openTreasure = false;
@@ -60,10 +61,6 @@ export class Cell {
     this.token = null;
   }
 
-  isEmpty(): boolean {
-    return this.tile == null;
-  }
-
   hasTile(): boolean {
     return this.tile != null;
   }
@@ -94,6 +91,14 @@ export class Cell {
 
   isConfirmingExplore(): boolean {
     return this.confirmingExplore;
+  }
+
+  isFightable(): boolean {
+    return this.fightable;
+  }
+
+  setFightable(fightable: boolean): void {
+    this.fightable = fightable;
   }
 
   isMoveable(): boolean {

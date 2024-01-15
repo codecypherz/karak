@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Cell } from 'src/app/model/cell';
 import { Player } from 'src/app/model/player/player';
+import { Monster } from 'src/app/model/token/monster/monster';
 import { GameService } from 'src/app/service/game.service';
 
 @Component({
@@ -33,7 +34,18 @@ export class CellComponent {
   }
 
   move(): void {
-    this.getActivePlayer().moveTo(this.cell, true);
+    this.getActivePlayer().moveTo(this.cell);
+  }
+
+  fight(): void {
+    if (!this.cell.hasToken()) {
+      throw new Error('Nothing to fight');
+    }
+    const token = this.cell.getToken();
+    if (!(token instanceof Monster)) {
+      throw new Error('Token not a monster');
+    }
+    this.getActivePlayer().startCombat(token);
   }
 
   pickUp(): void {

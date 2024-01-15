@@ -58,7 +58,7 @@ export class Dungeon {
 
   getConnectedCells(cell: Cell): Set<Cell> {
     const cells = new Set<Cell>();
-    if (cell.isEmpty()) {
+    if (!cell.hasTile()) {
       return cells;
     }
 

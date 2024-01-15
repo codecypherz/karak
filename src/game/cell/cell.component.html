@@ -1,6 +1,6 @@
 <div [ngClass]="{
       'cell': true,
-      'empty': cell.isEmpty()
+      'empty': !cell.hasTile()
     }">
 
   <div *ngIf="isSelected()" class="selected">
@@ -21,6 +21,10 @@
   <app-player *ngFor="let player of getInactivePlayersInCell(); let i = index"
       [player]="player" [index]="i">
   </app-player>
+
+  <button *ngIf="cell.isFightable()"
+      class="fight"
+      (click)="fight()">Fight</button>
 
   <button *ngIf="cell.isMoveable()"
       class="move"

@@ -33,6 +33,7 @@ export class Player extends EventTarget {
 
   static MOVE_EVENT = 'move';
   static COMBAT_CONFIRMED_EVENT = 'combat_confirmed';
+  static COMBAT_STARTED_EVENT = 'combat_started_event';
   static EXPLORATION_STARTED_EVENT = 'exploration_started';
   static EXPLORATION_FINISHED_EVENT = 'exploration_finished';
   static TREASURE_OPENED_EVENT = 'treasure_opened';
@@ -59,7 +60,7 @@ export class Player extends EventTarget {
   private active = false;
   private actionsRemaining = 0;
 
-  private lastPosition: Position | null = null; // Null until game start
+  private lastPositionWithoutMonster: Position | null = null; // Null until game start
   private position: Position | null = null; // Null until game start
 
   private hitPoints = 5;
@@ -206,18 +207,18 @@ export class Player extends EventTarget {
   /**
    * Use this to initialize the player or to update both positions at once.
    */
-  setPositions(position: Position, lastPosition: Position): void {
+  setPositions(position: Position, lastPositionWithoutMonster: Position): void {
     this.position = position;
-    this.lastPosition = lastPosition;
+    this.lastPositionWithoutMonster = lastPositionWithoutMonster;
   }
 
-  private moveToLastPosition(): void {
-    this.position = this.lastPosition;
+  private moveToLastPositionWithoutMonster(): void {
+    this.position = this.lastPositionWithoutMonster;
   }
 
-  getLastPosition(): Position {
+  getLastPositionWithoutMonster(): Position {
     // Assumed to only be accessed after game start.
-    return this.lastPosition!;
+    return this.lastPositionWithoutMonster!;
   }
 
   getPosition(): Position {
@@ -507,7 +508,7 @@ export class Player extends EventTarget {
     if (!this.canConfirmHealingTeleport()) {
       throw new Error('Cannot confirm healing teleport');
     }
-    this.healingTeleportTargetPlayer!.moveTo(this.healingTeleportTargetCell!, false);
+    this.healingTeleportTargetPlayer!.moveToInternal(this.healingTeleportTargetCell!);
     this.healingTeleportTargetPlayer!.fullHeal();
 
     // The spell is now consumed.
@@ -529,6 +530,7 @@ export class Player extends EventTarget {
   setActionIndicators(
       targetCell: Cell, playerCell: Cell, dungeon: Dungeon, tileBag: TileBag): void {
     targetCell.setExplorable(this.canExplore(targetCell, playerCell, dungeon, tileBag));
+    targetCell.setFightable(this.showFightable(targetCell, playerCell));
     targetCell.setMoveable(this.canMoveTo(targetCell, playerCell, dungeon));
     targetCell.setPickupItem(this.canPickUp(targetCell));
     targetCell.setOpenTreasure(this.canOpenTreasure(targetCell));
@@ -555,7 +557,7 @@ export class Player extends EventTarget {
     return false;
   }
   
-  private isBusy(): boolean {
+  protected isBusy(): boolean {
     return this.isInCombat()
         || this.isExploring()
         || this.isSwappingWeapons()
@@ -564,8 +566,9 @@ export class Player extends EventTarget {
         || this.isMovingCurse();
   }
 
-  private startCombat(monster: Monster): void {
+  startCombat(monster: Monster): void {
     this.activeMonster = monster;
+    this.dispatchEvent(new Event(Player.COMBAT_STARTED_EVENT));
   }
 
   isInCombat(): boolean {
@@ -614,7 +617,11 @@ export class Player extends EventTarget {
 
     const monsterStrength = this.activeMonster!.getStrength();
     const playerStrength = this.getCombatStrength();
+    return this.getCombatResult(monsterStrength, playerStrength);
+  }
 
+  protected getCombatResult(
+      monsterStrength: number, playerStrength: number): CombatResult {
     if (monsterStrength < playerStrength) {
       return CombatResult.WIN;
     } else if (monsterStrength > playerStrength) {
@@ -682,10 +689,10 @@ export class Player extends EventTarget {
         break;
       case CombatResult.LOSS:
         this.reduceHitPoints();
-        this.moveToLastPosition();
+        this.moveToLastPositionWithoutMonster();
         break;
       case CombatResult.TIE:
-        this.moveToLastPosition();
+        this.moveToLastPositionWithoutMonster();
         break;
     }
 
@@ -711,7 +718,7 @@ export class Player extends EventTarget {
     if (tileBag.isEmpty()) {
       return false;
     }
-    if (!targetCell.isEmpty()) {
+    if (targetCell.hasTile()) {
     return false;
     }
     return dungeon.getConnectedCells(playerCell).has(targetCell);
@@ -761,9 +768,6 @@ export class Player extends EventTarget {
   }
 
   confirmExplore(cell: Cell, tokenBag: TokenBag): void {
-    const newPosition = cell.getPosition();
-    this.lastPosition = this.position;
-    this.position = newPosition;
     this.exploring = false;
     cell.setConfirmingExplore(false);
     this.consumeAction();
@@ -773,13 +777,16 @@ export class Player extends EventTarget {
     if (tile.revealsToken() && !tokenBag.isEmpty()) {
       const token = tokenBag.drawToken();
       cell.setToken(token);
-
-      if (token instanceof Monster) {
-        this.startCombat(token);
-      }
     }
 
+    // Now officially move to that cell.
+    this.moveToInternal(cell);
+
     this.dispatchEvent(new ExplorationFinishedEvent(cell));
+  }
+
+  protected showFightable(targetCell: Cell, playerCell: Cell): boolean {
+    return !this.automaticallyStartCombat();
   }
 
   private canMoveTo(targetCell: Cell, playerCell: Cell, dungeon: Dungeon): boolean {
@@ -789,7 +796,7 @@ export class Player extends EventTarget {
     if (this.actionsRemaining <= 0) {
       return false;
     }
-    if (targetCell.isEmpty()) {
+    if (!targetCell.hasTile()) {
       return false;
     }
     const playerTile = playerCell.getTile();
@@ -808,22 +815,31 @@ export class Player extends EventTarget {
     return dungeon.getConnectedCells(cell);
   }
 
-  moveTo(cell: Cell, consumeAction: boolean): void {
-    const newPosition = cell.getPosition();
-    this.lastPosition = this.position;
-    this.position = newPosition;
-    if (consumeAction) {
-      this.consumeAction();
-    }
+  moveTo(cell: Cell): void {
+    this.consumeAction();
+    this.moveToInternal(cell);
+    this.dispatchEvent(new Event(Player.MOVE_EVENT));
+  }
 
+  private moveToInternal(cell: Cell): void {
+    this.position = cell.getPosition();
+    let hasMonster = false;
     if (cell.hasToken()) {
       const token = cell.getToken()!;
       if (token instanceof Monster) {
-        this.startCombat(token);
+        hasMonster = true;
+        if (this.automaticallyStartCombat()) {
+          this.startCombat(token);
+        }
       }
     }
+    if (!hasMonster) {
+      this.lastPositionWithoutMonster = this.position;
+    }
+  }
 
-    this.dispatchEvent(new Event(Player.MOVE_EVENT));
+  protected automaticallyStartCombat(): boolean {
+    return true;
   }
 
   private canPickUp(targetCell: Cell): boolean {
@@ -833,7 +849,7 @@ export class Player extends EventTarget {
     if (!targetCell.getPosition().equals(this.position)) {
       return false;
     }
-    if (targetCell.isEmpty()) {
+    if (!targetCell.hasTile()) {
       return false;
     }
     if (!targetCell.hasToken()) {
@@ -910,7 +926,7 @@ export class Player extends EventTarget {
     if (!targetCell.getPosition().equals(this.position)) {
       return false;
     }
-    if (targetCell.isEmpty()) {
+    if (!targetCell.hasTile()) {
       return false;
     }
     if (!targetCell.hasToken()) {
