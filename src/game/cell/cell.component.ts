@@ -34,7 +34,8 @@ export class CellComponent {
   }
 
   move(): void {
-    this.getActivePlayer().moveTo(this.cell);
+    this.getActivePlayer().moveTo(
+      this.gameService.getGame().getActivePlayerCell(), this.cell);
   }
 
   fight(): void {
@@ -88,8 +89,11 @@ export class CellComponent {
   }
 
   explore(): void {
+    const game = this.gameService.getGame();
     this.getActivePlayer().startExploring(
-        this.cell, this.gameService.getGame().getTileBag());
+        game.getActivePlayerCell(),
+        this.cell,
+        game.getTileBag());
   }
 
   rotateClockwise(): void {

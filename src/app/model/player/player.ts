@@ -230,7 +230,7 @@ export class Player extends EventTarget {
     return this.hitPoints;
   }
 
-  private reduceHitPoints(): void {
+  protected reduceHitPoints(): void {
     if (this.hitPoints > 0) {
       this.hitPoints--;
     }
@@ -724,25 +724,25 @@ export class Player extends EventTarget {
     return dungeon.getConnectedCells(playerCell).has(targetCell);
   }
 
-  startExploring(cell: Cell, tileBag: TileBag): void {
+  startExploring(playerCell: Cell, targetCell: Cell, tileBag: TileBag): void {
     if (this.isExploring()) {
       throw new Error('Another cell is currently being explored.');
     }
     if (this.actionsRemaining <= 0) {
       throw new Error('Player cannot explore without remaining actions.');
     }
-    if (!cell.isExplorable()) {
+    if (!targetCell.isExplorable()) {
       throw new Error('Cannot explore an unexplorable tile.');
     }
-    if (cell.hasTile()) {
+    if (targetCell.hasTile()) {
       throw new Error('Cell has already been explored.');
     }
     if (tileBag.isEmpty()) {
       throw new Error('Cannot draw from tile bag.');
     }
 
-    cell.setTile(tileBag.drawTile());
-    cell.setConfirmingExplore(true);
+    targetCell.setTile(tileBag.drawTile());
+    targetCell.setConfirmingExplore(true);
     this.exploring = true;
     this.dispatchEvent(new Event(Player.EXPLORATION_STARTED_EVENT));
   }
@@ -815,9 +815,9 @@ export class Player extends EventTarget {
     return dungeon.getConnectedCells(cell);
   }
 
-  moveTo(cell: Cell): void {
+  moveTo(playerCell: Cell, targetCell: Cell): void {
     this.consumeAction();
-    this.moveToInternal(cell);
+    this.moveToInternal(targetCell);
     this.dispatchEvent(new Event(Player.MOVE_EVENT));
   }
 

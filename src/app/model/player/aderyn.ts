@@ -23,7 +23,7 @@ export class Aderyn extends Player {
     if (this.isCursed()) {
       return super.automaticallyStartCombat();
     }
-    if (this.getActionsRemaining() == 0) {
+    if (this.getActionsRemaining() <= 0) {
       return true;
     }
     return false;
