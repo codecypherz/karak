@@ -26,12 +26,29 @@
         (click)="player.makeCombatRoll()">Roll</button>
       <div *ngIf="player.hasMadeCombatRoll()"
           class="roll-result">
-        <div class="die one">
-          <img src="{{getDieOneImageUrl()}}">
+
+        <div class="die-column">
+          <div class="die one">
+            <img src="{{getDieOneImageUrl()}}">
+          </div>
+          <button *ngIf="player.canRerollDieOne()"
+              class="die-reroll"
+              (click)="player.rerollDieOne()">
+            Reroll
+          </button>
         </div>
-        <div class="die two">
-          <img src="{{getDieTwoImageUrl()}}">
+
+        <div class="die-column">
+          <div class="die two">
+            <img src="{{getDieTwoImageUrl()}}">
+          </div>
+          <button *ngIf="player.canRerollDieTwo()"
+              class="die-reroll"
+              (click)="player.rerollDieTwo()">
+            Reroll
+          </button>
         </div>
+
         <div *ngIf="player.getCombatBonus() > 0" class="plus">
           +
         </div>

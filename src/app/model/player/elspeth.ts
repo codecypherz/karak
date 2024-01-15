@@ -7,12 +7,43 @@ export class Elspeth extends Player {
 
   static COMBAT_ABILITY_TEXT = "Dual Attack: You may re-roll any ONE die in combat.";
 
+  private hasRerolled = false;
+
   constructor() {
     super('Elspeth', 'Elspeth the Warrior Princess', 'elspeth.jpg', 'elspeth_icon.jpg');
   }
 
   override getCombatAbilityText(): string | null {
     return Elspeth.COMBAT_ABILITY_TEXT;
+  }
+
+  override startTurn(): void {
+    this.hasRerolled = false;
+    super.startTurn();
+  }
+
+  override canRerollDieOne(): boolean {
+    if (this.isCursed()) {
+      return super.canRerollDieOne();
+    }
+    return !this.hasRerolled;
+  }
+
+  override canRerollDieTwo(): boolean {
+    if (this.isCursed()) {
+      return super.canRerollDieTwo();
+    }
+    return !this.hasRerolled;
+  }
+
+  override rerollDieOne(): void {
+    this.hasRerolled = true;
+    super.rerollDieOne();
+  }
+
+  override rerollDieTwo(): void {
+    this.hasRerolled = true;
+    super.rerollDieTwo();
   }
 
   protected override automaticallyStartCombat(): boolean {

@@ -595,6 +595,24 @@ export class Player extends EventTarget {
     this.madeCombatRoll = true;
   }
 
+  canRerollDieOne(): boolean {
+    return false;
+  }
+
+  canRerollDieTwo(): boolean {
+    return false;
+  }
+
+  rerollDieOne(): void {
+    this.dieOne = this.rollDie();
+    this.getCombatSound().play();
+  }
+
+  rerollDieTwo(): void {
+    this.dieTwo = this.rollDie();
+    this.getCombatSound().play();
+  }
+
   private getCombatSound(): Sound {
     if (this.weaponOne != null || this.weaponTwo != null) {
       return Sound.SWORD_HIT;

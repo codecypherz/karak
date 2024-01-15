@@ -60,7 +60,8 @@
 }
 
 .roll-container, .roll-result {
-  display: inline-flex;
+  display: flex;
+  align-items: center;
 }
 
 .roll {
@@ -72,13 +73,19 @@
   display: inline-block;
 }
 
+.die-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
+}
+
 .die {
   width: 50px;
   height: 50px;
   border: 1px solid white;
   overflow: hidden;
   border-radius: 9px;
-  margin-right: 10px;
 }
 
 .die > img {
@@ -86,6 +93,10 @@
   background: white;
   margin-left: -9px;
   margin-top: -9px;
+}
+
+.die-reroll {
+  margin-top: 10px;
 }
 
 .plus {
