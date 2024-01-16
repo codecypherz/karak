@@ -715,6 +715,7 @@ export class Player extends EventTarget {
     switch (combatResult) {
       case CombatResult.WIN:
         monster.handleDefeat(this, combatCell);
+        this.lastPositionWithoutMonster = this.position;
         break;
       case CombatResult.LOSS:
         this.reduceHitPoints();
@@ -852,19 +853,21 @@ export class Player extends EventTarget {
 
   private moveToInternal(cell: Cell): void {
     this.position = cell.getPosition();
-    let hasMonster = false;
-    if (cell.hasToken()) {
-      const token = cell.getToken()!;
-      if (token instanceof Monster) {
-        hasMonster = true;
-        if (this.automaticallyStartCombat()) {
-          this.startCombat(token);
-        }
+    if (this.hasMonster(cell)) {
+      if (this.automaticallyStartCombat()) {
+        this.startCombat(cell.getToken()! as Monster);
       }
-    }
-    if (!hasMonster) {
+    } else {
       this.lastPositionWithoutMonster = this.position;
     }
+  }
+
+  protected hasMonster(cell: Cell): boolean {
+    if (cell.hasToken()) {
+      const token = cell.getToken()!;
+      return token instanceof Monster;
+    }
+    return false;
   }
 
   protected automaticallyStartCombat(): boolean {

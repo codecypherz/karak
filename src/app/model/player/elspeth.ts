@@ -99,12 +99,4 @@ export class Elspeth extends Player {
     }
     super.moveTo(playerCell, targetCell);
   }
-
-  private hasMonster(cell: Cell): boolean {
-    if (cell.hasToken()) {
-      const token = cell.getToken()!;
-      return token instanceof Monster;
-    }
-    return false;
-  }
 }
