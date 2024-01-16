@@ -4,10 +4,15 @@
     <div class="combat-title">
       Fight the {{player.getActiveMonster()!.getName()}}!
     </div>
-    <div *ngIf="hasCombatAbilityText()"
+    <div *ngIf="hasCombatAbilityOneText()"
         class="combat-ability"
         [ngClass]="{'cursed': player.isCursed()}">
-      {{player.getCombatAbilityText()}}
+      {{player.getCombatAbilityOneText()}}
+    </div>
+    <div *ngIf="hasCombatAbilityTwoText()"
+        class="combat-ability"
+        [ngClass]="{'cursed': player.isCursed()}">
+      {{player.getCombatAbilityTwoText()}}
     </div>
   </div>
 

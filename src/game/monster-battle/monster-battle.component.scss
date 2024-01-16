@@ -25,7 +25,11 @@
 }
 
 .combat-ability {
-  margin: 10px 0;
+  margin-top: 10px;
+}
+
+.combat-ability:last-child {
+  margin-bottom: 10px;
 }
 
 .combat-ability.cursed {

@@ -10,7 +10,7 @@ export class Aderyn extends Player {
     super('Aderyn', 'Aderyn the Thief', 'aderyn.jpg', 'aderyn_icon.jpg');
   }
 
-  override getCombatAbilityText(): string | null {
+  override getCombatAbilityOneText(): string | null {
     return Aderyn.COMBAT_ABILITY_TEXT;
   }
 

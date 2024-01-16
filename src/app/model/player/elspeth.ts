@@ -13,7 +13,7 @@ export class Elspeth extends Player {
     super('Elspeth', 'Elspeth the Warrior Princess', 'elspeth.jpg', 'elspeth_icon.jpg');
   }
 
-  override getCombatAbilityText(): string | null {
+  override getCombatAbilityOneText(): string | null {
     return Elspeth.COMBAT_ABILITY_TEXT;
   }
 

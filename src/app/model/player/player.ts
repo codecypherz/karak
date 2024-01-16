@@ -605,7 +605,11 @@ export class Player extends EventTarget {
         || this.isMovingCurse();
   }
 
-  getCombatAbilityText(): string | null {
+  getCombatAbilityOneText(): string | null {
+    return null;
+  }
+
+  getCombatAbilityTwoText(): string | null {
     return null;
   }
 

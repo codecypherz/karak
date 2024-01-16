@@ -2,8 +2,10 @@ import { CombatResult, Player } from "./player";
 
 export class Horan extends Player {
 
-  static COMBAT_ABILITY_TEXT = "Double Attack: If you fail your combat roll,"
+  static COMBAT_ABILITY_ONE_TEXT = "Double Attack: If you fail your combat roll,"
       + " roll again. You only lose if you fail your second roll.";
+  static COMBAT_ABILITY_TWO_TEXT = "Reincarnation: You do not fall unconscious."
+      + " Instead, you teleport to a healing fountain, heal all health, and end your turn.";
 
   private hasRerolled = false;
 
@@ -11,8 +13,12 @@ export class Horan extends Player {
     super('Horan', 'Horan the Warrior', 'horan.jpg', 'horan_icon.jpg');
   }
 
-  override getCombatAbilityText(): string | null {
-    return Horan.COMBAT_ABILITY_TEXT;
+  override getCombatAbilityOneText(): string | null {
+    return Horan.COMBAT_ABILITY_ONE_TEXT;
+  }
+
+  override getCombatAbilityTwoText(): string | null {
+    return Horan.COMBAT_ABILITY_TWO_TEXT;
   }
 
   override startTurn(): void {

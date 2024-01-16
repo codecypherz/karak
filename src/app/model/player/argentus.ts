@@ -12,7 +12,7 @@ export class Argentus extends Player {
     super('Argentus', 'Argentus the Wizard', 'argentus.jpg', 'argentus_icon.jpg');
   }
 
-  override getCombatAbilityText(): string | null {
+  override getCombatAbilityOneText(): string | null {
     return Argentus.COMBAT_ABILITY_TEXT;
   }
 
