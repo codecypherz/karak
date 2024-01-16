@@ -73,11 +73,24 @@
   display: inline-block;
 }
 
+.reroll-control {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+}
+
+.die-columns {
+  display: flex;
+}
+
+.die-column:first-child {
+  margin-right: 10px;
+}
+
 .die-column {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 10px;
 }
 
 .die {
@@ -96,6 +109,10 @@
 }
 
 .die-reroll {
+  margin-top: 10px;
+}
+
+.reroll-combat {
   margin-top: 10px;
 }
 

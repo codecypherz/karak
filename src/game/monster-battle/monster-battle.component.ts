@@ -51,10 +51,6 @@ export class MonsterBattleComponent {
   }
 
   getCombatResultClass(): string {
-    if (!this.player.canConfirmCombatResult()) {
-      return "";
-    }
-
     switch (this.player.getPendingCombatResult()) {
       case CombatResult.WIN:
         return "win";

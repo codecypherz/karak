@@ -79,6 +79,7 @@ export class Elspeth extends Player {
   override startExploring(playerCell: Cell, targetCell: Cell, tileBag: TileBag): void {
     if (this.isCursed()) {
       super.startExploring(playerCell, targetCell, tileBag);
+      return;
     }
 
     if (this.hasMonster(playerCell)) {
@@ -90,6 +91,7 @@ export class Elspeth extends Player {
   override moveTo(playerCell: Cell, targetCell: Cell): void {
     if (this.isCursed()) {
       super.moveTo(playerCell, targetCell);
+      return;
     }
 
     if (this.hasMonster(playerCell)) {

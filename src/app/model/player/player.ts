@@ -595,6 +595,16 @@ export class Player extends EventTarget {
     this.madeCombatRoll = true;
   }
 
+  canRerollCombat(): boolean {
+    return false;
+  }
+
+  rerollCombat(): void {
+    this.dieOne = this.rollDie();
+    this.dieTwo = this.rollDie();
+    this.getCombatSound().play();
+  }
+
   canRerollDieOne(): boolean {
     return false;
   }
@@ -632,9 +642,6 @@ export class Player extends EventTarget {
   getPendingCombatResult(): CombatResult {
     if (!this.isInCombat()) {
       throw new Error('Player not in combat.');
-    }
-    if (!this.canConfirmCombatResult()) {
-      throw new Error('Player cannot yet confirm combat result.');
     }
 
     const monsterStrength = this.activeMonster!.getStrength();

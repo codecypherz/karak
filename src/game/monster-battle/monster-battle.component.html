@@ -27,24 +27,34 @@
       <div *ngIf="player.hasMadeCombatRoll()"
           class="roll-result">
 
-        <div class="die-column">
-          <div class="die one">
-            <img src="{{getDieOneImageUrl()}}">
+        <div class="reroll-control">
+          <div class="die-columns">
+            <div class="die-column">
+              <div class="die one">
+                <img src="{{getDieOneImageUrl()}}">
+              </div>
+              <button *ngIf="player.canRerollDieOne()"
+                  class="die-reroll"
+                  (click)="player.rerollDieOne()">
+                Reroll
+              </button>
+            </div>
+    
+            <div class="die-column">
+              <div class="die two">
+                <img src="{{getDieTwoImageUrl()}}">
+              </div>
+              <button *ngIf="player.canRerollDieTwo()"
+                  class="die-reroll"
+                  (click)="player.rerollDieTwo()">
+                Reroll
+              </button>
+            </div>
           </div>
-          <button *ngIf="player.canRerollDieOne()"
-              class="die-reroll"
-              (click)="player.rerollDieOne()">
-            Reroll
-          </button>
-        </div>
 
-        <div class="die-column">
-          <div class="die two">
-            <img src="{{getDieTwoImageUrl()}}">
-          </div>
-          <button *ngIf="player.canRerollDieTwo()"
-              class="die-reroll"
-              (click)="player.rerollDieTwo()">
+          <button *ngIf="player.canRerollCombat()"
+              class="reroll-combat"
+              (click)="player.rerollCombat()">
             Reroll
           </button>
         </div>
@@ -64,8 +74,9 @@
       </div>
     </div>
   
-    <button *ngIf="player.canConfirmCombatResult()"
+    <button *ngIf="player.hasMadeCombatRoll()"
         class="confirm {{getCombatResultClass()}}"
+        [disabled]="!player.canConfirmCombatResult()"
         (click)="confirmCombatResult()">
       {{getConfirmText()}}
     </button>
