@@ -43,6 +43,8 @@ export class Player extends EventTarget {
   static PICKED_UP_EVENT = 'picked_up';
   static DIED_EVENT = 'died';
   static REVIVED_EVENT = 'revived';
+  static START_REINCARNATING_EVENT = 'start_reincarnating';
+  static CONFIRM_REINCARNATION_EVENT = 'confirm_reincarnation';
   static STARTING_SPELL_CAST_EVENT = 'starting_spell_cast';
   static CANCEL_SPELL_CAST_EVENT = 'cancel_spell_cast';
   static CONFIRM_SPELL_CAST_EVENT = 'confirm_spell_cast';
@@ -91,6 +93,7 @@ export class Player extends EventTarget {
   private swappingWeapons = false;
   private swappingSpells = false;
   private exploring = false;
+  private reincarnating = false;
   private castingHealingTeleport: HealingTeleport | null = null;
   private healingTeleportTargetPlayer: Player | null = null;
   private healingTeleportTargetCell: Cell | null = null;
@@ -147,6 +150,7 @@ export class Player extends EventTarget {
     this.exploring = false;
     this.movingCurse = false;
     this.curseTarget = null;
+    this.reincarnating = false;
     this.castingHealingTeleport = null;
     this.healingTeleportTargetPlayer = null;
     this.healingTeleportTargetCell = null;
@@ -235,7 +239,11 @@ export class Player extends EventTarget {
       this.hitPoints--;
     }
     if (this.hitPoints == 0) {
-      this.dispatchEvent(new Event(Player.DIED_EVENT));
+      if (this.canReincarnate()) {
+        this.startReincarnating();
+      } else {
+        this.dispatchEvent(new Event(Player.DIED_EVENT));
+      }
     }
   }
 
@@ -454,6 +462,36 @@ export class Player extends EventTarget {
     this.dispatchEvent(new CurseMovedEvent(curseTarget));
   }
   
+  protected canReincarnate(): boolean {
+    return false;
+  }
+
+  private startReincarnating(): void {
+    this.reincarnating = true;
+    this.dispatchEvent(new Event(Player.START_REINCARNATING_EVENT));
+  }
+
+  isReincarnating(): boolean {
+    return this.reincarnating;
+  }
+
+  canConfirmReincarnation(): boolean {
+    return this.healingTeleportTargetCell != null;
+  }
+
+  confirmReincarnation(): void {
+    if (!this.canConfirmReincarnation()) {
+      throw new Error('Cannot confirm reincarnation');
+    }
+    this.moveToInternal(this.healingTeleportTargetCell!);
+    this.fullHeal();
+    this.actionsRemaining = 0;
+
+    this.healingTeleportTargetCell = null;
+    this.reincarnating = false;
+    this.dispatchEvent(new Event(Player.CONFIRM_REINCARNATION_EVENT));
+  }
+
   startCastingHealingTeleport(spell: HealingTeleport): void {
     this.castingHealingTeleport = spell;
     this.dispatchEvent(new Event(Player.STARTING_SPELL_CAST_EVENT));
@@ -485,8 +523,8 @@ export class Player extends EventTarget {
   }
 
   setHealingTeleportTargetCell(cell: Cell): void {
-    if (!this.isCastingHealingTeleport()) {
-      throw new Error('Not casting healing teleport');
+    if (!this.isCastingHealingTeleport() && !this.isReincarnating()) {
+      throw new Error('Invalid setting of healing teleport cell');
     }
     this.healingTeleportTargetCell = cell;
   }
@@ -562,6 +600,7 @@ export class Player extends EventTarget {
         || this.isExploring()
         || this.isSwappingWeapons()
         || this.isSwappingSpells()
+        || this.isReincarnating()
         || this.isCastingHealingTeleport()
         || this.isMovingCurse();
   }
@@ -986,7 +1025,7 @@ export class Player extends EventTarget {
   }
 
   private canSelect(cell: Cell): boolean {
-    if (!this.isCastingHealingTeleport()) {
+    if (!this.isCastingHealingTeleport() && !this.isReincarnating()) {
       return false;
     }
     if (!cell.hasTile()) {

@@ -59,14 +59,14 @@ export class CellComponent {
 
   select(): void {
     const activePlayer = this.getActivePlayer();
-    if (activePlayer.isCastingHealingTeleport()) {
+    if (activePlayer.isCastingHealingTeleport() || activePlayer.isReincarnating()) {
       activePlayer.setHealingTeleportTargetCell(this.cell);
     }
   }
 
   isSelected(): boolean {
     const activePlayer = this.getActivePlayer();
-    if (activePlayer.isCastingHealingTeleport()) {
+    if (activePlayer.isCastingHealingTeleport() || activePlayer.isReincarnating()) {
       return activePlayer.getHealingTeleportTargetCell() == this.cell;
     }
     return false;

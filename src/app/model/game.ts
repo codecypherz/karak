@@ -141,6 +141,12 @@ export class Game extends EventTarget {
         Player.PICKED_UP_EVENT,
         this.endTurn.bind(this));
       player.addEventListener(
+        Player.START_REINCARNATING_EVENT,
+        this.updatePlayerActionIndicators.bind(this));
+      player.addEventListener(
+        Player.CONFIRM_REINCARNATION_EVENT,
+        this.endTurn.bind(this));
+      player.addEventListener(
         Player.STARTING_SPELL_CAST_EVENT,
         this.updatePlayerActionIndicators.bind(this));
       player.addEventListener(

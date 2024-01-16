@@ -88,12 +88,15 @@
 
   <app-player-select *ngIf="player.isCastingHealingTeleport()"
       [player]="player"
-      selectionTitle="Select a player and location to teleport">
+      selectionTitle="Select a player and a healing tile to teleport">
   </app-player-select>
 
   <app-player-select *ngIf="player.isMovingCurse()"
       [player]="player"
       selectionTitle="Select a player to curse">
   </app-player-select>
+
+  <app-reincarnate *ngIf="player.isReincarnating()" [player]="player">
+  </app-reincarnate>
 
 </div>

@@ -45,4 +45,11 @@ export class Horan extends Player {
     }
     return false;
   }
+
+  protected override canReincarnate(): boolean {
+    if (this.isCursed()) {
+      return super.canReincarnate();
+    }
+    return true;
+  }
 }

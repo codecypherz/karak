@@ -1,0 +1,9 @@
+<div class="reincarnate">
+  <div class="title">Select a healing tile to reincarnate</div>
+  <button
+      class="confirm"
+      (click)="player.confirmReincarnation()"
+      [disabled]="!player.canConfirmReincarnation()">
+    Confirm
+  </button>
+</div>

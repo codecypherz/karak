@@ -15,6 +15,7 @@ import { MonsterBattleComponent } from './monster-battle/monster-battle.componen
 import { WeaponSwapComponent } from './weapon-swap/weapon-swap.component';
 import { SpellSwapComponent } from './spell-swap/spell-swap.component';
 import { PlayerSelectComponent } from './player-select/player-select.component';
+import { ReincarnateComponent } from './reincarnate/reincarnate.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { PlayerSelectComponent } from './player-select/player-select.component';
     PlayerSelectComponent,
     PlayerSheetComponent,
     PlayerSheetsComponent,
+    ReincarnateComponent,
     SpellSwapComponent,
     WeaponSwapComponent,
   ],
