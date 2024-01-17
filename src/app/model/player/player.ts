@@ -674,7 +674,7 @@ export class Player extends EventTarget {
     }
   }
 
-  private rollDie(): number {
+  protected rollDie(): number {
     return Math.floor(Math.random() * 6) + 1;
   }
 
@@ -772,8 +772,14 @@ export class Player extends EventTarget {
     // Clean up
     this.activeMonster = null;
     this.madeCombatRoll = false;
-    this.actionsRemaining = 0;
+    if (this.shouldEndTurnAfterCombat()) {
+      this.actionsRemaining = 0;
+    }
     this.dispatchEvent(new CombatConfirmedEvent(monster, combatResult));
+  }
+
+  protected shouldEndTurnAfterCombat(): boolean {
+    return true;
   }
 
   protected shouldConsumeCombatSpell(spell: Spell | null): boolean {
