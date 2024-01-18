@@ -65,5 +65,7 @@
   </app-weapon-swap>
   <app-spell-swap *ngIf="isSwappingSpells()" [player]="getActivePlayerInCell()!">
   </app-spell-swap>
+  <app-explore-pick *ngIf="isPickingExploreToken()" [player]="getActivePlayer()">
+  </app-explore-pick>
 
 </div>

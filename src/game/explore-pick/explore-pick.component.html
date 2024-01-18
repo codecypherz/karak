@@ -1,0 +1,22 @@
+<div class="explore-pick">
+
+  <div class="title">Choose token to place</div>
+
+  <div class="selection">
+    <div (click)="selectTokenOne()"
+        class="token one" [ngClass]="{'selected': isTokenOneSelected()}">
+      <img src="{{player.getExploreTokenOne()!.imageUrl}}">
+    </div>
+    <div (click)="selectTokenTwo()"
+        class="token two" [ngClass]="{'selected': isTokenTwoSelected()}">
+      <img src="{{player.getExploreTokenTwo()!.imageUrl}}">
+    </div>
+  </div>
+
+  <button class="confirm"
+      (click)="confirmExploreToken()"
+      [disabled]="!player.canConfirmExploreToken()">
+    Confirm
+  </button>
+
+</div>

@@ -16,6 +16,7 @@ import { WeaponSwapComponent } from './weapon-swap/weapon-swap.component';
 import { SpellSwapComponent } from './spell-swap/spell-swap.component';
 import { PlayerSelectComponent } from './player-select/player-select.component';
 import { ReincarnateComponent } from './reincarnate/reincarnate.component';
+import { ExplorePickComponent } from './explore-pick/explore-pick.component';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { ReincarnateComponent } from './reincarnate/reincarnate.component';
   declarations: [
     CellComponent,
     DungeonComponent,
+    ExplorePickComponent,
     GameComponent,
     GameInfoComponent,
     GameOverComponent,

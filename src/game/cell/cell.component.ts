@@ -88,6 +88,13 @@ export class CellComponent {
     return activePlayer.isSwappingSpells();
   }
 
+  isPickingExploreToken(): boolean {
+    // Show the token picker dialog above the cell being explored.
+    const activePlayer = this.getActivePlayer();
+    const exploredCell = activePlayer.getExploredCell();
+    return activePlayer.isPickingExploreToken() && exploredCell == this.cell;
+  }
+
   explore(): void {
     const game = this.gameService.getGame();
     this.getActivePlayer().startExploring(

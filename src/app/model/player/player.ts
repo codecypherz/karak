@@ -93,12 +93,17 @@ export class Player extends EventTarget {
   private swappingWeapons = false;
   private swappingSpells = false;
   private exploring = false;
+  private exploredCell: Cell | null = null;
   private reincarnating = false;
   private castingHealingTeleport: HealingTeleport | null = null;
   private healingTeleportTargetPlayer: Player | null = null;
   private healingTeleportTargetCell: Cell | null = null;
   private movingCurse = false;
   private curseTarget: Player | null = null;
+  private pickingExploreToken = false;
+  private exploreTokenOne: Token | null = null;
+  private exploreTokenTwo: Token | null = null;
+  private pickedExploreToken: Token | null = null;
 
   constructor(shortName: string, longName: string, imageFile: string, iconFile: string) {
     super();
@@ -148,6 +153,7 @@ export class Player extends EventTarget {
     this.swappingWeapons = false;
     this.swappingSpells = false;
     this.exploring = false;
+    this.exploredCell = null;
     this.movingCurse = false;
     this.curseTarget = null;
     this.reincarnating = false;
@@ -156,6 +162,10 @@ export class Player extends EventTarget {
     this.healingTeleportTargetCell = null;
     this.tokenToDiscard = null;
     this.targetTokenToPickup = null;
+    this.pickingExploreToken = false;
+    this.exploreTokenOne = null;
+    this.exploreTokenTwo = null;
+    this.pickedExploreToken = null;
 
     this.actionsRemaining = this.isDead() ? 0 : 4;
 
@@ -424,6 +434,10 @@ export class Player extends EventTarget {
     return this.exploring;
   }
 
+  getExploredCell(): Cell | null {
+    return this.exploredCell;
+  }
+
   isCursed(): boolean {
     return this.cursed;
   }
@@ -587,7 +601,9 @@ export class Player extends EventTarget {
         if (cell.isExplorable()
           || cell.isMoveable()
           || cell.canPickupItem()
-          || cell.canOpenTreasure()) {
+          || cell.canOpenTreasure()
+          || cell.isFightable()
+          || cell.isSelectable()) {
           return true;
         }
       }
@@ -602,7 +618,8 @@ export class Player extends EventTarget {
         || this.isSwappingSpells()
         || this.isReincarnating()
         || this.isCastingHealingTeleport()
-        || this.isMovingCurse();
+        || this.isMovingCurse()
+        || this.isPickingExploreToken();
   }
 
   getCombatAbilityOneText(): string | null {
@@ -823,6 +840,7 @@ export class Player extends EventTarget {
     targetCell.setTile(tileBag.drawTile());
     targetCell.setConfirmingExplore(true);
     this.exploring = true;
+    this.exploredCell = targetCell;
     this.dispatchEvent(new Event(Player.EXPLORATION_STARTED_EVENT));
   }
 
@@ -853,15 +871,76 @@ export class Player extends EventTarget {
 
     // If a room was explored, reveal a token.
     const tile = cell.getTile()!;
+    let token = null;
     if (tile.revealsToken() && !tokenBag.isEmpty()) {
-      const token = tokenBag.drawToken();
-      cell.setToken(token);
+      if (this.playerPicksExploreToken() && tokenBag.getNumTokens() > 1) {
+        this.startPickingExploreToken(tokenBag);
+        return; // Finish after picking complete
+      } else {
+        token = tokenBag.drawToken();
+      }
     }
 
-    // Now officially move to that cell.
-    this.moveToInternal(cell);
+    this.finishExploreInternal(token);
+  }
 
+  private finishExploreInternal(token: Token | null): void {
+    const cell = this.exploredCell!;
+    this.exploredCell = null;
+    if (token != null) {
+      cell.setToken(token);
+    }
+    this.moveToInternal(cell);
     this.dispatchEvent(new ExplorationFinishedEvent(cell));
+  }
+
+  protected playerPicksExploreToken(): boolean {
+    return false;
+  }
+
+  startPickingExploreToken(tokenBag: TokenBag): void {
+    this.pickingExploreToken = true;
+    this.exploreTokenOne = tokenBag.drawToken();
+    this.exploreTokenTwo = tokenBag.drawToken();
+  }
+
+  isPickingExploreToken(): boolean {
+    return this.pickingExploreToken;
+  }
+
+  getExploreTokenOne(): Token | null {
+    return this.exploreTokenOne;
+  }
+
+  getExploreTokenTwo(): Token | null {
+    return this.exploreTokenTwo;
+  }
+
+  selectExploreToken(token: Token): void {
+    this.pickedExploreToken = token;
+  }
+
+  getSelectedExploreToken(): Token | null {
+    return this.pickedExploreToken;
+  }
+
+  canConfirmExploreToken(): boolean {
+    return this.pickedExploreToken != null;
+  }
+
+  confirmExploreToken(tokenBag: TokenBag): void {
+    const token = this.pickedExploreToken;
+    // Put the unpicked token back in the bag.
+    if (token == this.exploreTokenOne) {
+      tokenBag.addBack(this.exploreTokenTwo!);
+    } else {
+      tokenBag.addBack(this.exploreTokenOne!);
+    }
+    this.pickingExploreToken = false;
+    this.pickedExploreToken = null;
+    this.exploreTokenOne = null;
+    this.exploreTokenTwo = null;
+    this.finishExploreInternal(token);
   }
 
   protected showFightable(targetCell: Cell, playerCell: Cell): boolean {

@@ -76,6 +76,10 @@ export class TokenBag {
     return removeRandom(this.tokens);
   }
 
+  addBack(token: Token): void {
+    this.tokens.push(token);
+  }
+
   getNumTokens(): number {
     return this.tokens.length;
   }
