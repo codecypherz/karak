@@ -1,6 +1,4 @@
-import { Cell } from "../cell";
 import { Monster } from "../token/monster/monster";
-import { HealingTeleport } from "../token/spell/healing-teleport";
 import { Player } from "./player";
 
 export class Victorius extends Player {

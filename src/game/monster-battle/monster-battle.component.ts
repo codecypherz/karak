@@ -13,6 +13,10 @@ export class MonsterBattleComponent {
 
   constructor(private gameService: GameService) {}
 
+  showCombatAbilityButton(): boolean {
+    return this.player.getCombatAbilityButtonText() != null;
+  }
+
   hasCombatAbilityOneText(): boolean {
     return this.player.getCombatAbilityOneText() != null;
   }

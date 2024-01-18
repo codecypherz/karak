@@ -7,6 +7,13 @@
     <div *ngIf="hasCombatAbilityOneText()"
         class="combat-ability"
         [ngClass]="{'cursed': player.isCursed()}">
+      <button *ngIf="showCombatAbilityButton()"
+          class="combat-ability-button"
+          [ngClass]="{'combat-ability-active': player.isCombatAbilityActive()}"
+          [disabled]="!player.isCombatAbilityButtonEnabled()"
+          (click)="player.handleCombatAbilityButtonClick()">
+        {{player.getCombatAbilityButtonText()}}
+      </button>
       {{player.getCombatAbilityOneText()}}
     </div>
     <div *ngIf="hasCombatAbilityTwoText()"

@@ -24,6 +24,15 @@
   font-size: 24px;
 }
 
+.combat-ability-button {
+  margin-right: 10px;
+  height: 40px;
+}
+
+.combat-ability-active {
+  border: 3px solid var(--selected_color);
+}
+
 .combat-ability {
   margin-top: 10px;
 }

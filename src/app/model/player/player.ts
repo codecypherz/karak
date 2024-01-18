@@ -622,6 +622,21 @@ export class Player extends EventTarget {
         || this.isPickingExploreToken();
   }
 
+  getCombatAbilityButtonText(): string | null {
+    return null;
+  }
+
+  isCombatAbilityButtonEnabled(): boolean {
+    return false;
+  }
+
+  isCombatAbilityActive(): boolean {
+    return false;
+  }
+  
+  handleCombatAbilityButtonClick(): void {
+  }
+
   getCombatAbilityOneText(): string | null {
     return null;
   }
