@@ -8,8 +8,8 @@ export class Dungeon {
 
   constructor() {
     this.cells = new Array<Array<Cell>>();
-    for (let row = 0; row < 7; row++) {
-      this.cells.push(this.createNewRow(row, 7));
+    for (let row = 0; row < 9; row++) {
+      this.cells.push(this.createNewRow(row, 9));
     }
   }
 
@@ -78,7 +78,7 @@ export class Dungeon {
   }
 
   maybeExpandGrid(): Direction | null {
-    const triggerBuffer = 2;
+    const triggerBuffer = 3;
 
     // Maybe expand downward
     const lastRow = this.cells[this.getNumRows() - triggerBuffer];

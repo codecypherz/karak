@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Dungeon } from 'src/app/model/dungeon';
 
 @Component({
@@ -6,15 +6,37 @@ import { Dungeon } from 'src/app/model/dungeon';
   templateUrl: './dungeon.component.html',
   styleUrls: ['./dungeon.component.scss']
 })
-export class DungeonComponent {
+export class DungeonComponent implements OnInit, OnDestroy {
 
   @Input() dungeon!: Dungeon;
+  @ViewChild('container') container!: ElementRef<HTMLElement>;
 
-  draggingStarted = false;
-  startX = 0;
-  startY = 0;
-  scrollLeft = 0;
-  scrollTop = 0;
+  private draggingStarted = false;
+  private startX = 0;
+  private startY = 0;
+  private scrollLeft = 0;
+  private scrollTop = 0;
+
+  private autoScrolled = false;
+
+  ngOnInit(): void {
+    this.autoScrolled = false;
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.autoScrolled) {
+      return;
+    }
+    // This centers the starting tile on the screen.
+    const el = this.container.nativeElement;
+    el.scrollLeft = Math.abs(el.scrollWidth - el.clientWidth) / 2;
+    el.scrollTop = Math.abs(el.scrollHeight - el.clientHeight) / 2;
+    this.autoScrolled = true;
+  }
+
+  ngOnDestroy(): void {
+    this.autoScrolled = false;
+  }
 
   startMouseDragging(e: MouseEvent, flag: boolean, container: HTMLElement): void {
     this.startDragging(e.pageX, e.pageY, container);
