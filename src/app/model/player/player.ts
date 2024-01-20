@@ -622,6 +622,17 @@ export class Player extends EventTarget {
         || this.isPickingExploreToken();
   }
 
+  getPlayerAbilityButtonText(): string | null {
+    return null;
+  }
+
+  isPlayerAbilityButtonEnabled(): boolean {
+    return false;
+  }
+
+  handlePlayerAbilityButtonClick(): void {
+  }
+
   getCombatAbilityButtonText(): string | null {
     return null;
   }
@@ -633,7 +644,7 @@ export class Player extends EventTarget {
   isCombatAbilityActive(): boolean {
     return false;
   }
-  
+
   handleCombatAbilityButtonClick(): void {
   }
 
@@ -852,6 +863,7 @@ export class Player extends EventTarget {
       throw new Error('Cannot draw from tile bag.');
     }
 
+    this.consumeAction();
     targetCell.setTile(tileBag.drawTile());
     targetCell.setConfirmingExplore(true);
     this.exploring = true;
@@ -882,7 +894,6 @@ export class Player extends EventTarget {
   confirmExplore(cell: Cell, tokenBag: TokenBag): void {
     this.exploring = false;
     cell.setConfirmingExplore(false);
-    this.consumeAction();
 
     // If a room was explored, reveal a token.
     const tile = cell.getTile()!;

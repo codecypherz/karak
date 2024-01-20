@@ -46,6 +46,10 @@ export class PlayerSheetComponent {
     return PlayerSheetComponent.HEALTH_IMAGE;
   }
 
+  showPlayerAbilityButton(): boolean {
+    return this.player.getPlayerAbilityButtonText() != null;
+  }
+
   clickSpell(spell: Spell): void {
     if (this.player.isInCombat() && spell.canBeUsedInCombat()) {
       spell.setSelected(!spell.isSelected());

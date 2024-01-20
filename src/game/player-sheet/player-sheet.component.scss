@@ -90,6 +90,14 @@
   width: 100%;
 }
 
+.player-ability {
+  position: absolute;
+  left: 109px;
+  top: 140px;
+  transform: translateX(-50%);
+  font-size: 16px;
+}
+
 .weapon {
   width: 48px;
   height: 47px;

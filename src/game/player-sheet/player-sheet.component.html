@@ -39,6 +39,12 @@
     <img src="/images/token/curse.jpg">
   </div>
 
+  <button *ngIf="showPlayerAbilityButton()"
+      class="player-ability"
+      [disabled]="!player.isPlayerAbilityButtonEnabled()">
+    {{player.getPlayerAbilityButtonText()}}
+  </button>
+
   <div *ngIf="player.getWeaponOne() != null"
       class="item weapon one"
       [ngClass]="{'item-active': player.hasMadeCombatRoll()}">

@@ -6,6 +6,7 @@ export class Xanros extends Player {
   static COMBAT_ABILITY_BUTTON_TEXT = "Sacrifice"
   static COMBAT_ABILITY_ONE_TEXT = "Spend a health point to add +1"
       + " to your combat result after the dice have been rolled.";
+  static PLAYER_ABILITY_BUTTON_TEXT = "Magic Swap";
 
   private sacrificing = false;
 
@@ -53,5 +54,21 @@ export class Xanros extends Player {
       this.reduceHitPoints();
     }
     super.confirmCombatResult(combatCell);
+  }
+
+  override getPlayerAbilityButtonText(): string | null {
+    return Xanros.PLAYER_ABILITY_BUTTON_TEXT;
+  }
+
+  override isPlayerAbilityButtonEnabled(): boolean {
+    if (this.isCursed()) {
+      return super.isPlayerAbilityButtonEnabled();
+    }
+    // Can only do Magic Swap as the player's first action.
+    return this.getActionsRemaining() == 4;
+  }
+
+  override handlePlayerAbilityButtonClick(): void {
+    // TODO
   }
 }
