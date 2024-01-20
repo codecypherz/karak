@@ -41,7 +41,8 @@
 
   <button *ngIf="showPlayerAbilityButton()"
       class="player-ability"
-      [disabled]="!player.isPlayerAbilityButtonEnabled()">
+      [disabled]="!player.isPlayerAbilityButtonEnabled()"
+      (click)="player.handlePlayerAbilityButtonClick()">
     {{player.getPlayerAbilityButtonText()}}
   </button>
 
@@ -100,6 +101,11 @@
   <app-player-select *ngIf="player.isMovingCurse()"
       [player]="player"
       selectionTitle="Select a player to curse">
+  </app-player-select>
+
+  <app-player-select *ngIf="player.isSwappingPlayers()"
+      [player]="player"
+      selectionTitle="Select a player to swap">
   </app-player-select>
 
   <app-reincarnate *ngIf="player.isReincarnating()" [player]="player">

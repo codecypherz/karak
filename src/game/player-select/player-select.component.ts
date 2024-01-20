@@ -15,17 +15,25 @@ export class PlayerSelectComponent {
   constructor(private gameService: GameService) {}
 
   getPlayers(): Array<Player> {
-    return this.gameService.getGame().getPlayersInOrder();
+    const players = this.gameService.getGame().getPlayersInOrder();
+    if (this.player.isSwappingPlayers()) {
+      // Exclude the active player from the set of choices.
+      return players.filter(p => p != this.player);
+    }
+    return players;
   }
 
   showCancel(): boolean {
-    return this.player.isCastingHealingTeleport();
+    return this.player.isCastingHealingTeleport() || this.player.isSwappingPlayers();
   }
 
   cancel(): void {
     if (this.player.isCastingHealingTeleport()) {
       this.player.cancelHealingTeleport();
+    } else if (this.player.isSwappingPlayers()) {
+      this.player.cancelPlayerSwap();
     }
+
   }
 
   selectPlayer(player: Player): void {
@@ -33,6 +41,8 @@ export class PlayerSelectComponent {
       this.player.setCurseTarget(player);
     } else if (this.player.isCastingHealingTeleport()) {
       this.player.setHealingTeleportTargetPlayer(player);
+    } else if (this.player.isSwappingPlayers()) {
+      this.player.setPlayerSwapTarget(player);
     }
   }
 
@@ -41,6 +51,8 @@ export class PlayerSelectComponent {
       return this.player.canConfirmCurseMove();
     } else if (this.player.isCastingHealingTeleport()) {
       return this.player.canConfirmHealingTeleport();
+    } else if (this.player.isSwappingPlayers()) {
+      return this.player.canConfirmPlayerSwap();
     }
     return false;
   }
@@ -50,6 +62,8 @@ export class PlayerSelectComponent {
       this.player.confirmCurseMove();
     } else if (this.player.isCastingHealingTeleport()) {
       this.player.confirmHealingTeleport();
+    } else if (this.player.isSwappingPlayers()) {
+      this.player.confirmPlayerSwap();
     }
   }
 
@@ -58,6 +72,8 @@ export class PlayerSelectComponent {
       return this.player.getCurseTarget() == player;
     } else if (this.player.isCastingHealingTeleport()) {
       return this.player.getHealingTeleportTargetPlayer() == player;
+    } else if (this.player.isSwappingPlayers()) {
+      return this.player.getPlayerSwapTarget() == player;
     }
     return false;
   }

@@ -161,6 +161,15 @@ export class Game extends EventTarget {
       player.addEventListener(
         Player.CURSE_MOVED_EVENT,
         this.onCurseMoved.bind(this));
+      player.addEventListener(
+        Player.STARTING_PLAYER_SWAP_EVENT,
+        this.updatePlayerActionIndicators.bind(this));
+      player.addEventListener(
+        Player.CANCEL_PLAYER_SWAP_EVENT,
+        this.updatePlayerActionIndicators.bind(this));
+      player.addEventListener(
+        Player.CONFIRM_PLAYER_SWAP_EVENT,
+        this.endTurn.bind(this));
       player.setPositions(starterCell.getPosition(), starterCell.getPosition());
     }, this);
 

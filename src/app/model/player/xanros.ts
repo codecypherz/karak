@@ -65,10 +65,10 @@ export class Xanros extends Player {
       return super.isPlayerAbilityButtonEnabled();
     }
     // Can only do Magic Swap as the player's first action.
-    return this.getActionsRemaining() == 4;
+    return this.getActionsRemaining() == 4 && !this.isBusy();
   }
 
   override handlePlayerAbilityButtonClick(): void {
-    // TODO
+    this.startSwappingPlayers();
   }
 }

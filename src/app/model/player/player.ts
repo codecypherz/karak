@@ -50,6 +50,9 @@ export class Player extends EventTarget {
   static CONFIRM_SPELL_CAST_EVENT = 'confirm_spell_cast';
   static STARTING_CURSE_MOVE_EVENT = 'starting_curse_move';
   static CURSE_MOVED_EVENT = 'curse_moved';
+  static STARTING_PLAYER_SWAP_EVENT = 'starting_player_swap';
+  static CANCEL_PLAYER_SWAP_EVENT = 'cancel_player_swap';
+  static CONFIRM_PLAYER_SWAP_EVENT = 'confirm_player_swap';
 
   private id = uuidv4();
 
@@ -104,6 +107,8 @@ export class Player extends EventTarget {
   private exploreTokenOne: Token | null = null;
   private exploreTokenTwo: Token | null = null;
   private pickedExploreToken: Token | null = null;
+  private swappingPlayers = false;
+  private playerSwapTarget: Player | null = null;
 
   constructor(shortName: string, longName: string, imageFile: string, iconFile: string) {
     super();
@@ -166,6 +171,8 @@ export class Player extends EventTarget {
     this.exploreTokenOne = null;
     this.exploreTokenTwo = null;
     this.pickedExploreToken = null;
+    this.swappingPlayers = false;
+    this.playerSwapTarget = null;
 
     this.actionsRemaining = this.isDead() ? 0 : 4;
 
@@ -619,7 +626,8 @@ export class Player extends EventTarget {
         || this.isReincarnating()
         || this.isCastingHealingTeleport()
         || this.isMovingCurse()
-        || this.isPickingExploreToken();
+        || this.isPickingExploreToken()
+        || this.isSwappingPlayers();
   }
 
   getPlayerAbilityButtonText(): string | null {
@@ -631,6 +639,54 @@ export class Player extends EventTarget {
   }
 
   handlePlayerAbilityButtonClick(): void {
+  }
+
+  startSwappingPlayers(): void {
+    this.swappingPlayers = true;
+    this.playerSwapTarget = null;
+    this.dispatchEvent(new Event(Player.STARTING_PLAYER_SWAP_EVENT));
+  }
+
+  cancelPlayerSwap(): void {
+    this.swappingPlayers = false;
+    this.playerSwapTarget = null;
+    this.dispatchEvent(new Event(Player.CANCEL_PLAYER_SWAP_EVENT));
+  }
+
+  isSwappingPlayers(): boolean {
+    return this.swappingPlayers;
+  }
+
+  setPlayerSwapTarget(player: Player): void {
+    if (this == player) {
+      throw new Error('Cannot swap with self');
+    }
+    this.playerSwapTarget = player;
+  }
+
+  getPlayerSwapTarget(): Player | null {
+    return this.playerSwapTarget;
+  }
+
+  canConfirmPlayerSwap(): boolean {
+    return this.playerSwapTarget != null;
+  }
+
+  confirmPlayerSwap(): void {
+    const targetPlayer = this.playerSwapTarget!;
+    const targetPos = targetPlayer.position;
+    
+    // Assumption: players are both on non-monster cells.
+    targetPlayer.position = this.position;
+    targetPlayer.lastPositionWithoutMonster = this.position;
+    this.position = targetPos;
+    this.lastPositionWithoutMonster = targetPos;
+
+    // Reset
+    this.actionsRemaining = 0;
+    this.swappingPlayers = false;
+    this.playerSwapTarget = null;
+    this.dispatchEvent(new Event(Player.CONFIRM_PLAYER_SWAP_EVENT));
   }
 
   getCombatAbilityButtonText(): string | null {
