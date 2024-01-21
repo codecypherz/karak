@@ -2,6 +2,7 @@ import { Monster } from "./monster";
 import { SkeletonKey } from "../skeleton-key";
 import { Cell } from "../../cell";
 import { Player } from "../../player/player";
+import { Sound } from "src/app/util/sound";
 
 export class SkeletonJailer extends Monster {
 
@@ -9,7 +10,12 @@ export class SkeletonJailer extends Monster {
     super("Skeleton Jailer", "skeleton_jailer.jpg", 8);
   }
 
+  override revealed(): void {
+    Sound.BONES_REVEAL.play();
+  }
+
   override handleDefeat(player: Player, cell: Cell): void {
     cell.replaceToken(new SkeletonKey());
+    Sound.BONES_DEFEAT.play();
   }
 }

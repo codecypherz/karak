@@ -9,13 +9,13 @@ export class Dragon extends Monster {
     super("Dragon", "dragon.jpg", 15);
   }
 
+  override revealed(): void {
+    Sound.DRAGON_REVEAL.play();
+  }
+
   override handleDefeat(player: Player, cell: Cell): void {
     cell.removeToken();
     player.addTreasure(1.5);
     Sound.DRAGON_DEFEAT.play();
-  }
-
-  override revealed(): void {
-    Sound.DRAGON_REVEAL.play();
   }
 }
