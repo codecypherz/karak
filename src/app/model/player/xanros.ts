@@ -1,3 +1,4 @@
+import { Sound } from "src/app/util/sound";
 import { Cell } from "../cell";
 import { Player } from "./player";
 
@@ -14,6 +15,10 @@ export class Xanros extends Player {
     super('Xanros', 'Lord Xanros the Warlock', 'xanros.jpg', 'xanros_icon.jpg');
   }
 
+  protected override getUnarmedCombatSound(): Sound {
+    return Sound.FIREBALL;
+  }
+  
   override startTurn(): void {
     this.sacrificing = false;
     super.startTurn();

@@ -765,12 +765,16 @@ export class Player extends EventTarget {
     this.getCombatSound().play();
   }
 
-  private getCombatSound(): Sound {
+  protected getCombatSound(): Sound {
     if (this.weaponOne != null || this.weaponTwo != null) {
       return Sound.SWORD_HIT;
     } else {
-      return Sound.PUNCH;
+      return this.getUnarmedCombatSound();
     }
+  }
+
+  protected getUnarmedCombatSound(): Sound {
+    return Sound.PUNCH;
   }
 
   protected rollDie(): number {

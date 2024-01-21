@@ -1,14 +1,18 @@
 
 export class Sound {
+  static FIREBALL = new Sound('fireball.mp3');
   static PUNCH = new Sound('punch.mp3');
   static SWORD_HIT = new Sound('sword_hit.mp3');
 
-  constructor(readonly file: string) {}
+  private audio: HTMLAudioElement;
+
+  constructor(readonly file: string) {
+    this.audio = new Audio();
+    this.audio.src = '/audio/effect/' + this.file;
+    this.audio.load();
+  }
 
   play(): void {
-    const audio = new Audio();
-    audio.src = '/audio/effect/' + this.file;
-    audio.load();
-    audio.play();
+    this.audio.play();
   }
 }
