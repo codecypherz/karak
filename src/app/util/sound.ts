@@ -1,5 +1,7 @@
 
 export class Sound {
+  static DRAGON_REVEAL = new Sound('dragon_reveal.mp3');
+  static DRAGON_DEFEAT = new Sound('dragon_defeat.mp3');
   static FIREBALL = new Sound('fireball.mp3');
   static PUNCH = new Sound('punch.mp3');
   static SWORD_HIT = new Sound('sword_hit.mp3');

@@ -975,6 +975,7 @@ export class Player extends EventTarget {
     this.exploredCell = null;
     if (token != null) {
       cell.setToken(token);
+      token.revealed();
     }
     this.moveToInternal(cell);
     this.dispatchEvent(new ExplorationFinishedEvent(cell));
