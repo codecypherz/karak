@@ -2,6 +2,7 @@ import { Monster } from "./monster";
 import { HealingTeleport } from "../spell/healing-teleport";
 import { Cell } from "../../cell";
 import { Player } from "../../player/player";
+import { Sound } from "src/app/util/sound";
 
 export class GiantSpider extends Monster {
 
@@ -9,7 +10,12 @@ export class GiantSpider extends Monster {
     super("Giant Spider", "giant_spider.jpg", 6);
   }
 
+  override revealed(): void {
+    Sound.SPIDER_REVEAL.play();
+  }
+
   override handleDefeat(player: Player, cell: Cell): void {
     cell.replaceToken(new HealingTeleport());
+    Sound.SPIDER_DEFEAT.play();
   }
 }
