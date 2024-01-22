@@ -15,7 +15,7 @@ export class SkeletonKing extends Monster {
   }
 
   override handleDefeat(player: Player, cell: Cell): void {
-    cell.replaceToken(new BattleAxe());
     Sound.BONES_DEFEAT.play();
+    cell.replaceToken(new BattleAxe());
   }
 }

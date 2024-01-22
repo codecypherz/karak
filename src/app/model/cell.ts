@@ -40,6 +40,7 @@ export class Cell {
       throw new Error('Cell already had a token.');
     }
     this.token = token;
+    this.token.revealed();
   }
 
   replaceToken(newToken: Token): Token {
@@ -51,14 +52,17 @@ export class Cell {
     }
     const oldToken = this.token;
     this.token = newToken;
+    this.token.revealed();
     return oldToken;
   }
 
-  removeToken(): void {
+  removeToken(): Token {
     if (this.token == null) {
       throw new Error('No token to remove.');
     }
+    const token = this.token;
     this.token = null;
+    return token;
   }
 
   hasTile(): boolean {

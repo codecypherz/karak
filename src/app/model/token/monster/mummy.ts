@@ -15,8 +15,8 @@ export class Mummy extends Monster {
   }
 
   override handleDefeat(player: Player, cell: Cell): void {
-    cell.replaceToken(new FireBolt());
     Sound.MUMMY_DEFEAT.play();
+    cell.replaceToken(new FireBolt());
     player.startMovingCurse();
   }
 }

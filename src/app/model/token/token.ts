@@ -9,6 +9,7 @@ export class Token {
     this.imageUrl = Token.IMAGE_PATH + imageUrl;
   }
 
-  revealed(): void {
-  }
+  revealed(): void { }
+
+  pickedUp(): void { }
 }

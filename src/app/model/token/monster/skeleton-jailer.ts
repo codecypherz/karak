@@ -15,7 +15,7 @@ export class SkeletonJailer extends Monster {
   }
 
   override handleDefeat(player: Player, cell: Cell): void {
-    cell.replaceToken(new SkeletonKey());
     Sound.BONES_DEFEAT.play();
+    cell.replaceToken(new SkeletonKey());
   }
 }

@@ -1,12 +1,15 @@
 
 export class Sound {
+  static AXE_REVEAL = new Sound('axe_reveal.mp3');
   static BONES_DEFEAT = new Sound('bones_defeat.mp3');
   static BONES_REVEAL = new Sound('bones_reveal.mp3');
+  static DAGGER_REVEAL = new Sound('dagger_reveal.mp3');
   static DRAGON_DEFEAT = new Sound('dragon_defeat.mp3');
   static DRAGON_REVEAL = new Sound('dragon_reveal.mp3');
   static FALLEN_DEFEAT = new Sound('fallen_defeat.mp3');
   static FALLEN_REVEAL = new Sound('fallen_reveal.mp3');
   static FIREBALL = new Sound('fireball.mp3');
+  static KEY_REVEAL = new Sound('key_reveal.mp3');
   static MUMMY_DEFEAT = new Sound('mummy_defeat.mp3');
   static MUMMY_REVEAL = new Sound('mummy_reveal.mp3');
   static PUNCH = new Sound('punch.mp3');
@@ -15,6 +18,9 @@ export class Sound {
   static SPIDER_DEFEAT = new Sound('spider_defeat.mp3');
   static SPIDER_REVEAL = new Sound('spider_reveal.mp3');
   static SWORD_HIT = new Sound('sword_hit.mp3');
+  static SWORD_REVEAL = new Sound('sword_reveal.mp3');
+  static TREASURE_OPEN = new Sound('treasure_open.mp3');
+  static TREASURE_REVEAL = new Sound('treasure_reveal.mp3');
 
   private audio: HTMLAudioElement;
 

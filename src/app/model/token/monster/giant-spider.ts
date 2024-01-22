@@ -15,7 +15,7 @@ export class GiantSpider extends Monster {
   }
 
   override handleDefeat(player: Player, cell: Cell): void {
-    cell.replaceToken(new HealingTeleport());
     Sound.SPIDER_DEFEAT.play();
+    cell.replaceToken(new HealingTeleport());
   }
 }

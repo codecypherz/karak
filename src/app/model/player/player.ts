@@ -975,7 +975,6 @@ export class Player extends EventTarget {
     this.exploredCell = null;
     if (token != null) {
       cell.setToken(token);
-      token.revealed();
     }
     this.moveToInternal(cell);
     this.dispatchEvent(new ExplorationFinishedEvent(cell));
@@ -1160,7 +1159,7 @@ export class Player extends EventTarget {
     }
 
     if (pickedUpToken) {
-      cell.removeToken();
+      cell.removeToken().pickedUp();
       this.actionsRemaining = 0;
       this.dispatchEvent(new Event(Player.PICKED_UP_EVENT));
     }
@@ -1194,7 +1193,7 @@ export class Player extends EventTarget {
     if (this.skeletonKey == null) {
       throw new Error('Unable to open treasure without a skeleton key');
     }
-    cell.removeToken();
+    cell.removeToken().pickedUp();
     this.treasure++;
     this.skeletonKey = null;
     this.dispatchEvent(new Event(Player.TREASURE_OPENED_EVENT));

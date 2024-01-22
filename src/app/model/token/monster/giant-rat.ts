@@ -15,7 +15,7 @@ export class GiantRat extends Monster {
   }
 
   override handleDefeat(player: Player, cell: Cell): void {
-    cell.replaceToken(new Daggers());
     Sound.RAT_DEFEAT.play();
+    cell.replaceToken(new Daggers());
   }
 }
