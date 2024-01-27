@@ -61,7 +61,7 @@ export abstract class Player extends EventTarget {
   private imageUrl: string;
   private iconUrl: string;
   private selected = false;
-  
+
   private active = false;
   private actionsRemaining = 0;
 
@@ -146,7 +146,7 @@ export abstract class Player extends EventTarget {
   setSelected(selected: boolean): void {
     this.selected = selected;
   }
-  
+
   toggleSelected(): void {
     this.selected = !this.selected;
     if (this.selected) {
@@ -374,7 +374,7 @@ export abstract class Player extends EventTarget {
 
   canConfirmSwap(): boolean {
     return (this.isSwappingWeapons() || this.isSwappingSpells())
-        && this.tokenToDiscard != null;
+      && this.tokenToDiscard != null;
   }
 
   cancelSwap(): void {
@@ -419,7 +419,7 @@ export abstract class Player extends EventTarget {
     if (!swapped) {
       throw new Error('Failed to swap');
     }
-    
+
     cell.replaceToken(this.tokenToDiscard!);
     this.swappingWeapons = false;
     this.swappingSpells = false;
@@ -490,7 +490,7 @@ export abstract class Player extends EventTarget {
     this.curseTarget = null;
     this.dispatchEvent(new CurseMovedEvent(curseTarget));
   }
-  
+
   protected canReincarnate(): boolean {
     return false;
   }
@@ -512,6 +512,7 @@ export abstract class Player extends EventTarget {
     if (!this.canConfirmReincarnation()) {
       throw new Error('Cannot confirm reincarnation');
     }
+    Sound.TELEPORT.play();
     this.moveToInternal(this.healingTeleportTargetCell!);
     this.fullHeal();
     this.actionsRemaining = 0;
@@ -568,13 +569,14 @@ export abstract class Player extends EventTarget {
 
   canConfirmHealingTeleport(): boolean {
     return this.healingTeleportTargetPlayer != null
-        && this.healingTeleportTargetCell != null;
+      && this.healingTeleportTargetCell != null;
   }
 
   confirmHealingTeleport(): void {
     if (!this.canConfirmHealingTeleport()) {
       throw new Error('Cannot confirm healing teleport');
     }
+    Sound.TELEPORT.play();
     this.healingTeleportTargetPlayer!.moveToInternal(this.healingTeleportTargetCell!);
     this.healingTeleportTargetPlayer!.fullHeal();
 
@@ -595,7 +597,7 @@ export abstract class Player extends EventTarget {
   }
 
   setActionIndicators(
-      targetCell: Cell, playerCell: Cell, dungeon: Dungeon, tileBag: TileBag): void {
+    targetCell: Cell, playerCell: Cell, dungeon: Dungeon, tileBag: TileBag): void {
     targetCell.setExplorable(this.canExplore(targetCell, playerCell, dungeon, tileBag));
     targetCell.setFightable(this.showFightable(targetCell, playerCell));
     targetCell.setMoveable(this.canMoveTo(targetCell, playerCell, dungeon));
@@ -625,17 +627,17 @@ export abstract class Player extends EventTarget {
     }
     return false;
   }
-  
+
   protected isBusy(): boolean {
     return this.isInCombat()
-        || this.isExploring()
-        || this.isSwappingWeapons()
-        || this.isSwappingSpells()
-        || this.isReincarnating()
-        || this.isCastingHealingTeleport()
-        || this.isMovingCurse()
-        || this.isPickingExploreToken()
-        || this.isSwappingPlayers();
+      || this.isExploring()
+      || this.isSwappingWeapons()
+      || this.isSwappingSpells()
+      || this.isReincarnating()
+      || this.isCastingHealingTeleport()
+      || this.isMovingCurse()
+      || this.isPickingExploreToken()
+      || this.isSwappingPlayers();
   }
 
   getPlayerAbilityButtonText(): string | null {
@@ -683,7 +685,7 @@ export abstract class Player extends EventTarget {
   confirmPlayerSwap(): void {
     const targetPlayer = this.playerSwapTarget!;
     const targetPos = targetPlayer.position;
-    
+
     // Assumption: players are both on non-monster cells.
     targetPlayer.position = this.position;
     targetPlayer.lastPositionWithoutMonster = this.position;
@@ -805,7 +807,7 @@ export abstract class Player extends EventTarget {
   }
 
   protected getCombatResult(
-      monsterStrength: number, playerStrength: number): CombatResult {
+    monsterStrength: number, playerStrength: number): CombatResult {
     if (monsterStrength < playerStrength) {
       return CombatResult.WIN;
     } else if (monsterStrength > playerStrength) {
@@ -908,7 +910,7 @@ export abstract class Player extends EventTarget {
   }
 
   private canExplore(
-      targetCell: Cell, playerCell: Cell, dungeon: Dungeon, tileBag: TileBag): boolean {
+    targetCell: Cell, playerCell: Cell, dungeon: Dungeon, tileBag: TileBag): boolean {
     if (this.isBusy() || this.isDead()) {
       return false;
     }
@@ -919,7 +921,7 @@ export abstract class Player extends EventTarget {
       return false;
     }
     if (targetCell.hasTile()) {
-    return false;
+      return false;
     }
     return dungeon.getConnectedCells(playerCell).has(targetCell);
   }
@@ -1065,8 +1067,8 @@ export abstract class Player extends EventTarget {
     const playerTile = playerCell.getTile();
     const targetTile = targetCell.getTile();
     if (playerTile instanceof TunnelTeleportTile
-        && targetTile instanceof TunnelTeleportTile
-        && playerTile != targetTile) {
+      && targetTile instanceof TunnelTeleportTile
+      && playerTile != targetTile) {
       return true;
     }
     const targetConnectedToPlayer = this.getConnectedCells(targetCell, dungeon).has(playerCell);
@@ -1080,6 +1082,10 @@ export abstract class Player extends EventTarget {
 
   moveTo(playerCell: Cell, targetCell: Cell): void {
     this.consumeAction();
+    if (playerCell.getTile() instanceof TunnelTeleportTile
+        && targetCell.getTile() instanceof TunnelTeleportTile) {
+      Sound.TELEPORT.play();
+    }
     this.moveToInternal(targetCell);
     this.dispatchEvent(new Event(Player.MOVE_EVENT));
   }
@@ -1129,7 +1135,7 @@ export abstract class Player extends EventTarget {
 
     // Can only hold one skeleton key. Swaps don't make sense.
     if (token instanceof SkeletonKey
-        && this.hasSkeletonKey()) {
+      && this.hasSkeletonKey()) {
       return false;
     }
 
@@ -1238,8 +1244,8 @@ export class ExplorationFinishedEvent extends Event {
 
 export class CombatConfirmedEvent extends Event {
   constructor(
-      readonly monster: Monster,
-      readonly combatResult: CombatResult) {
+    readonly monster: Monster,
+    readonly combatResult: CombatResult) {
     super(Player.COMBAT_CONFIRMED_EVENT);
   }
 }

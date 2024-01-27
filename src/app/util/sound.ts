@@ -29,6 +29,7 @@ export class Sound {
   static SPIDER_REVEAL = new Sound('spider_reveal.mp3');
   static SWORD_HIT = new Sound('sword_hit.mp3');
   static SWORD_REVEAL = new Sound('sword_reveal.mp3');
+  static TELEPORT = new Sound('teleport.mp3');
   static TREASURE_OPEN = new Sound('treasure_open.mp3');
   static TREASURE_REVEAL = new Sound('treasure_reveal.mp3');
   static WHOOSH = new Sound('whoosh.mp3');
