@@ -18,6 +18,10 @@ export class Horan extends Player {
     return Sound.GREETING_HORAN;
   }
 
+  override getHurtSound(): Sound {
+    return Sound.GRUNT_MALE;
+  }
+  
   override getCombatAbilityOneText(): string | null {
     return Horan.COMBAT_ABILITY_ONE_TEXT;
   }

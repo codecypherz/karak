@@ -16,6 +16,8 @@ export class Sound {
   static GREETING_TAIA = new Sound('greeting_taia.mp3');
   static GREETING_VICTORIUS = new Sound('greeting_victorius.mp3');
   static GREETING_XANROS = new Sound('greeting_xanros.mp3');
+  static GRUNT_FEMALE = new Sound('grunt_female.mp3');
+  static GRUNT_MALE = new Sound('grunt_male.mp3');
   static KEY_REVEAL = new Sound('key_reveal.mp3');
   static MUMMY_DEFEAT = new Sound('mummy_defeat.mp3');
   static MUMMY_REVEAL = new Sound('mummy_reveal.mp3');

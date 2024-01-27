@@ -18,6 +18,10 @@ export class Victorius extends Player {
     return Sound.GREETING_VICTORIUS;
   }
 
+  override getHurtSound(): Sound {
+    return Sound.GRUNT_MALE;
+  }
+  
   override startTurn(): void {
     this.sixRolledInLastCombat = false;
     super.startTurn();

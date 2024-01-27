@@ -258,6 +258,7 @@ export abstract class Player extends EventTarget {
 
   protected reduceHitPoints(): void {
     if (this.hitPoints > 0) {
+      this.getHurtSound().play();
       this.hitPoints--;
     }
     if (this.hitPoints == 0) {
@@ -268,6 +269,8 @@ export abstract class Player extends EventTarget {
       }
     }
   }
+
+  abstract getHurtSound(): Sound;
 
   private revive(): void {
     if (this.hitPoints != 0) {

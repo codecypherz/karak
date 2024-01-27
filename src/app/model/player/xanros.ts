@@ -19,6 +19,10 @@ export class Xanros extends Player {
     return Sound.GREETING_XANROS;
   }
 
+  override getHurtSound(): Sound {
+    return Sound.GRUNT_MALE;
+  }
+  
   protected override getUnarmedCombatSound(): Sound {
     return Sound.FIREBALL;
   }

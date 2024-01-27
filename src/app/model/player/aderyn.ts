@@ -14,7 +14,11 @@ export class Aderyn extends Player {
   override getSelectedSound(): Sound {
     return Sound.GREETING_ADERYN;
   }
-  
+
+  override getHurtSound(): Sound {
+    return Sound.GRUNT_FEMALE;
+  }
+
   override getCombatAbilityOneText(): string | null {
     return Aderyn.COMBAT_ABILITY_TEXT;
   }
