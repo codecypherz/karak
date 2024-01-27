@@ -290,6 +290,11 @@ export abstract class Player extends EventTarget {
       this.skippedTurnForDeath = false;
       this.dispatchEvent(new Event(Player.REVIVED_EVENT));
     }
+    if (oldHitPoints == 0 || this.cursed) {
+      Sound.REVIVE.play();
+    } else {
+      Sound.HEALTH_POTION.play();
+    }
     this.cursed = false;
   }
 

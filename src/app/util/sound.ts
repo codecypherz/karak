@@ -21,12 +21,14 @@ export class Sound {
   static GREETING_XANROS = new Sound('greeting_xanros.mp3');
   static GRUNT_FEMALE = new Sound('grunt_female.mp3');
   static GRUNT_MALE = new Sound('grunt_male.mp3');
+  static HEALTH_POTION = new Sound('health_potion.mp3');
   static KEY_REVEAL = new Sound('key_reveal.mp3');
   static MUMMY_DEFEAT = new Sound('mummy_defeat.mp3');
   static MUMMY_REVEAL = new Sound('mummy_reveal.mp3');
   static PUNCH = new Sound('punch.mp3');
   static RAT_DEFEAT = new Sound('rat_defeat.mp3');
   static RAT_REVEAL = new Sound('rat_reveal.mp3');
+  static REVIVE = new Sound('revive.mp3');
   static SPIDER_DEFEAT = new Sound('spider_defeat.mp3');
   static SPIDER_REVEAL = new Sound('spider_reveal.mp3');
   static SPILLED_COINS = new Sound('spilled_coins.mp3');
