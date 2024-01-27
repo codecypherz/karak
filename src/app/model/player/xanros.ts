@@ -15,10 +15,14 @@ export class Xanros extends Player {
     super('Xanros', 'Lord Xanros the Warlock', 'xanros.jpg', 'xanros_icon.jpg');
   }
 
+  override getSelectedSound(): Sound {
+    return Sound.GREETING_XANROS;
+  }
+
   protected override getUnarmedCombatSound(): Sound {
     return Sound.FIREBALL;
   }
-  
+
   override startTurn(): void {
     this.sacrificing = false;
     super.startTurn();

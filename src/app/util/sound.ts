@@ -9,6 +9,13 @@ export class Sound {
   static FALLEN_DEFEAT = new Sound('fallen_defeat.mp3');
   static FALLEN_REVEAL = new Sound('fallen_reveal.mp3');
   static FIREBALL = new Sound('fireball.mp3');
+  static GREETING_ADERYN = new Sound('greeting_aderyn.mp3');
+  static GREETING_ARGENTUS = new Sound('greeting_argentus.mp3');
+  static GREETING_ELSPETH = new Sound('greeting_elspeth.mp3');
+  static GREETING_HORAN = new Sound('greeting_horan.mp3');
+  static GREETING_TAIA = new Sound('greeting_taia.mp3');
+  static GREETING_VICTORIUS = new Sound('greeting_victorius.mp3');
+  static GREETING_XANROS = new Sound('greeting_xanros.mp3');
   static KEY_REVEAL = new Sound('key_reveal.mp3');
   static MUMMY_DEFEAT = new Sound('mummy_defeat.mp3');
   static MUMMY_REVEAL = new Sound('mummy_reveal.mp3');

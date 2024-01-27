@@ -1,3 +1,4 @@
+import { Sound } from "src/app/util/sound";
 import { Cell } from "../cell";
 import { TileBag } from "../tile/tilebag";
 import { Monster } from "../token/monster/monster";
@@ -11,6 +12,10 @@ export class Elspeth extends Player {
 
   constructor() {
     super('Elspeth', 'Elspeth the Warrior Princess', 'elspeth.jpg', 'elspeth_icon.jpg');
+  }
+
+  override getSelectedSound(): Sound {
+    return Sound.GREETING_ELSPETH;
   }
 
   override getCombatAbilityOneText(): string | null {

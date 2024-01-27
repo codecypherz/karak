@@ -1,3 +1,4 @@
+import { Sound } from "src/app/util/sound";
 import { Cell } from "../cell";
 import { Player } from "./player";
 
@@ -10,6 +11,10 @@ export class Taia extends Player {
   
   constructor() {
     super('Taia', 'Taia the Oracle', 'taia.jpg', 'taia_icon.jpg');
+  }
+
+  override getSelectedSound(): Sound {
+    return Sound.GREETING_TAIA;
   }
 
   override getCombatAbilityOneText(): string | null {

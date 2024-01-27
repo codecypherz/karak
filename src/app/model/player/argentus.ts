@@ -13,6 +13,10 @@ export class Argentus extends Player {
     super('Argentus', 'Argentus the Wizard', 'argentus.jpg', 'argentus_icon.jpg');
   }
 
+  override getSelectedSound(): Sound {
+    return Sound.GREETING_ARGENTUS;
+  }
+
   protected override getUnarmedCombatSound(): Sound {
     return Sound.FIREBALL;
   }

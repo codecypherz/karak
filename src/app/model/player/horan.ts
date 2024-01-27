@@ -1,3 +1,4 @@
+import { Sound } from "src/app/util/sound";
 import { CombatResult, Player } from "./player";
 
 export class Horan extends Player {
@@ -11,6 +12,10 @@ export class Horan extends Player {
 
   constructor() {
     super('Horan', 'Horan the Warrior', 'horan.jpg', 'horan_icon.jpg');
+  }
+
+  override getSelectedSound(): Sound {
+    return Sound.GREETING_HORAN;
   }
 
   override getCombatAbilityOneText(): string | null {

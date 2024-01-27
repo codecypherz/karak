@@ -1,3 +1,4 @@
+import { Sound } from "src/app/util/sound";
 import { Cell } from "../cell";
 import { Monster } from "../token/monster/monster";
 import { CombatResult, Player } from "./player";
@@ -10,6 +11,10 @@ export class Aderyn extends Player {
     super('Aderyn', 'Aderyn the Thief', 'aderyn.jpg', 'aderyn_icon.jpg');
   }
 
+  override getSelectedSound(): Sound {
+    return Sound.GREETING_ADERYN;
+  }
+  
   override getCombatAbilityOneText(): string | null {
     return Aderyn.COMBAT_ABILITY_TEXT;
   }

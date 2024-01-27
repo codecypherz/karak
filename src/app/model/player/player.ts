@@ -25,7 +25,7 @@ export interface PlayerCtor {
   new(): Player
 }
 
-export class Player extends EventTarget {
+export abstract class Player extends EventTarget {
 
   static newFrom(other: Player): Player {
     return new (Object.getPrototypeOf(other).constructor as PlayerCtor)()
@@ -149,7 +149,12 @@ export class Player extends EventTarget {
   
   toggleSelected(): void {
     this.selected = !this.selected;
+    if (this.selected) {
+      this.getSelectedSound().play();
+    }
   }
+
+  abstract getSelectedSound(): Sound;
 
   startTurn(): void {
     this.active = true;
