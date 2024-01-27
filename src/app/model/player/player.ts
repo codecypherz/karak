@@ -941,6 +941,7 @@ export abstract class Player extends EventTarget {
       throw new Error('Cannot draw from tile bag.');
     }
 
+    Sound.EXPLORE.play();
     this.consumeAction();
     targetCell.setTile(tileBag.drawTile());
     targetCell.setConfirmingExplore(true);

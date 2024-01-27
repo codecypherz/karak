@@ -3,6 +3,7 @@ import { Cell } from 'src/app/model/cell';
 import { Player } from 'src/app/model/player/player';
 import { Monster } from 'src/app/model/token/monster/monster';
 import { GameService } from 'src/app/service/game.service';
+import { Sound } from 'src/app/util/sound';
 
 @Component({
   selector: 'app-cell',
@@ -107,6 +108,7 @@ export class CellComponent {
     if (!this.cell.hasTile() || !this.cell.isConfirmingExplore()) {
       throw new Error('Cannot rotate unless exploring.');
     }
+    Sound.WHOOSH.play();
     this.cell.getTile()!.rotateClockwise();
   }
 
@@ -114,6 +116,7 @@ export class CellComponent {
     if (!this.cell.hasTile() || !this.cell.isConfirmingExplore()) {
       throw new Error('Cannot rotate unless exploring.');
     }
+    Sound.WHOOSH.play();
     this.cell.getTile()?.rotateCounterClockwise();
   }
 

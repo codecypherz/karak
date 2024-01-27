@@ -6,6 +6,7 @@ export class Sound {
   static DAGGER_REVEAL = new Sound('dagger_reveal.mp3');
   static DRAGON_DEFEAT = new Sound('dragon_defeat.mp3');
   static DRAGON_REVEAL = new Sound('dragon_reveal.mp3');
+  static EXPLORE = new Sound('explore.mp3');
   static FALLEN_DEFEAT = new Sound('fallen_defeat.mp3');
   static FALLEN_REVEAL = new Sound('fallen_reveal.mp3');
   static FIREBALL = new Sound('fireball.mp3');
@@ -30,6 +31,7 @@ export class Sound {
   static SWORD_REVEAL = new Sound('sword_reveal.mp3');
   static TREASURE_OPEN = new Sound('treasure_open.mp3');
   static TREASURE_REVEAL = new Sound('treasure_reveal.mp3');
+  static WHOOSH = new Sound('whoosh.mp3');
 
   private audio: HTMLAudioElement;
 
