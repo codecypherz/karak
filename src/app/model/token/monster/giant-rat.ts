@@ -10,7 +10,7 @@ export class GiantRat extends Monster {
     super("Giant Rat", "giant_rat.jpg", 5);
   }
 
-  override revealed(): void {
+  override startCombat(): void {
     Sound.RAT_REVEAL.play();
   }
 

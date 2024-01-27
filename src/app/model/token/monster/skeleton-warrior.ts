@@ -10,7 +10,7 @@ export class SkeletonWarrior extends Monster {
     super("Skeleton Warrior", "skeleton_warrior.jpg", 9);
   }
 
-  override revealed(): void {
+  override startCombat(): void {
     Sound.BONES_REVEAL.play();
   }
 

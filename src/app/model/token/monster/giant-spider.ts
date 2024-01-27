@@ -10,7 +10,7 @@ export class GiantSpider extends Monster {
     super("Giant Spider", "giant_spider.jpg", 6);
   }
 
-  override revealed(): void {
+  override startCombat(): void {
     Sound.SPIDER_REVEAL.play();
   }
 

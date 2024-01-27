@@ -714,6 +714,7 @@ export class Player extends EventTarget {
 
   startCombat(monster: Monster): void {
     this.activeMonster = monster;
+    this.activeMonster.startCombat();
     this.dispatchEvent(new Event(Player.COMBAT_STARTED_EVENT));
   }
 

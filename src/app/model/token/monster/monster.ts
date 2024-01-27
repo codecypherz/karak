@@ -16,9 +16,12 @@ export abstract class Monster extends Token {
   getName(): string {
     return this.name;
   }
-  
+
   getStrength(): number {
     return this.strength;
+  }
+
+  startCombat() {
   }
 
   handleDefeat(player: Player, cell: Cell): void {

@@ -9,7 +9,7 @@ export class Fallen extends Monster {
     super("Fallen", "fallen.jpg", 12);
   }
 
-  override revealed(): void {
+  override startCombat(): void {
     Sound.FALLEN_REVEAL.play();
   }
 

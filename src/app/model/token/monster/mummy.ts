@@ -10,7 +10,7 @@ export class Mummy extends Monster {
     super("Mummy", "mummy.jpg", 7);
   }
 
-  override revealed(): void {
+  override startCombat(): void {
     Sound.MUMMY_REVEAL.play();
   }
 

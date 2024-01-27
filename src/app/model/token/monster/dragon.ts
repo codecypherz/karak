@@ -9,7 +9,7 @@ export class Dragon extends Monster {
     super("Dragon", "dragon.jpg", 15);
   }
 
-  override revealed(): void {
+  override startCombat(): void {
     Sound.DRAGON_REVEAL.play();
   }
 

@@ -10,7 +10,7 @@ export class SkeletonJailer extends Monster {
     super("Skeleton Jailer", "skeleton_jailer.jpg", 8);
   }
 
-  override revealed(): void {
+  override startCombat(): void {
     Sound.BONES_REVEAL.play();
   }
 
