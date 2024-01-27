@@ -495,6 +495,7 @@ export abstract class Player extends EventTarget {
     const curseTarget = this.curseTarget!;
     this.movingCurse = false;
     this.curseTarget = null;
+    Sound.CURSE.play();
     this.dispatchEvent(new CurseMovedEvent(curseTarget));
   }
 
