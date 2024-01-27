@@ -39,6 +39,12 @@ handlers:
   static_files: dist/\1
   upload: dist/(.*\.(mid|midi|mp3|wav))  
 
+# PDFs
+- url: /(.*\.pdf)
+  mime_type: application/pdf
+  static_files: dist/\1
+  upload: dist/(.*\.pdf)
+
 # index files
 - url: /(.+)/
   static_files: dist/\1/index.html

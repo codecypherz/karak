@@ -26,6 +26,22 @@
   border: 1px solid var(--foreground_color);
 }
 
+.rules {
+  position: absolute;
+  top: 0px;
+  left: 245px;
+  height: var(--header_height);
+  display: flex;
+  align-items: center;
+}
+
+.rules > a {
+  color: white;
+  width: 100px;
+  height: 30px;
+  font-size: 20px;
+}
+
 .navigation-title {
   position: absolute;
   top: 22px;

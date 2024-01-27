@@ -27,7 +27,8 @@
             "assets": [
               "src/favicon.ico",
               "src/images",
-              "src/audio"
+              "src/audio",
+              "src/pdf"
             ],
             "styles": [
               "src/styles.scss"

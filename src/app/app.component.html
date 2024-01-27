@@ -1,6 +1,9 @@
 <div class="header">
   <img src="/images/banner.jpg" class="banner">
   <img src="/images/logo.jpg" class="logo" (click)="navigateHome()">
+  <div class="rules">
+    <a href="/pdf/rules.pdf" target="_blank">Rulebook</a>
+  </div>
   <div *ngIf=getNavigationTitle() class="navigation-title">{{getNavigationTitle()}}</div>
   <audio class="audio-controls" controls loop>
     <source src="/audio/honor.mp3" type="audio/mpeg">
