@@ -37,6 +37,7 @@ export class PlayerSelectComponent {
   }
 
   selectPlayer(player: Player): void {
+    player.getSelectedSound().play();
     if (this.player.isMovingCurse()) {
       this.player.setCurseTarget(player);
     } else if (this.player.isCastingHealingTeleport()) {
