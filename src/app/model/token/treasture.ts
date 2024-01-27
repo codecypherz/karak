@@ -13,5 +13,6 @@ export class Treasure extends Token {
 
   override pickedUp(): void {
     Sound.TREASURE_OPEN.play();
+    Sound.SPILLED_COINS.play();
   }
 }

@@ -17,5 +17,6 @@ export class Fallen extends Monster {
     cell.removeToken();
     player.addTreasure(1);
     Sound.FALLEN_DEFEAT.play();
+    Sound.SPILLED_COINS.play();
   }
 }
