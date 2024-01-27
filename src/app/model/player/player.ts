@@ -875,10 +875,19 @@ export class Player extends EventTarget {
     // Clean up
     this.activeMonster = null;
     this.madeCombatRoll = false;
+    this.deselectSpell(this.spellOne);
+    this.deselectSpell(this.spellTwo);
+    this.deselectSpell(this.spellThree);
     if (this.shouldEndTurnAfterCombat()) {
       this.actionsRemaining = 0;
     }
     this.dispatchEvent(new CombatConfirmedEvent(monster, combatResult));
+  }
+
+  private deselectSpell(spell: Spell | null) {
+    if (spell != null) {
+      spell.setSelected(false);
+    }
   }
 
   protected shouldEndTurnAfterCombat(): boolean {
