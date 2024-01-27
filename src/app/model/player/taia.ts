@@ -21,6 +21,10 @@ export class Taia extends Player {
     return Sound.GRUNT_FEMALE;
   }
 
+  override getDeathSound(): Sound {
+    return Sound.DEATH_FEMALE;
+  }
+  
   override getCombatAbilityOneText(): string | null {
     return Taia.COMBAT_ABILITY_ONE_TEXT;
   }

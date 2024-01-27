@@ -21,6 +21,10 @@ export class Argentus extends Player {
     return Sound.GRUNT_MALE;
   }
 
+  override getDeathSound(): Sound {
+    return Sound.DEATH_MALE;
+  }
+
   protected override getUnarmedCombatSound(): Sound {
     return Sound.FIREBALL;
   }

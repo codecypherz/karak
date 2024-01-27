@@ -265,12 +265,14 @@ export abstract class Player extends EventTarget {
       if (this.canReincarnate()) {
         this.startReincarnating();
       } else {
+        this.getDeathSound().play();
         this.dispatchEvent(new Event(Player.DIED_EVENT));
       }
     }
   }
 
   abstract getHurtSound(): Sound;
+  abstract getDeathSound(): Sound;
 
   private revive(): void {
     if (this.hitPoints != 0) {

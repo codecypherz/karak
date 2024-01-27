@@ -21,6 +21,10 @@ export class Elspeth extends Player {
   override getHurtSound(): Sound {
     return Sound.GRUNT_FEMALE;
   }
+
+  override getDeathSound(): Sound {
+    return Sound.DEATH_FEMALE;
+  }
   
   override getCombatAbilityOneText(): string | null {
     return Elspeth.COMBAT_ABILITY_TEXT;

@@ -4,6 +4,8 @@ export class Sound {
   static BONES_DEFEAT = new Sound('bones_defeat.mp3');
   static BONES_REVEAL = new Sound('bones_reveal.mp3');
   static DAGGER_REVEAL = new Sound('dagger_reveal.mp3');
+  static DEATH_FEMALE = new Sound('death_female.mp3');
+  static DEATH_MALE = new Sound('death_male.mp3');
   static DRAGON_DEFEAT = new Sound('dragon_defeat.mp3');
   static DRAGON_REVEAL = new Sound('dragon_reveal.mp3');
   static EXPLORE = new Sound('explore.mp3');
